@@ -1,3 +1,0 @@
-git add .
-git commit -m "Published from Cloud 9"
-git push -u origin master --force
