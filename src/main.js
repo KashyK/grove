@@ -21,17 +21,20 @@ function animate(delta) {
     globals.cameraViewProjectionMatrix.multiplyMatrices(globals.camera.projectionMatrix, globals.camera.matrixWorldInverse);
     globals.frustum.setFromMatrix(globals.cameraViewProjectionMatrix);
 
-    // Update ball positions
+    // Update bullets, etc.
     for (let i = 0; i < globals.BODIES['projectiles'].length; i++) {
         globals.BODIES['projectiles'][i].mesh.position.copy(globals.BODIES['projectiles'][i].body.position);
         globals.BODIES['projectiles'][i].mesh.quaternion.copy(globals.BODIES['projectiles'][i].body.quaternion);
     }
 
-    // Update box positions
+    // Update items
     for (let i = 0; i < globals.BODIES['items'].length; i++) {
         globals.BODIES['items'][i].mesh.position.copy(globals.BODIES['items'][i].body.position);
         globals.BODIES['items'][i].mesh.quaternion.copy(globals.BODIES['items'][i].body.quaternion);
     }
+
+    // Update labels
+    for (let key in globals.LABELS) globals.LABELS[key]();
 
     globals.BODIES['player'].body.velocity.set(globals.BODIES['player'].body.velocity.x * 0.95, globals.BODIES['player'].body.velocity.y, globals.BODIES['player'].body.velocity.z * 0.95)
     globals.MESHES['player'].position.copy(globals.BODIES['player'].body.position);

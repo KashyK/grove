@@ -1,27 +1,27 @@
-/* global THREE, CANNON */
+/* global THREE, CANNON, socket */
 
-module.exports = function (globals) {
+module.exports = (globals) => {
 
     function getShootDir(targetVec) {
-        var projector = new THREE.Projector();
-        var vector = targetVec;
+        let projector = new THREE.Projector();
+        let vector = targetVec;
         targetVec.set(0, 0, 1);
         projector.unprojectVector(vector, globals.camera);
-        var ray = new THREE.Ray(globals.BODIES['player'].body.position, vector.sub(globals.BODIES['player'].body.position).normalize());
+        let ray = new THREE.Ray(globals.BODIES['player'].body.position, vector.sub(globals.BODIES['player'].body.position).normalize());
         targetVec.copy(ray.direction);
     }
 
-    window.addEventListener("click", function (e) {
+    window.addEventListener("click", (e) => {
         if (globals.controls.enabled == true) {
 
-            var shootDirection = new THREE.Vector3();
-            var shootVelo = 15;
+            let shootDirection = new THREE.Vector3();
+            const shootVelo = 15;
 
-            var x = globals.BODIES['player'].body.position.x;
-            var y = globals.BODIES['player'].body.position.y;
-            var z = globals.BODIES['player'].body.position.z;
+            let x = globals.BODIES['player'].body.position.x;
+            let y = globals.BODIES['player'].body.position.y;
+            let z = globals.BODIES['player'].body.position.z;
 
-            var ball = globals.load.ball({
+            let ball = globals.load.ball({
                 array: 'projectiles'
             });
 
@@ -36,6 +36,12 @@ module.exports = function (globals) {
             z += shootDirection.z * (globals.BODIES['player'].shape.radius * 1.02 + ball.shape.radius);
             ball.body.position.set(x, y, z);
             ball.mesh.position.set(x, y, z);
+            
+            socket.emit('bullet', {
+                x,
+                y,
+                z
+            });
         }
     });
 };

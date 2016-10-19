@@ -1,68 +1,68 @@
 <!doctype html>
 <html>
 
-<head>
-    <title>The Grove | Home</title>
-    <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.min.css'>
-    <link rel='icon' href='/img/favicon.ico'>
-    <script src='/bower_components/jquery/dist/jquery.min.js'></script>
-    <script src='/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
+    <head>
+        <title>The Grove | Home</title>
+        <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.min.css'>
+        <link rel='icon' href='/img/favicon.ico'>
+        <script src='/bower_components/jquery/dist/jquery.min.js'></script>
+        <script src='/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
+        <style>
+            body {
+                /*Change this after we are back up*/
+                background-image: url('/img/404.png');
+                background-size: cover;
+            }
+            
+            h1 {
+                color: white;
+                margin: 150px;
+                font-size: 70px;
+            }
+            
+            button {
+                margin-left: 150px;
+                margin-top: -100px;
+                padding: 15px 30px !important;
+            }
+        </style>
+
+        <!-- redirect the page to heroku -->
+
+
+        <meta http-equiv="refresh" content="0; URL='http://grove-mmo.herokuapp.com'" />
+    </head>
+
+    <!--  END    -->
+
+
+    <div class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> The grove is temporaly down. We are sorry for the inconvenience. HybridAplaca Game Studios, Artifex Game Studios. This page wil redirect in 10 seconds.
+    </div>
     <style>
-        body {/*Change this after we are back up*/
-            background-image: url('/img/404.png');
-            background-size: cover;
-        }
-        h1 {
+        .alert {
+            padding: 20px;
+            background-color: #f44336;
             color: white;
-            margin: 150px;
-            font-size: 70px;
+            margin-bottom: 15px;
         }
-        button {
-            margin-left: 150px;
-            margin-top: -100px;
-            padding: 15px 30px !important;
+        
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .closebtn:hover {
+            color: black;
         }
     </style>
-    
-     <!-- redirect the page to heroku -->
-    
-    
-    <meta http-equiv="refresh" content="10; URL='http://grove-mmo.herokuapp.com'" />
-</head>
-
-<!--  END    -->
-
-
-<div class="alert">
-  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-  The grove is temporaly down. We are sorry for the inconvenience. HybridAplaca Game Studios, Artifex Game Studios. This page wil redirect in 10 seconds.
-</div>
-<style>
-.alert {
-    padding: 20px;
-    background-color: #f44336;
-    color: white;
-    margin-bottom: 15px;
-}
-
-
-.closebtn {
-    margin-left: 15px;
-    color: white;
-    font-weight: bold;
-    float: right;
-    font-size: 22px;
-    line-height: 20px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-
-.closebtn:hover {
-    color: black;
-}
-</style>
-<!-- the grove is down for maintnence
+    <!-- the grove is down for maintnence
 <body>
     <h1>The Grove</h1>
     <button class='btn btn-success btn-lg'><a href='/login' style='color:white;text-decoration:none;'>Login</a></button><br><br><br><br>
@@ -71,16 +71,17 @@
 -->
 
 
-<!-- Start of StatCounter Code for Default Guide -->
-<script type="text/javascript">
-var sc_project=10664980; 
-var sc_invisible=1; 
-var sc_security="ee6552ce"; 
-var scJsHost = (("https:" == document.location.protocol) ?
-"https://secure." : "http://www.");
-document.write("<sc"+"ript type='text/javascript' src='" +
-scJsHost+
-"statcounter.com/counter/counter.js'></"+"script>");
-</script>
-<!-- End of StatCounter Code for Default Guide -->
+    <!-- Start of StatCounter Code for Default Guide -->
+    <script type="text/javascript">
+        var sc_project = 10664980;
+        var sc_invisible = 1;
+        var sc_security = "ee6552ce";
+        var scJsHost = (("https:" == document.location.protocol) ?
+            "https://secure." : "http://www.");
+        document.write("<sc" + "ript type='text/javascript' src='" +
+            scJsHost +
+            "statcounter.com/counter/counter.js'></" + "script>");
+    </script>
+    <!-- End of StatCounter Code for Default Guide -->
+
 </html>

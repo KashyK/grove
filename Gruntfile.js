@@ -4,24 +4,43 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
+        watch: {
+            scripts: {
+                files: ['src/**/*.js'],
+                tasks: ['browserify', 'uglify'],
+                options: {
+                    spawn: false
+                },
+            },
+        },
+
         browserify: {
             client: {
                 src: ['src/**/*.js'],
                 dest: 'public/js/build/latest.js',
                 options: {
-                    watch: true,
-                    keepAlive: true,
-                    transform: ['coffeeify']
+                    transform: [['babelify', {
+                        presets: ['es2015']
+                    }]]
+                }
+            }
+        },
+
+        uglify: {
+            my_target: {
+                files: {
+                    'public/js/build/latest.min.js': ['public/js/build/latest.js']
                 }
             }
         }
 
     });
 
-    // Load the plugin that provides the "coffee" task.
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browserify');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
     // Default task(s).
-    grunt.registerTask('build', ['browserify']);
+    grunt.registerTask('default', ['watch']);
 
 };

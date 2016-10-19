@@ -4,20 +4,20 @@ let players = [];
 
 function Player() {
 
-    this.playerId = players.length;
-    this.accountData = {};
+    this.id = players.length;
+    this.acc = {};
     this.x = 0;
     this.y = 0;
     this.z = 0;
-    this.quaternion = {}; //for now
+    this.q = {}; // quaternion
 
 }
 
 let addPlayer = (id, accountData) => {
 
     let player = new Player();
-    player.playerId = id;
-    player.accountData = accountData;
+    player.id = id;
+    player.acc = accountData;
     players.push(player);
 
     return player;
@@ -33,11 +33,12 @@ let removePlayer = player => {
 };
 
 let updatePlayerData = data => {
-    let player = playerForId(data.playerId);
+    let player = playerForId(data.id);
+    
     player.x = data.x;
     player.y = data.y;
     player.z = data.z;
-    player.quaternion = data.quaternion;
+    player.q = data.q;
 
     return player;
 };
@@ -46,7 +47,7 @@ let playerForId = id => {
 
     let player;
     for (let i = 0; i < players.length; i++) {
-        if (players[i].playerId === id) {
+        if (players[i].id === id) {
 
             player = players[i];
             break;

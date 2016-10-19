@@ -25,7 +25,7 @@ module.exports = (io, User, conf_url) => {
         // when client asks for players that were there before they joined
         socket.on('requestOldPlayers', function () {
           for (let i = 0; i < players.players.length; i++) {
-            if (players.players[i].playerId != socket.id)
+            if (players.players[i].id != socket.id)
               socket.emit('addOtherPlayer', players.players[i]);
           }
 
@@ -42,6 +42,10 @@ module.exports = (io, User, conf_url) => {
           socket.broadcast.emit('updatePosition', newData);
         });
 
+        //////////////////////////////////////////////////
+        
+        require('./physics')(socket);
+        
         //////////////////////////////////////////////////
 
         // client interacted with their inventory
@@ -85,7 +89,7 @@ module.exports = (io, User, conf_url) => {
 
         // client left :(
         socket.on('disconnect', function () {
-          console.log(player.accountData.username + ' has logged off.\n\n\n\n');
+          console.log(player.acc.username + ' has logged off.\n\n\n\n');
           io.emit('removeOtherPlayer', player);
           players.removePlayer(player);
         }); //

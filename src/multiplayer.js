@@ -1,73 +1,82 @@
 /* global socket */
 
-module.exports = function (globals, player) {
-    
+module.exports = (globals, player) => {
+
     socket.emit('requestOldPlayers', {});
 
     socket.on('createPlayer', data => {
         if (typeof player.serverdata === 'undefined') {
 
             player.serverdata = data;
-            player.id = data.playerId;
+            player.id = data.id;
 
-            player.inventory = player.serverdata.accountData.inventory;
+            player.inventory = player.serverdata.acc.inventory;
 
         }
     });
 
     socket.on('addOtherPlayer', data => {
-        if (data.playerId !== player.id) {
-            var cube = globals.load.box({
+        if (data.id !== player.id) {
+            let cube = globals.load.box({
                 l: 1,
                 w: 1,
                 h: 2,
                 mass: 0
             });
             cube.body.position.set(data.x, data.y, data.z);
-            globals.otherPlayersId.push(data.playerId);
+            globals.otherPlayersId.push(data.id);
             globals.otherPlayers.push(cube);
-            globals.load.label(cube.mesh, data.accountData.level + ' - ' + data.accountData.username);
+            globals.load.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
         }
     });
 
     socket.on('removeOtherPlayer', data => {
 
-        globals.scene.remove(playerForId(data.playerId).mesh);
-        globals.world.remove(playerForId(data.playerId).body);
-        console.log(data.playerId + ' disconnected');
+        globals.scene.remove(playerForId(data.id).mesh);
+        globals.world.remove(playerForId(data.id).body);
+        console.log(data.id + ' disconnected');
 
     });
 
     socket.on('updatePosition', data => {
 
-        var somePlayer = playerForId(data.playerId);
+        let somePlayer = playerForId(data.id);
         if (somePlayer) {
             somePlayer.body.position.x = data.x;
             somePlayer.body.position.y = data.y;
             somePlayer.body.position.z = data.z;
 
-            // somePlayer.body.quaternion.x = data.quaternion.x;
-            // somePlayer.body.quaternion.y = data.quaternion.y;
-            // somePlayer.body.quaternion.z = data.quaternion.z;
-            // somePlayer.body.quaternion.w = data.quaternion.w;
+            // somePlayer.body.q.x = data.q.x;
+            // somePlayer.body.q.y = data.q.y;
+            // somePlayer.body.q.z = data.q.z;
+            // somePlayer.body.q.w = data.q.w;
         }
 
     });
 
+    socket.on('bullet', (pos) => {
+        alert('boi');
+        let ball = globals.load.ball({
+            array: 'projectiles'
+        });
+        ball.body.position.set(pos.x, pos.y, pos.z);
+        ball.mesh.position.set(pos.x, pos.y, pos.z);
+    });
+
 
     var updatePlayerData = function () {
-        player.serverdata.id = player.id;
-
+        
         player.serverdata.x = globals.BODIES['player'].body.position.x;
         player.serverdata.y = globals.BODIES['player'].body.position.y;
         player.serverdata.z = globals.BODIES['player'].body.position.z;
 
-        player.serverdata.quaternion = globals.BODIES['player'].body.quaternion;
+        player.serverdata.q = globals.BODIES['player'].body.quaternion;
+        
     };
 
     var playerForId = id => {
-        var index;
-        for (var i = 0; i < globals.otherPlayersId.length; i++) {
+        let index;
+        for (let i = 0; i < globals.otherPlayersId.length; i++) {
             if (globals.otherPlayersId[i] == id) {
                 index = i;
                 break;
@@ -88,5 +97,5 @@ module.exports = function (globals, player) {
 
     globals.updatePlayerData = updatePlayerData;
     globals.playerForId = playerForId;
-    
+
 };

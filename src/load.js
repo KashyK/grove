@@ -1,5 +1,5 @@
-module.exports = function (globals) {
-    
+module.exports = (globals) => {
+
     function load(mesh, opts) {
         opts = opts ? opts : {};
         mesh.castShadow = true;
@@ -115,9 +115,9 @@ module.exports = function (globals) {
     globals.load.box = box;
     globals.load.label = label;
     globals.load.ball = ball;
-    
-    this.load = load;
-    this.box = box;
-    this.label = label;
-    this.ball = ball;
+
+    // this.load = load;
+    // this.box = box;
+    // this.label = label;
+    // this.ball = ball;
 };
