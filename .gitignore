@@ -1,2 +1,5 @@
 # unused files
 push.bat
+npm-debug.log
+.c9
+.git

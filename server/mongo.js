@@ -13,7 +13,7 @@ module.exports = (app, events) => {
     });
     db.on('error', console.error);
     db.once('open', function () {
-        console.log('Successfully connected to MongoDB');
+        console.log(`Successfully connected to MongoDB`);
     });
     mongoose.connect('mongodb://hybridalpaca:cellman123@ds139685.mlab.com:39685/grove');
 

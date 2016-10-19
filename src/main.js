@@ -36,7 +36,7 @@ function animate(delta) {
     // Update labels
     for (let key in globals.LABELS) globals.LABELS[key]();
 
-    globals.BODIES['player'].body.velocity.set(globals.BODIES['player'].body.velocity.x * 0.95, globals.BODIES['player'].body.velocity.y, globals.BODIES['player'].body.velocity.z * 0.95)
+    globals.BODIES['player'].body.velocity.set(globals.BODIES['player'].body.velocity.x * 0.95, globals.BODIES['player'].body.velocity.y, globals.BODIES['player'].body.velocity.z * 0.95);
     globals.MESHES['player'].position.copy(globals.BODIES['player'].body.position);
 
     globals.world.step(dt);

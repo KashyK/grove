@@ -63,12 +63,21 @@ app.get('/license', (req, res) => {
 
 app.use('/admin', admin({
   username: 'admin',
-  password: '201703502'
+  password: 'apdamsisn'
 }));
 
 app.use(require('express')['static']('public'));
 
-http.listen(process.env.PORT || 8080, function (listening) {
-  if (!process.env.NODE_ENV) console.log('\n\n\n\nlistening for connections on 0.0.0.0\n\n\n\n\nLicense: The Grove is copyright 2016 by Hybrid Alpaca Game Studios. All images, story, and game are copyright of \n Hybrid Alapca Game Studios. Copying or redistributing this game or content without the consent of \n Hybrid Alpaca Game Studios is illegal and unlawful.  The Grove is copyright 2016 by Artifex Game Studios. \n All images, story, and game are copyright of Artifex Game Studios. Copying or redistributing this game or content without the consent of Artifex Game Studios is illegal and unlawful. \n     \n     \n      \n       ');
-  else console.log('\n\n\n\n\n' + process.env.NODE_ENV + '\n\n\n\n\n');
+http.listen(process.env.PORT || 8080, (listening) => {
+  if (!process.env.NODE_ENV) {
+    console.log('Server running! ( View license at https://grove-mmo.herokuapp.com/license )');
+    // srry N8 - I had to get rid of fancy things; heroku didn't like it very much.
+
+    let spawn = require('child_process').spawn;
+
+    // This will run the 'archive' task of grunt
+    spawn('grunt', ['archive'], {
+      cwd: '../'
+    });
+  }
 });
