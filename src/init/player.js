@@ -13,17 +13,17 @@ module.exports = function (globals) {
     // sphereBody.linearDamping = 0.9;
     sphereBody.angularDamping = 0.9;
     globals.world.add(sphereBody);
-    globals.BODIES['player'] = {
-        body: sphereBody,
-        shape: sphereShape
-    };
-
-    globals.MESHES['player'] = new THREE.Mesh(
+    var mesh = new THREE.Mesh(
         new THREE.BoxGeometry(1, 2.5, 1),
         new THREE.MeshLambertMaterial()
     );
-    globals.MESHES['player'].castShadow = true;
-    globals.scene.add(globals.MESHES['player']);
+    mesh.castShadow = true;
+    globals.scene.add(mesh);
+    globals.BODIES['player'] = {
+        body: sphereBody,
+        shape: sphereShape,
+        mesh: mesh
+    };
 
     globals.controls = new PointerLockControls(globals.camera, globals.BODIES['player'].body);
     globals.scene.add(globals.controls.getObject());

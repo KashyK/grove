@@ -21,6 +21,7 @@ module.exports = {
         projectiles: []
     },
     LABELS: [],
+    PLAYERS: [],
     remove: {
         bodies: [],
         meshes: []
@@ -222,14 +223,14 @@ module.exports = function (globals) {
     // sphereBody.linearDamping = 0.9;
     sphereBody.angularDamping = 0.9;
     globals.world.add(sphereBody);
+    var mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 2.5, 1), new THREE.MeshLambertMaterial());
+    mesh.castShadow = true;
+    globals.scene.add(mesh);
     globals.BODIES['player'] = {
         body: sphereBody,
-        shape: sphereShape
+        shape: sphereShape,
+        mesh: mesh
     };
-
-    globals.MESHES['player'] = new THREE.Mesh(new THREE.BoxGeometry(1, 2.5, 1), new THREE.MeshLambertMaterial());
-    globals.MESHES['player'].castShadow = true;
-    globals.scene.add(globals.MESHES['player']);
 
     globals.controls = new PointerLockControls(globals.camera, globals.BODIES['player'].body);
     globals.scene.add(globals.controls.getObject());
@@ -438,7 +439,7 @@ function animate(delta) {
     for (var _key2 in globals.LABELS) {
         globals.LABELS[_key2]();
     }globals.BODIES['player'].body.velocity.set(globals.BODIES['player'].body.velocity.x * 0.95, globals.BODIES['player'].body.velocity.y, globals.BODIES['player'].body.velocity.z * 0.95);
-    globals.MESHES['player'].position.copy(globals.BODIES['player'].body.position);
+    globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
 
     globals.world.step(dt);
     globals.controls.update(Date.now() - globals.delta);

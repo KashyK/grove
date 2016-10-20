@@ -18,6 +18,7 @@ module.exports = {
         projectiles: []
     },
     LABELS: [],
+    PLAYERS: [],
     remove: {
         bodies: [],
         meshes: []
