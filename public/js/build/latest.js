@@ -12,10 +12,6 @@ module.exports = {
 
     world: new CANNON.World(),
 
-    MESHES: {
-        items: [],
-        projectiles: []
-    },
     BODIES: {
         items: [],
         projectiles: []
@@ -26,9 +22,6 @@ module.exports = {
         bodies: [],
         meshes: []
     },
-
-    otherPlayers: [],
-    otherPlayersId: [],
 
     delta: Date.now(),
     frustum: new THREE.Frustum(),
@@ -480,9 +473,12 @@ module.exports = function (globals, player) {
                 h: 2,
                 mass: 0
             });
-            cube.body.position.set(data.x, data.y, data.z);
-            globals.otherPlayersId.push(data.id);
-            globals.otherPlayers.push(cube);
+            globals.PLAYERS.push({
+                body: cube.body,
+                mesh: cube.mesh,
+                id: data.id,
+                data: data
+            });
             globals.load.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
         }
     });
@@ -537,13 +533,13 @@ module.exports = function (globals, player) {
 
     var playerForId = function playerForId(id) {
         var index = void 0;
-        for (var i = 0; i < globals.otherPlayersId.length; i++) {
-            if (globals.otherPlayersId[i] == id) {
+        for (var i = 0; i < globals.PLAYERS.length; i++) {
+            if (globals.PLAYERS[i].id == id) {
                 index = i;
                 break;
             }
         }
-        return globals.otherPlayers[index];
+        return globals.PLAYERS[index];
     };
 
     socket.on('clear', function () {

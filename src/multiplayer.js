@@ -18,14 +18,18 @@ module.exports = (globals, player) => {
     socket.on('addOtherPlayer', data => {
         if (data.id !== player.id) {
             let cube = globals.load.box({
-                l: 1,
-                w: 1,
-                h: 2,
+                l: 50,
+                w: 0.5,
+                h: 5,
                 mass: 0
             });
-            cube.body.position.set(data.x, data.y, data.z);
             globals.otherPlayersId.push(data.id);
             globals.otherPlayers.push(cube);
+            globals.PLAYERS.push({
+                body: cube.body,
+                mesh: cube.mesh,
+                data
+            });
             globals.load.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
         }
     });

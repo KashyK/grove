@@ -8,11 +8,7 @@ module.exports = {
     camera: new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 10000),
 
     world: new CANNON.World(),
-
-    MESHES: {
-        items: [],
-        projectiles: []
-    },
+    
     BODIES: {
         items: [],
         projectiles: []
@@ -23,9 +19,6 @@ module.exports = {
         bodies: [],
         meshes: []
     },
-
-    otherPlayers: [],
-    otherPlayersId: [],
 
     delta: Date.now(),
     frustum: new THREE.Frustum(),
