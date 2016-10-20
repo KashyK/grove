@@ -302,7 +302,7 @@ module.exports = function (globals) {
             mass: opts.mass || 0
         });
         boxBody.addShape(boxShape);
-        var boxMesh = new THREE.Mesh(boxGeometry, new THREE.MeshLambertMaterial({
+        var boxMesh = new THREE.Mesh(boxGeometry, new THREE.MeshPhongMaterial({
             color: 0xFF0000
         }));
         globals.world.add(boxBody);
@@ -329,11 +329,11 @@ module.exports = function (globals) {
         var ballShape = new CANNON.Sphere(opts.radius || 0.2);
         var ballGeometry = new THREE.SphereGeometry(ballShape.radius, 32, 32);
         var ballBody = new CANNON.Body({
-            mass: 100
+            mass: 10
         });
 
         ballBody.addShape(ballShape);
-        var ballMesh = new THREE.Mesh(ballGeometry, new THREE.MeshLambertMaterial({
+        var ballMesh = new THREE.Mesh(ballGeometry, new THREE.MeshPhongMaterial({
             color: Math.random() * 0xFFFFFF
         }));
         globals.world.add(ballBody);
@@ -582,7 +582,7 @@ module.exports = function (globals) {
             (function () {
 
                 var shootDirection = new THREE.Vector3();
-                var shootVelo = 15;
+                var shootVelo = 25;
 
                 var x = globals.BODIES['player'].body.position.x;
                 var y = globals.BODIES['player'].body.position.y;
@@ -604,8 +604,10 @@ module.exports = function (globals) {
                 ball.id = Math.random();
 
                 ball.body.addEventListener("collide", function (event) {
-                    globals.remove.bodies.push(ball.body);
-                    globals.remove.meshes.push(ball.mesh);
+                    setTimeout(function () {
+                        globals.remove.bodies.push(ball.body);
+                        globals.remove.meshes.push(ball.mesh);
+                    });
                 });
 
                 socket.emit('bullet', {

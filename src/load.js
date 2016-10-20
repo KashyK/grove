@@ -44,7 +44,7 @@ module.exports = (globals) => {
             mass: opts.mass || 0
         });
         boxBody.addShape(boxShape);
-        var boxMesh = new THREE.Mesh(boxGeometry, new THREE.MeshLambertMaterial({
+        var boxMesh = new THREE.Mesh(boxGeometry, new THREE.MeshPhongMaterial({
             color: 0xFF0000
         }));
         globals.world.add(boxBody);
@@ -71,11 +71,11 @@ module.exports = (globals) => {
         var ballShape = new CANNON.Sphere(opts.radius || 0.2);
         var ballGeometry = new THREE.SphereGeometry(ballShape.radius, 32, 32);
         var ballBody = new CANNON.Body({
-            mass: 100
+            mass: 10
         });
 
         ballBody.addShape(ballShape);
-        var ballMesh = new THREE.Mesh(ballGeometry, new THREE.MeshLambertMaterial({
+        var ballMesh = new THREE.Mesh(ballGeometry, new THREE.MeshPhongMaterial({
             color: Math.random() * 0xFFFFFF
         }));
         globals.world.add(ballBody);

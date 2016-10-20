@@ -18,16 +18,15 @@ module.exports = (globals, player) => {
     socket.on('addOtherPlayer', data => {
         if (data.id !== player.id) {
             let cube = globals.load.box({
-                l: 50,
-                w: 0.5,
-                h: 5,
+                l: 1,
+                w: 1,
+                h: 2,
                 mass: 0
             });
-            globals.otherPlayersId.push(data.id);
-            globals.otherPlayers.push(cube);
             globals.PLAYERS.push({
                 body: cube.body,
                 mesh: cube.mesh,
+                id: data.id,
                 data
             });
             globals.load.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
@@ -62,16 +61,16 @@ module.exports = (globals, player) => {
         pos,
         vel,
     }) => {
-      let ball = globals.load.ball({
-           array: 'projectiles'
-      });
-       ball.body.position.set(pos.x, pos.y, pos.z);
-       ball.body.velocity.set(vel.x, vel.y, vel.z);
-      ball.mesh.position.set(pos.x, pos.y, pos.z);
+        let ball = globals.load.ball({
+            array: 'projectiles'
+        });
+        ball.body.position.set(pos.x, pos.y, pos.z);
+        ball.body.velocity.set(vel.x, vel.y, vel.z);
+        ball.mesh.position.set(pos.x, pos.y, pos.z);
 
         ball.body.addEventListener("collide", function (event) {
             globals.remove.bodies.push(ball.body);
-           globals.remove.meshes.push(ball.mesh);
+            globals.remove.meshes.push(ball.mesh);
         });
     });
 
@@ -88,13 +87,13 @@ module.exports = (globals, player) => {
 
     var playerForId = id => {
         let index;
-        for (let i = 0; i < globals.otherPlayersId.length; i++) {
-            if (globals.otherPlayersId[i] == id) {
+        for (let i = 0; i < globals.PLAYERS.length; i++) {
+            if (globals.PLAYERS[i].id == id) {
                 index = i;
                 break;
             }
         }
-        return globals.otherPlayers[index];
+        return globals.PLAYERS[index];
     };
 
     socket.on('clear', function () {

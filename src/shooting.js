@@ -15,7 +15,7 @@ module.exports = (globals) => {
         if (globals.controls.enabled == true) {
 
             let shootDirection = new THREE.Vector3();
-            const shootVelo = 15;
+            const shootVelo = 25;
 
             let x = globals.BODIES['player'].body.position.x;
             let y = globals.BODIES['player'].body.position.y;
@@ -39,8 +39,10 @@ module.exports = (globals) => {
             ball.id = Math.random();
 
             ball.body.addEventListener("collide", function (event) {
-                globals.remove.bodies.push(ball.body);
-                globals.remove.meshes.push(ball.mesh);
+                setTimeout(function () {
+                    globals.remove.bodies.push(ball.body);
+                    globals.remove.meshes.push(ball.mesh);
+                });
             });
 
             socket.emit('bullet', {
