@@ -58,16 +58,16 @@ module.exports = (globals, player) => {
         pos,
         vel,
     }) => {
-        let ball = globals.load.ball({
-            array: 'projectiles'
-        });
-        ball.body.position.set(pos.x, pos.y, pos.z);
-        ball.body.velocity.set(vel.x, vel.y, vel.z);
-        ball.mesh.position.set(pos.x, pos.y, pos.z);
+      let ball = globals.load.ball({
+           array: 'projectiles'
+      });
+       ball.body.position.set(pos.x, pos.y, pos.z);
+       ball.body.velocity.set(vel.x, vel.y, vel.z);
+      ball.mesh.position.set(pos.x, pos.y, pos.z);
 
         ball.body.addEventListener("collide", function (event) {
             globals.remove.bodies.push(ball.body);
-            globals.remove.meshes.push(ball.mesh);
+           globals.remove.meshes.push(ball.mesh);
         });
     });
 

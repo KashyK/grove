@@ -71,6 +71,5 @@ app.use(require('express')['static']('public'));
 http.listen(process.env.PORT || 8080, (listening) => {
   if (!process.env.NODE_ENV) {
     console.log('Server running! ( View license at https://grove-mmo.herokuapp.com/license )');
-    // srry N8 - I had to get rid of fancy things; heroku didn't like it very much.
   }
 });
