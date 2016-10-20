@@ -11,7 +11,7 @@ module.exports = (globals) => {
         targetVec.copy(ray.direction);
     }
 
-    window.addEventListener("click", (e) => {
+    function shoot(e) {
         if (globals.controls.enabled == true) {
 
             let shootDirection = new THREE.Vector3();
@@ -36,12 +36,27 @@ module.exports = (globals) => {
             z += shootDirection.z * (globals.BODIES['player'].shape.radius * 1.02 + ball.shape.radius);
             ball.body.position.set(x, y, z);
             ball.mesh.position.set(x, y, z);
-            
+            ball.id = Math.random();
+
+            ball.body.addEventListener("collide", function (event) {
+                globals.remove.bodies.push(ball.body);
+                globals.remove.meshes.push(ball.mesh);
+            });
+
             socket.emit('bullet', {
-                x,
-                y,
-                z
+                pos: {
+                    x,
+                    y,
+                    z
+                },
+                vel: {
+                    x: ball.body.velocity.x,
+                    y: ball.body.velocity.y,
+                    z: ball.body.velocity.z
+                },
             });
         }
-    });
+    }
+
+    window.addEventListener('click', shoot);
 };

@@ -24,19 +24,19 @@ module.exports = function (globals) {
     light.shadowCameraFar = globals.camera.far;
     light.shadowCameraFov = globals.camera.fov;
 
-    light.shadowMapBias = -1;
+    light.shadowMapBias = 0.0039;
     light.shadowMapDarkness = 0.5;
-    light.shadowMapWidth = 2048;
-    light.shadowMapHeight = 2048;
+    light.shadowMapWidth = 3072;
+    light.shadowMapHeight = 3072;
 
-    light.shadowCameraVisible = true;
+    light.shadowCameraVisible = false;
     globals.scene.add(light);
 
     // floor
     var geometry = new THREE.PlaneGeometry(300, 300, 50, 50);
     geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
-    var mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
+    var mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
         color: 0x00FF00,
         shininess: 10,
     }));

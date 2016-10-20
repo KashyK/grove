@@ -63,7 +63,7 @@ app.get('/license', (req, res) => {
 
 app.use('/admin', admin({
   username: 'admin',
-  password: 'apdamsisn'
+  password: '201703502'
 }));
 
 app.use(require('express')['static']('public'));
@@ -72,12 +72,5 @@ http.listen(process.env.PORT || 8080, (listening) => {
   if (!process.env.NODE_ENV) {
     console.log('Server running! ( View license at https://grove-mmo.herokuapp.com/license )');
     // srry N8 - I had to get rid of fancy things; heroku didn't like it very much.
-
-    let spawn = require('child_process').spawn;
-
-    // This will run the 'archive' task of grunt
-    spawn('grunt', ['archive'], {
-      cwd: '../'
-    });
   }
 });

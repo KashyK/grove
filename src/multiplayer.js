@@ -54,24 +54,32 @@ module.exports = (globals, player) => {
 
     });
 
-    socket.on('bullet', (pos) => {
-        alert('boi');
+    socket.on('bullet', ({
+        pos,
+        vel,
+    }) => {
         let ball = globals.load.ball({
             array: 'projectiles'
         });
         ball.body.position.set(pos.x, pos.y, pos.z);
+        ball.body.velocity.set(vel.x, vel.y, vel.z);
         ball.mesh.position.set(pos.x, pos.y, pos.z);
+
+        ball.body.addEventListener("collide", function (event) {
+            globals.remove.bodies.push(ball.body);
+            globals.remove.meshes.push(ball.mesh);
+        });
     });
 
 
     var updatePlayerData = function () {
-        
+
         player.serverdata.x = globals.BODIES['player'].body.position.x;
         player.serverdata.y = globals.BODIES['player'].body.position.y;
         player.serverdata.z = globals.BODIES['player'].body.position.z;
 
         player.serverdata.q = globals.BODIES['player'].body.quaternion;
-        
+
     };
 
     var playerForId = id => {

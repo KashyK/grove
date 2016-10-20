@@ -19,6 +19,7 @@
   },
   "scripts": {
     "start": "node server/index.js",
+    "debug": "DEBUG=* node server/index.js",
     "test": "exit 0"
   },
   "devDependencies": {

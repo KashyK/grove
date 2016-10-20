@@ -21,6 +21,17 @@ function animate(delta) {
     globals.cameraViewProjectionMatrix.multiplyMatrices(globals.camera.projectionMatrix, globals.camera.matrixWorldInverse);
     globals.frustum.setFromMatrix(globals.cameraViewProjectionMatrix);
 
+    if (globals.remove.bodies.length && globals.remove.meshes.length) {
+        for (let key in globals.remove.bodies) {
+            globals.world.remove(globals.remove.bodies[key]);
+            delete globals.remove.bodies[key];
+        }
+        for (let key in globals.remove.meshes) {
+            globals.scene.remove(globals.remove.meshes[key]);
+            delete globals.remove.meshes[key];
+        }
+    }
+
     // Update bullets, etc.
     for (let i = 0; i < globals.BODIES['projectiles'].length; i++) {
         globals.BODIES['projectiles'][i].mesh.position.copy(globals.BODIES['projectiles'][i].body.position);
