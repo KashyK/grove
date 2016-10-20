@@ -63,7 +63,7 @@ app.get('/license', (req, res) => {
 
 app.use('/admin', admin({
   username: 'admin',
-  password: '201703502'
+  password: 'porpose'
 }));
 
 app.use(require('express')['static']('public'));
