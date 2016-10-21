@@ -74,6 +74,10 @@ module.exports = (globals, player) => {
         });
     });
 
+    socket.on('hit', (data) => {
+        if (data.id == player.id) alert(`You've been struck for ${data.dmg} damage!`);
+    });
+
 
     var updatePlayerData = function () {
 

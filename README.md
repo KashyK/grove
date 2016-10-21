@@ -36,9 +36,8 @@ Liscense:
 - The Grove is copyright 2016 by Hybrid Alpaca Game Studios. All images, story, and game are copyright of Hybrid Alapca Game Studios.
 Copying or redistributing this game or content without the consent of Hybrid Alpaca Game Studios is illegal and unlawful.
 
-- The Grove is copyright 2016 by Artifex Game Studios. All images, story, and game are copyright of Artifex Game Studios.
+- The Grove is copyright 2016 by Artifex Game Studios. All images, story, and game are copyright of Artifex Game Studios. 
 Copying or redistributing this game or content without the consent of Artifex Game Studios is illegal and unlawful.
-
 
 
 All people that have contributed to this game include:
@@ -51,5 +50,3 @@ All people that have contributed to this game include:
 - Hunter Sokolis          Graphics
 - Michael Rimmele         Graphics
 - Brendan O'Rourke        Graphics
-- Will Vanderlaan         Graphics
-- Race Bonner             Story, Ideas

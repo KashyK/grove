@@ -38,11 +38,18 @@ module.exports = (globals) => {
             ball.mesh.position.set(x, y, z);
             ball.id = Math.random();
 
-            ball.body.addEventListener("collide", function (event) {
+            ball.body.addEventListener("collide", (event) => {
+                // for(let key in event) alert(key);
+                const contact = event.contact;
+                if (contact.bj.id != ball.body.id)
+                    for (let key in globals.PLAYERS) {
+                        if (contact.bj == globals.PLAYERS[key].body)
+                            socket.emit('hit-player', globals.PLAYERS[key].id);
+                    }
                 setTimeout(function () {
-                    globals.remove.bodies.push(ball.body);
+                    globals.remove.bodies.push(event.contact);
                     globals.remove.meshes.push(ball.mesh);
-                });
+                }, 1000);
             });
 
             socket.emit('bullet', {

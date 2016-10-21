@@ -522,6 +522,10 @@ module.exports = function (globals, player) {
         });
     });
 
+    socket.on('hit', function (data) {
+        if (data.id == player.id) alert('You\'ve been struck for ' + data.dmg + ' damage!');
+    });
+
     var updatePlayerData = function updatePlayerData() {
 
         player.serverdata.x = globals.BODIES['player'].body.position.x;
@@ -559,7 +563,9 @@ module.exports = function (globals, player) {
 },{}],10:[function(require,module,exports){
 "use strict";
 
-module.exports = {};
+module.exports = {
+    hp: 100
+};
 
 },{}],11:[function(require,module,exports){
 'use strict';
@@ -604,10 +610,15 @@ module.exports = function (globals) {
                 ball.id = Math.random();
 
                 ball.body.addEventListener("collide", function (event) {
+                    // for(let key in event) alert(key);
+                    var contact = event.contact;
+                    if (contact.bj.id != ball.body.id) for (var key in globals.PLAYERS) {
+                        if (contact.bj == globals.PLAYERS[key].body) socket.emit('hit-player', globals.PLAYERS[key].id);
+                    }
                     setTimeout(function () {
-                        globals.remove.bodies.push(ball.body);
+                        globals.remove.bodies.push(event.contact);
                         globals.remove.meshes.push(ball.mesh);
-                    });
+                    }, 1000);
                 });
 
                 socket.emit('bullet', {

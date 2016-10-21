@@ -44,7 +44,7 @@ module.exports = (io, User, conf_url) => {
 
         //////////////////////////////////////////////////
         
-        require('./physics')(socket);
+        require('./physics')(socket, io);
         
         //////////////////////////////////////////////////
 
