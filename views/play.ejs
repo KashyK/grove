@@ -5,7 +5,7 @@
         <title>Play | The Grove</title>
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-        <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.min.css'>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
         <link rel='icon' href='/img/favicon.ico'>
 
         <script src="/socket.io/socket.io.js"></script>
@@ -20,9 +20,7 @@
         <script src='/js/vendor/cannon.debug.js'></script>
 
         <style>
-        
             @import url('https://fonts.googleapis.com/css?family=Megrim');
-            
             html,
             body {
                 overflow: hidden;
@@ -33,6 +31,7 @@
                 width: 100%;
                 height: 100%;
                 background-color: rgba(0, 0, 0, 1.0);
+                z-index: 5;
             }
             
             #instructions {
@@ -56,10 +55,12 @@
                 font-family: Megrim, cursive;
             }
             
-            #voice-chat {
+            #hud {
                 position: fixed;
-                left: 0px;
+                left: 5%;
                 bottom: 0px;
+                width: 90%;
+                /*height: 100%;*/
             }
         </style>
     </head>
@@ -73,7 +74,33 @@
             </div>
         </div>
 
+        <div class="modal fade" id='pause'>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Paused</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>The Grove is currently paused.&hellip;</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal">Resume</button>
+                        <button class="btn btn-danger">Quit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id='hud'>
+            <div id='health' class="text-xs-center" id="example-caption-6">Loading...</div>
+            <progress id='health-bar' class="progress progress-success" value="100" max="100"></progress>
+        </div>
+
         <script>
+            
             String.prototype.capitalize = function () {
                 return this.charAt(0).toUpperCase() + this.slice(1);
             };

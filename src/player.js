@@ -1,3 +1,3 @@
 module.exports = {
-    hp: 100
+    hp: 10
 };

@@ -1,5 +1,6 @@
 var blocker = document.getElementById('blocker');
 var instructions = document.getElementById('instructions');
+var hud = document.getElementById('hud');
 
 var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
@@ -14,17 +15,23 @@ if (havePointerLock) {
             controls.enabled = true;
 
             blocker.style.display = 'none';
+            
+            hud.style.display = '';
 
         }
         else {
 
             controls.enabled = false;
+            
+            hud.style.display = 'none';
+            
+            $('#pause').modal();
 
-            blocker.style.display = '-webkit-box';
-            blocker.style.display = '-moz-box';
-            blocker.style.display = 'box';
+            // blocker.style.display = '-webkit-box';
+            // blocker.style.display = '-moz-box';
+            // blocker.style.display = 'box';
 
-            instructions.style.display = '';
+            // instructions.style.display = '';
 
         }
 
@@ -44,6 +51,9 @@ if (havePointerLock) {
     document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
 
     function click(event) {
+
+        toggleFullScreen();
+
         instructions.style.display = 'none';
 
         // Ask the browser to lock the pointer
@@ -86,4 +96,22 @@ else {
 
     instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
 
+}
+
+function toggleFullScreen() {
+    var i = document.body;
+
+    // go full-screen
+    if (i.requestFullscreen) {
+        i.requestFullscreen();
+    }
+    else if (i.webkitRequestFullscreen) {
+        i.webkitRequestFullscreen();
+    }
+    else if (i.mozRequestFullScreen) {
+        i.mozRequestFullScreen();
+    }
+    else if (i.msRequestFullscreen) {
+        i.msRequestFullscreen();
+    }
 }

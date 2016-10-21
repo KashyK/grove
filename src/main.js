@@ -50,6 +50,10 @@ function animate(delta) {
     globals.BODIES['player'].body.velocity.set(globals.BODIES['player'].body.velocity.x * 0.95, globals.BODIES['player'].body.velocity.y, globals.BODIES['player'].body.velocity.z * 0.95);
     globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
 
+    $('#health-bar')
+        .val(player.hp / 10 * 100);
+    $('#health').text(player.hp + ' HP');
+
     globals.world.step(dt);
     globals.controls.update(Date.now() - globals.delta);
     // globals.rendererDEBUG.update();
@@ -60,5 +64,16 @@ function animate(delta) {
         globals.updatePlayerData();
         socket.emit('updatePosition', player.serverdata);
     }
+
+}
+
+window.addEventListener('resize', onWindowResize, false);
+
+function onWindowResize() {
+
+    globals.camera.aspect = window.innerWidth / window.innerHeight;
+    globals.camera.updateProjectionMatrix();
+
+    globals.renderer.setSize(window.innerWidth, window.innerHeight);
 
 }

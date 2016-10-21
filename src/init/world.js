@@ -10,7 +10,7 @@ module.exports = function (globals) {
 
     solver.iterations = 7;
     solver.tolerance = 0.1;
-    var split = true;
+    var split = false;
     if (split)
         globals.world.solver = new CANNON.SplitSolver(solver);
     else

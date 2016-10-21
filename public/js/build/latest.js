@@ -246,7 +246,7 @@ module.exports = function (globals) {
 
     solver.iterations = 7;
     solver.tolerance = 0.1;
-    var split = true;
+    var split = false;
     if (split) globals.world.solver = new CANNON.SplitSolver(solver);else globals.world.solver = solver;
 
     globals.world.gravity.set(0, -20, 0);
@@ -434,6 +434,9 @@ function animate(delta) {
     }globals.BODIES['player'].body.velocity.set(globals.BODIES['player'].body.velocity.x * 0.95, globals.BODIES['player'].body.velocity.y, globals.BODIES['player'].body.velocity.z * 0.95);
     globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
 
+    $('#health-bar').val(player.hp / 10 * 100);
+    $('#health').text(player.hp + ' HP');
+
     globals.world.step(dt);
     globals.controls.update(Date.now() - globals.delta);
     // globals.rendererDEBUG.update();
@@ -444,6 +447,16 @@ function animate(delta) {
         globals.updatePlayerData();
         socket.emit('updatePosition', player.serverdata);
     }
+}
+
+window.addEventListener('resize', onWindowResize, false);
+
+function onWindowResize() {
+
+    globals.camera.aspect = window.innerWidth / window.innerHeight;
+    globals.camera.updateProjectionMatrix();
+
+    globals.renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 },{"./globals":1,"./init/manager":4,"./load":7,"./multiplayer":9,"./player":10,"./shooting":11}],9:[function(require,module,exports){
@@ -487,6 +500,7 @@ module.exports = function (globals, player) {
 
         globals.scene.remove(playerForId(data.id).mesh);
         globals.world.remove(playerForId(data.id).body);
+        alert(globals.PLAYERS[playerForId(data.id)]);
         console.log(data.id + ' disconnected');
     });
 
@@ -523,7 +537,7 @@ module.exports = function (globals, player) {
     });
 
     socket.on('hit', function (data) {
-        if (data.id == player.id) alert('You\'ve been struck for ' + data.dmg + ' damage!');
+        if (data.id == player.id) player.hp -= data.dmg;
     });
 
     var updatePlayerData = function updatePlayerData() {
@@ -564,7 +578,7 @@ module.exports = function (globals, player) {
 "use strict";
 
 module.exports = {
-    hp: 100
+    hp: 10
 };
 
 },{}],11:[function(require,module,exports){

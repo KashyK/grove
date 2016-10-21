@@ -37,6 +37,7 @@ module.exports = (globals, player) => {
 
         globals.scene.remove(playerForId(data.id).mesh);
         globals.world.remove(playerForId(data.id).body);
+        alert(globals.PLAYERS[playerForId(data.id)]);
         console.log(data.id + ' disconnected');
 
     });
@@ -75,7 +76,7 @@ module.exports = (globals, player) => {
     });
 
     socket.on('hit', (data) => {
-        if (data.id == player.id) alert(`You've been struck for ${data.dmg} damage!`);
+        if (data.id == player.id) player.hp -= data.dmg;
     });
 
 
