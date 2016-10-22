@@ -1,12 +1,13 @@
 /* global THREE, CANNON, PointerLockControls */
 
 module.exports = function (globals) {
-    
-    var mass = 5,
+
+    var mass = 10,
         radius = 1.3;
     var sphereShape = new CANNON.Sphere(radius);
     var sphereBody = new CANNON.Body({
-        mass: mass
+        mass: mass,
+        material: globals.groundMaterial
     });
     sphereBody.addShape(sphereShape);
     sphereBody.position.set(0, 5, 0);
@@ -27,7 +28,7 @@ module.exports = function (globals) {
 
     globals.controls = new PointerLockControls(globals.camera, globals.BODIES['player'].body);
     globals.scene.add(globals.controls.getObject());
-    
+
     window.controls = globals.controls;
-    
+
 };

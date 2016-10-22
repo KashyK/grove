@@ -25,10 +25,24 @@ module.exports = {
 
     delta: Date.now(),
     frustum: new THREE.Frustum(),
-    cameraViewProjectionMatrix: new THREE.Matrix4()
+    cameraViewProjectionMatrix: new THREE.Matrix4(),
+
+    groundMaterial: new CANNON.Material("groundMaterial")
 };
 
 module.exports.rendererDEBUG = new THREE.CannonDebugRenderer(module.exports.scene, module.exports.world);
+// Adjust constraint equation parameters for ground/ground contact
+var ground_ground_cm = new CANNON.ContactMaterial(module.exports.groundMaterial, module.exports.groundMaterial, {
+    friction: 1e60,
+    restitution: 0.3,
+    contactEquationStiffness: 1e8,
+    contactEquationRelaxation: 3,
+    frictionEquationStiffness: 1e8,
+    frictionEquationRegularizationTime: 3
+});
+
+// Add contact material to the world
+module.exports.world.addContactMaterial(ground_ground_cm);
 
 },{}],2:[function(require,module,exports){
 "use strict";
@@ -36,14 +50,6 @@ module.exports.rendererDEBUG = new THREE.CannonDebugRenderer(module.exports.scen
 /* global THREE, CANNON */
 
 module.exports = function (globals) {
-
-    var groundShape = new CANNON.Plane();
-    var groundBody = new CANNON.Body({
-        mass: 0
-    });
-    groundBody.addShape(groundShape);
-    groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
-    globals.world.add(groundBody);
 
     globals.scene.fog = new THREE.FogExp2(0x110011, 0.02);
 
@@ -71,13 +77,20 @@ module.exports = function (globals) {
     var geometry = new THREE.PlaneGeometry(300, 300, 50, 50);
     geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
-    var mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
+    for (var i = 0; i < geometry.vertices.length; i++) {
+        geometry.vertices[i].y += Math.sin(geometry.vertices[i].x) * Math.cos(geometry.vertices[i].z) * 0;
+    }var mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
         color: 0x00FF00,
         shininess: 10
     }));
     mesh.castShadow = true;
     mesh.receiveShadow = true;
     globals.scene.add(mesh);
+
+    globals.load(mesh, {
+        mass: 0,
+        material: globals.groundMaterial
+    });
 };
 
 },{}],3:[function(require,module,exports){
@@ -205,11 +218,12 @@ module.exports = init;
 
 module.exports = function (globals) {
 
-    var mass = 5,
+    var mass = 10,
         radius = 1.3;
     var sphereShape = new CANNON.Sphere(radius);
     var sphereBody = new CANNON.Body({
-        mass: mass
+        mass: mass,
+        material: globals.groundMaterial
     });
     sphereBody.addShape(sphereShape);
     sphereBody.position.set(0, 5, 0);
@@ -274,7 +288,8 @@ module.exports = function (globals) {
         }
         var cvph = new CANNON.ConvexPolyhedron(verts, faces);
         var Cbody = new CANNON.Body({
-            mass: opts.mass || 0
+            mass: opts.mass || 0,
+            material: opts.material || undefined
         });
         Cbody.addShape(cvph);
         Cbody.position.copy(mesh.position);
@@ -389,8 +404,8 @@ var player = require('./player');
 
 var dt = 1 / 60;
 
-require('./init/manager')(globals);
 require('./load')(globals);
+require('./init/manager')(globals);
 require('./shooting')(globals);
 require('./multiplayer')(globals, player);
 
@@ -431,8 +446,7 @@ function animate(delta) {
     // Update labels
     for (var _key2 in globals.LABELS) {
         globals.LABELS[_key2]();
-    }globals.BODIES['player'].body.velocity.set(globals.BODIES['player'].body.velocity.x * 0.95, globals.BODIES['player'].body.velocity.y, globals.BODIES['player'].body.velocity.z * 0.95);
-    globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
+    }globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
 
     $('#health-bar').val(player.hp / 10 * 100);
     $('#health').text(player.hp + ' HP');
@@ -630,7 +644,7 @@ module.exports = function (globals) {
                         if (contact.bj == globals.PLAYERS[key].body) socket.emit('hit-player', globals.PLAYERS[key].id);
                     }
                     setTimeout(function () {
-                        globals.remove.bodies.push(event.contact);
+                        globals.remove.bodies.push(ball.body);
                         globals.remove.meshes.push(ball.mesh);
                     }, 1000);
                 });

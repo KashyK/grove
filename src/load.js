@@ -16,7 +16,8 @@ module.exports = (globals) => {
         }
         var cvph = new CANNON.ConvexPolyhedron(verts, faces);
         var Cbody = new CANNON.Body({
-            mass: opts.mass || 0
+            mass: opts.mass || 0,
+            material: opts.material || undefined
         });
         Cbody.addShape(cvph);
         Cbody.position.copy(mesh.position);

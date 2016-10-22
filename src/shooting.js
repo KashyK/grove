@@ -47,7 +47,7 @@ module.exports = (globals) => {
                             socket.emit('hit-player', globals.PLAYERS[key].id);
                     }
                 setTimeout(function () {
-                    globals.remove.bodies.push(event.contact);
+                    globals.remove.bodies.push(ball.body);
                     globals.remove.meshes.push(ball.mesh);
                 }, 1000);
             });
