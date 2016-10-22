@@ -77,6 +77,10 @@ module.exports = (globals, player) => {
 
     socket.on('hit', (data) => {
         if (data.id == player.id) player.hp -= data.dmg;
+        if (player.hp <= 0) {
+            alert('Why excuse me fine sir, but it appears that you are dead!');
+            socket.disconnect();
+        }
     });
 
 
