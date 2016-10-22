@@ -29,7 +29,7 @@ module.exports = function (globals) {
     geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
     for (let i = 0; i < geometry.vertices.length; i++)
-        geometry.vertices[i].y += (Math.sin(geometry.vertices[i].x) * Math.cos(geometry.vertices[i].z)) * 0;
+        geometry.vertices[i].y += (Math.sin(geometry.vertices[i].x) * Math.cos(geometry.vertices[i].z)) * 7;
 
     let mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
         color: 0x00FF00,

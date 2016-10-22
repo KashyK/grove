@@ -15,16 +15,16 @@ if (havePointerLock) {
             controls.enabled = true;
 
             blocker.style.display = 'none';
-            
+
             hud.style.display = '';
 
         }
         else {
 
             controls.enabled = false;
-            
+
             hud.style.display = 'none';
-            
+
             $('#pause').modal();
 
             // blocker.style.display = '-webkit-box';
@@ -100,7 +100,6 @@ else {
 
 function toggleFullScreen() {
     var i = document.body;
-
     // go full-screen
     if (i.requestFullscreen) {
         i.requestFullscreen();
