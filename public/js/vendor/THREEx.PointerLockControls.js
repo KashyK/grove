@@ -141,24 +141,25 @@ var PointerLockControls = function (camera, cannonBody) {
     var euler = new THREE.Euler();
     this.update = function (delta) {
 
-        if (scope.enabled === false) return;
+        if (scope.enabled === true) {
 
-        delta *= 0.1;
+            delta *= 0.1;
 
-        inputVelocity.set(0, 0, 0);
+            inputVelocity.set(0, 0, 0);
 
-        if (moveForward) {
-            inputVelocity.z = -velocityFactor * delta;
-        }
-        if (moveBackward) {
-            inputVelocity.z = velocityFactor * delta;
-        }
+            if (moveForward) {
+                inputVelocity.z = -velocityFactor * delta;
+            }
+            if (moveBackward) {
+                inputVelocity.z = velocityFactor * delta;
+            }
 
-        if (moveLeft) {
-            inputVelocity.x = -velocityFactor * delta;
-        }
-        if (moveRight) {
-            inputVelocity.x = velocityFactor * delta;
+            if (moveLeft) {
+                inputVelocity.x = -velocityFactor * delta;
+            }
+            if (moveRight) {
+                inputVelocity.x = velocityFactor * delta;
+            }
         }
 
         // Convert velocity to world coordinates

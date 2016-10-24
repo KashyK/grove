@@ -79,7 +79,7 @@ module.exports = function (globals) {
 
     for (var i = 0; i < geometry.vertices.length; i++) {
         geometry.vertices[i].y += Math.sin(geometry.vertices[i].x) * Math.cos(geometry.vertices[i].z) * 7;
-    }var mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
+    }var mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
         color: 0x00FF00,
         shininess: 10
     }));
@@ -349,7 +349,7 @@ module.exports = function (globals) {
 
         ballBody.addShape(ballShape);
         var ballMesh = new THREE.Mesh(ballGeometry, new THREE.MeshPhongMaterial({
-            color: Math.random() * 0xFFFFFF
+            color: 0x00CCFF
         }));
         globals.world.add(ballBody);
         globals.scene.add(ballMesh);
@@ -629,6 +629,8 @@ module.exports = function (globals) {
                 var ball = globals.load.ball({
                     array: 'projectiles'
                 });
+
+                // ball.mesh.add(new THREE.PointLight(0x00FFFF, 1, 10, 2));
 
                 getShootDir(shootDirection);
                 ball.body.velocity.set(shootDirection.x * shootVelo, shootDirection.y * shootVelo, shootDirection.z * shootVelo);

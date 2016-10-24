@@ -77,7 +77,7 @@ module.exports = (globals) => {
 
         ballBody.addShape(ballShape);
         var ballMesh = new THREE.Mesh(ballGeometry, new THREE.MeshPhongMaterial({
-            color: Math.random() * 0xFFFFFF
+            color: 0x00CCFF
         }));
         globals.world.add(ballBody);
         globals.scene.add(ballMesh);

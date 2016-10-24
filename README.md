@@ -28,7 +28,7 @@ The Grove is officialy hosted on Heroku servers
 
 The Grove officialy uses MongoDB databases
 
-www.mlab.com/
+www.mlab.com
 
 Liscense:
 

@@ -31,7 +31,7 @@ module.exports = function (globals) {
     for (let i = 0; i < geometry.vertices.length; i++)
         geometry.vertices[i].y += (Math.sin(geometry.vertices[i].x) * Math.cos(geometry.vertices[i].z)) * 7;
 
-    let mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
+    let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
         color: 0x00FF00,
         shininess: 10,
     }));
