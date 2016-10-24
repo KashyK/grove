@@ -29,7 +29,7 @@ module.exports = {
 
 module.exports.rendererDEBUG = new THREE.CannonDebugRenderer(module.exports.scene, module.exports.world);
 // Adjust constraint equation parameters for ground/ground contact
-var ground_ground_cm = new CANNON.ContactMaterial(module.exports.groundMaterial, module.exports.groundMaterial, {
+let ground_ground_cm = new CANNON.ContactMaterial(module.exports.groundMaterial, module.exports.groundMaterial, {
     friction: 1e60,
     restitution: 0.3,
     contactEquationStiffness: 1e8,
@@ -40,3 +40,9 @@ var ground_ground_cm = new CANNON.ContactMaterial(module.exports.groundMaterial,
 
 // Add contact material to the world
 module.exports.world.addContactMaterial(ground_ground_cm);
+
+let load = require('./load');
+module.exports.load = load.load;
+module.exports.box = load.box;
+module.exports.label = load.label;
+module.exports.ball = load.ball;

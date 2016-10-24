@@ -1,4 +1,48 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AIS = [];
+
+var AI = function () {
+    function AI() {
+        var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '{{ AI CONSTRUCTOR }}';
+        var hp = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
+        var dmg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
+
+        _classCallCheck(this, AI);
+
+        this.name = name;
+        this.hp = hp;
+        this.dmg = dmg;
+        this.target = null;
+
+        this.shape = new THREE.Mesh(new THREE.BoxGeometry(5, 10, 5), new THREE.MeshLambertMaterial({
+            color: 0xFFFFFF
+        }));
+        AIS.push(this);
+    }
+
+    _createClass(AI, [{
+        key: 'update',
+        value: function update() {
+            for (var key in AIS) {
+                key;
+            }
+        }
+    }]);
+
+    return AI;
+}();
+
+module.exports.ai = AI;
+
+var dave = new AI();
+
+},{}],2:[function(require,module,exports){
 "use strict";
 
 /* global THREE, CANNON */
@@ -44,7 +88,13 @@ var ground_ground_cm = new CANNON.ContactMaterial(module.exports.groundMaterial,
 // Add contact material to the world
 module.exports.world.addContactMaterial(ground_ground_cm);
 
-},{}],2:[function(require,module,exports){
+var load = require('./load');
+module.exports.load = load.load;
+module.exports.box = load.box;
+module.exports.label = load.label;
+module.exports.ball = load.ball;
+
+},{"./load":8}],3:[function(require,module,exports){
 "use strict";
 
 /* global THREE, CANNON */
@@ -78,10 +128,11 @@ module.exports = function (globals) {
     geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
     for (var i = 0; i < geometry.vertices.length; i++) {
-        geometry.vertices[i].y += Math.sin(geometry.vertices[i].x) * Math.cos(geometry.vertices[i].z) * 7;
+        geometry.vertices[i].y += Math.tan(geometry.vertices[i].x) * Math.tan(geometry.vertices[i].z);
     }var mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
         color: 0x00FF00,
-        shininess: 10
+        shininess: 10,
+        vertexColors: THREE.FaceColors
     }));
     mesh.castShadow = true;
     mesh.receiveShadow = true;
@@ -93,7 +144,7 @@ module.exports = function (globals) {
     });
 };
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 /* global $ */
@@ -102,83 +153,83 @@ module.exports = function () {
     $('#splash-title').text('In the beginning, a Tree was planted...');
     setTimeout(function () {
 
-        $('#splash-title').fadeOut(2000);
+        $('#splash-title').fadeOut(950);
         setTimeout(function () {
             $('#splash-title').text('Its presence infused the souls of mankind with a magical essence...');
-        }, 2000);
-        $('#splash-title').fadeIn(2000);
+        }, 950);
+        $('#splash-title').fadeIn(950);
 
         setTimeout(function () {
 
-            $('#splash-title').fadeOut(2000);
+            $('#splash-title').fadeOut(950);
             setTimeout(function () {
                 $('#splash-title').text('There were those jealous of this extreme power...');
-            }, 2000);
-            $('#splash-title').fadeIn(2000);
+            }, 950);
+            $('#splash-title').fadeIn(950);
 
             setTimeout(function () {
 
-                $('#splash-title').fadeOut(2000);
+                $('#splash-title').fadeOut(950);
                 setTimeout(function () {
                     $('#splash-title').text('12 Alchemists, of heightened skill...');
-                }, 2000);
-                $('#splash-title').fadeIn(2000);
+                }, 950);
+                $('#splash-title').fadeIn(950);
 
                 setTimeout(function () {
 
-                    $('#splash-title').fadeOut(2000);
+                    $('#splash-title').fadeOut(950);
                     setTimeout(function () {
                         $('#splash-title').text('They attempted to create a power of their own, to combat those naturally infused...');
-                    }, 2000);
-                    $('#splash-title').fadeIn(2000);
+                    }, 950);
+                    $('#splash-title').fadeIn(950);
 
                     setTimeout(function () {
 
-                        $('#splash-title').fadeOut(2000);
+                        $('#splash-title').fadeOut(950);
                         setTimeout(function () {
                             $('#splash-title').text('Eventually, they succeeded, but...');
-                        }, 2000);
-                        $('#splash-title').fadeIn(2000);
+                        }, 950);
+                        $('#splash-title').fadeIn(950);
 
                         setTimeout(function () {
 
-                            $('#splash-title').fadeOut(2000);
+                            $('#splash-title').fadeOut(950);
                             setTimeout(function () {
                                 $('#splash-title').text('Their creation consumed them, turning them into unimaginable demons...');
-                            }, 2000);
-                            $('#splash-title').fadeIn(2000);
+                            }, 950);
+                            $('#splash-title').fadeIn(950);
 
                             setTimeout(function () {
 
-                                $('#splash-title').fadeOut(2000);
+                                $('#splash-title').fadeOut(950);
                                 setTimeout(function () {
                                     $('#splash-title').text('Finally, put to rest by The Developer, they were banished from these lands...');
-                                }, 2000);
-                                $('#splash-title').fadeIn(2000);
+                                }, 950);
+                                $('#splash-title').fadeIn(950);
 
                                 setTimeout(function () {
 
-                                    $('#splash-title').fadeOut(2000);
+                                    $('#splash-title').fadeOut(950);
                                     setTimeout(function () {
                                         $('#splash-title').text('Now, they are back, attacking the original Tree and its power...');
-                                    }, 2000);
-                                    $('#splash-title').fadeIn(2000);
+                                    }, 950);
+                                    $('#splash-title').fadeIn(950);
 
                                     setTimeout(function () {
 
-                                        $('#splash-title').fadeOut(2000);
+                                        $('#splash-title').fadeOut(950);
                                         setTimeout(function () {
                                             $('#splash-title').text('And it is up to you to stop them.');
-                                        }, 2000);
-                                        $('#splash-title').fadeIn(2000);
+                                        }, 950);
+                                        $('#splash-title').fadeIn(950);
 
                                         setTimeout(function () {
 
-                                            $('#splash-title').fadeOut(2000);
+                                            $('#splash-title').fadeOut(950);
                                             setTimeout(function () {
                                                 $('#splash-title').text('THE GROVE');
-                                            }, 2000);
-                                            $('#splash-title').fadeIn(2000);
+                                            }, 950);
+                                            $('#splash-title').fadeIn(950);
                                         }, 6500);
                                     }, 6500);
                                 }, 6500);
@@ -191,7 +242,7 @@ module.exports = function () {
     }, 6500);
 };
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 function init(globals) {
@@ -211,7 +262,7 @@ function init(globals) {
 
 module.exports = init;
 
-},{"./bodies":2,"./dom":3,"./player":5,"./world":6}],5:[function(require,module,exports){
+},{"./bodies":3,"./dom":4,"./player":6,"./world":7}],6:[function(require,module,exports){
 'use strict';
 
 /* global THREE, CANNON, PointerLockControls */
@@ -245,7 +296,7 @@ module.exports = function (globals) {
     window.controls = globals.controls;
 };
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
 /* global CANNON */
@@ -267,134 +318,128 @@ module.exports = function (globals) {
     globals.world.broadphase = new CANNON.NaiveBroadphase();
 };
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
-module.exports = function (globals) {
+var globals = require('./globals');
 
-    function load(mesh, opts) {
-        opts = opts ? opts : {};
-        mesh.castShadow = true;
-        mesh.recieveShadow = true;
-        var verts = [],
-            faces = [];
-        for (var i = 0; i < mesh.geometry.vertices.length; i++) {
-            var v = mesh.geometry.vertices[i];
-            verts.push(new CANNON.Vec3(v.x, v.y, v.z));
-        }
-        for (var i = 0; i < mesh.geometry.faces.length; i++) {
-            var f = mesh.geometry.faces[i];
-            faces.push([f.a, f.b, f.c]);
-        }
-        var cvph = new CANNON.ConvexPolyhedron(verts, faces);
-        var Cbody = new CANNON.Body({
-            mass: opts.mass || 0,
-            material: opts.material || undefined
-        });
-        Cbody.addShape(cvph);
-        Cbody.position.copy(mesh.position);
-        Cbody.quaternion.copy(mesh.quaternion);
-        globals.world.add(Cbody);
-        globals.BODIES['items'].push({
-            body: Cbody,
-            shape: cvph,
-            mesh: mesh
-        });
-        return {
-            body: Cbody,
-            shape: cvph,
-            mesh: mesh
-        };
+function load(mesh, opts) {
+    opts = opts ? opts : {};
+    mesh.castShadow = true;
+    mesh.recieveShadow = true;
+    var verts = [],
+        faces = [];
+    for (var i = 0; i < mesh.geometry.vertices.length; i++) {
+        var v = mesh.geometry.vertices[i];
+        verts.push(new CANNON.Vec3(v.x, v.y, v.z));
     }
-
-    function box(opts) {
-        opts = opts ? opts : {};
-
-        var halfExtents = new CANNON.Vec3(opts.l || 1, opts.h || 1, opts.w || 1);
-        var boxShape = new CANNON.Box(halfExtents);
-        var boxGeometry = new THREE.BoxGeometry(halfExtents.x * 2, halfExtents.y * 2, halfExtents.z * 2);
-        var boxBody = new CANNON.Body({
-            mass: opts.mass || 0
-        });
-        boxBody.addShape(boxShape);
-        var boxMesh = new THREE.Mesh(boxGeometry, new THREE.MeshPhongMaterial({
-            color: 0xFF0000
-        }));
-        globals.world.add(boxBody);
-        globals.scene.add(boxMesh);
-        boxBody.position.set(opts.x || 0, opts.y || 10, opts.z || 0);
-        boxMesh.position.set(opts.x || 0, opts.y || 10, opts.z || 0);
-        boxMesh.castShadow = true;
-        boxMesh.receiveShadow = true;
-        globals.BODIES['items'].push({
-            body: boxBody,
-            shape: boxShape,
-            mesh: boxMesh
-        });
-
-        return {
-            body: boxBody,
-            shape: boxShape,
-            mesh: boxMesh
-        };
+    for (var i = 0; i < mesh.geometry.faces.length; i++) {
+        var f = mesh.geometry.faces[i];
+        faces.push([f.a, f.b, f.c]);
     }
+    var cvph = new CANNON.ConvexPolyhedron(verts, faces);
+    var Cbody = new CANNON.Body({
+        mass: opts.mass || 0,
+        material: opts.material || undefined
+    });
+    Cbody.addShape(cvph);
+    Cbody.position.copy(mesh.position);
+    Cbody.quaternion.copy(mesh.quaternion);
+    globals.world.add(Cbody);
+    globals.BODIES['items'].push({
+        body: Cbody,
+        shape: cvph,
+        mesh: mesh
+    });
+    return {
+        body: Cbody,
+        shape: cvph,
+        mesh: mesh
+    };
+}
 
-    function ball(opts) {
-        opts = opts ? opts : {};
-        var ballShape = new CANNON.Sphere(opts.radius || 0.2);
-        var ballGeometry = new THREE.SphereGeometry(ballShape.radius, 32, 32);
-        var ballBody = new CANNON.Body({
-            mass: 10
-        });
+function box(opts) {
+    opts = opts ? opts : {};
 
-        ballBody.addShape(ballShape);
-        var ballMesh = new THREE.Mesh(ballGeometry, new THREE.MeshPhongMaterial({
-            color: 0x00CCFF
-        }));
-        globals.world.add(ballBody);
-        globals.scene.add(ballMesh);
-        ballMesh.castShadow = true;
-        ballMesh.receiveShadow = true;
-        globals.BODIES[opts.array || 'items'].push({
-            body: ballBody,
-            shape: ballShape,
-            mesh: ballMesh
-        });
+    var halfExtents = new CANNON.Vec3(opts.l || 1, opts.h || 1, opts.w || 1);
+    var boxShape = new CANNON.Box(halfExtents);
+    var boxGeometry = new THREE.BoxGeometry(halfExtents.x * 2, halfExtents.y * 2, halfExtents.z * 2);
+    var boxBody = new CANNON.Body({
+        mass: opts.mass || 0
+    });
+    boxBody.addShape(boxShape);
+    var boxMesh = new THREE.Mesh(boxGeometry, new THREE.MeshPhongMaterial({
+        color: 0xFF0000
+    }));
+    globals.world.add(boxBody);
+    globals.scene.add(boxMesh);
+    boxBody.position.set(opts.x || 0, opts.y || 10, opts.z || 0);
+    boxMesh.position.set(opts.x || 0, opts.y || 10, opts.z || 0);
+    boxMesh.castShadow = true;
+    boxMesh.receiveShadow = true;
+    globals.BODIES['items'].push({
+        body: boxBody,
+        shape: boxShape,
+        mesh: boxMesh
+    });
 
-        return {
-            body: ballBody,
-            shape: ballShape,
-            mesh: ballMesh
-        };
-    }
+    return {
+        body: boxBody,
+        shape: boxShape,
+        mesh: boxMesh
+    };
+}
 
-    function label(mesh, txt) {
-        var element = document.createElement('h2');
-        document.body.appendChild(element);
-        element.style.color = 'white';
-        element.style.position = 'absolute';
-        element.innerHTML = txt || 'BLAH BLAH BLAH';
-        globals.LABELS.push(function () {
-            var position = THREEx.ObjCoord.cssPosition(mesh, globals.camera, globals.renderer);
-            var boundingRect = element.getBoundingClientRect();
-            element.style.left = position.x - boundingRect.width / 2 + 'px';
-            element.style.top = position.y - boundingRect.height / 2 - 70 + 'px';
-            if (globals.frustum.intersectsObject(mesh)) element.style.opacity = 1;else element.style.opacity = 0;
-        });
-    }
+function ball(opts) {
+    opts = opts ? opts : {};
+    var ballShape = new CANNON.Sphere(opts.radius || 0.2);
+    var ballGeometry = new THREE.SphereGeometry(ballShape.radius, 32, 32);
+    var ballBody = new CANNON.Body({
+        mass: 10
+    });
 
-    globals.load = load;
-    globals.load.box = box;
-    globals.load.label = label;
-    globals.load.ball = ball;
+    ballBody.addShape(ballShape);
+    var ballMesh = new THREE.Mesh(ballGeometry, new THREE.MeshPhongMaterial({
+        color: 0x00CCFF
+    }));
+    globals.world.add(ballBody);
+    globals.scene.add(ballMesh);
+    ballMesh.castShadow = true;
+    ballMesh.receiveShadow = true;
+    globals.BODIES[opts.array || 'items'].push({
+        body: ballBody,
+        shape: ballShape,
+        mesh: ballMesh
+    });
 
-    // this.load = load;
-    // this.box = box;
-    // this.label = label;
-    // this.ball = ball;
-};
+    return {
+        body: ballBody,
+        shape: ballShape,
+        mesh: ballMesh
+    };
+}
 
-},{}],8:[function(require,module,exports){
+function label(mesh, txt) {
+    var element = document.createElement('h2');
+    document.body.appendChild(element);
+    element.style.color = 'white';
+    element.style.position = 'absolute';
+    element.innerHTML = txt || 'BLAH BLAH BLAH';
+    globals.LABELS.push(function () {
+        var position = THREEx.ObjCoord.cssPosition(mesh, globals.camera, globals.renderer);
+        var boundingRect = element.getBoundingClientRect();
+        element.style.left = position.x - boundingRect.width / 2 + 'px';
+        element.style.top = position.y - boundingRect.height / 2 - 70 + 'px';
+        if (globals.frustum.intersectsObject(mesh)) element.style.opacity = 1;else element.style.opacity = 0;
+    });
+}
+
+module.exports.load = load;
+module.exports.box = box;
+module.exports.label = label;
+module.exports.ball = ball;
+
+},{"./globals":2}],9:[function(require,module,exports){
 'use strict';
 
 /* global socket */
@@ -404,7 +449,7 @@ var player = require('./player');
 
 var dt = 1 / 60;
 
-require('./load')(globals);
+// require('./load')(globals);
 require('./init/manager')(globals);
 require('./shooting')(globals);
 require('./multiplayer')(globals, player);
@@ -447,6 +492,8 @@ function animate(delta) {
     for (var _key2 in globals.LABELS) {
         globals.LABELS[_key2]();
     }globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
+    if (globals.BODIES['player'].body.velocity.x > 15) globals.BODIES['player'].body.velocity.x = 10;
+    if (globals.BODIES['player'].body.velocity.z > 15) globals.BODIES['player'].body.velocity.z = 10;
 
     $('#health-bar').val(player.hp / 10 * 100);
     $('#health').text(player.hp + ' HP');
@@ -473,7 +520,7 @@ function onWindowResize() {
     globals.renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-},{"./globals":1,"./init/manager":4,"./load":7,"./multiplayer":9,"./player":10,"./shooting":11}],9:[function(require,module,exports){
+},{"./globals":2,"./init/manager":5,"./multiplayer":10,"./player":11,"./shooting":12}],10:[function(require,module,exports){
 'use strict';
 
 /* global socket */
@@ -494,7 +541,7 @@ module.exports = function (globals, player) {
 
     socket.on('addOtherPlayer', function (data) {
         if (data.id !== player.id) {
-            var cube = globals.load.box({
+            var cube = globals.box({
                 l: 1,
                 w: 1,
                 h: 2,
@@ -506,7 +553,7 @@ module.exports = function (globals, player) {
                 id: data.id,
                 data: data
             });
-            globals.load.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
+            globals.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
         }
     });
 
@@ -537,7 +584,7 @@ module.exports = function (globals, player) {
         var pos = _ref.pos;
         var vel = _ref.vel;
 
-        var ball = globals.load.ball({
+        var ball = globals.ball({
             array: 'projectiles'
         });
         ball.body.position.set(pos.x, pos.y, pos.z);
@@ -592,14 +639,14 @@ module.exports = function (globals, player) {
     globals.playerForId = playerForId;
 };
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 module.exports = {
-    hp: 10
+    hp: 15
 };
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 /* global THREE, CANNON, socket */
@@ -620,17 +667,17 @@ module.exports = function (globals) {
             (function () {
 
                 var shootDirection = new THREE.Vector3();
-                var shootVelo = 25;
+                var shootVelo = 20;
 
                 var x = globals.BODIES['player'].body.position.x;
                 var y = globals.BODIES['player'].body.position.y;
                 var z = globals.BODIES['player'].body.position.z;
 
-                var ball = globals.load.ball({
+                var ball = globals.ball({
                     array: 'projectiles'
                 });
 
-                // ball.mesh.add(new THREE.PointLight(0x00FFFF, 1, 10, 2));
+                ball.mesh.add(new THREE.PointLight(0x00FFFF, 1, 20, 2));
 
                 getShootDir(shootDirection);
                 ball.body.velocity.set(shootDirection.x * shootVelo, shootDirection.y * shootVelo, shootDirection.z * shootVelo);
@@ -652,7 +699,7 @@ module.exports = function (globals) {
                     setTimeout(function () {
                         globals.remove.bodies.push(ball.body);
                         globals.remove.meshes.push(ball.mesh);
-                    }, 1000);
+                    }, 1500);
                 });
 
                 socket.emit('bullet', {
@@ -674,4 +721,4 @@ module.exports = function (globals) {
     window.addEventListener('click', shoot);
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12]);

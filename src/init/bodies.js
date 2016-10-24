@@ -29,11 +29,12 @@ module.exports = function (globals) {
     geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
     for (let i = 0; i < geometry.vertices.length; i++)
-        geometry.vertices[i].y += (Math.sin(geometry.vertices[i].x) * Math.cos(geometry.vertices[i].z)) * 7;
+        geometry.vertices[i].y += (Math.tan(geometry.vertices[i].x) * Math.tan(geometry.vertices[i].z));
 
     let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
         color: 0x00FF00,
         shininess: 10,
+        vertexColors: THREE.FaceColors
     }));
     mesh.castShadow = true;
     mesh.receiveShadow = true;

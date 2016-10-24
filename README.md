@@ -39,14 +39,15 @@ Copying or redistributing this game or content without the consent of Hybrid Alp
 - The Grove is copyright 2016 by Artifex Game Studios. All images, story, and game are copyright of Artifex Game Studios. 
 Copying or redistributing this game or content without the consent of Artifex Game Studios is illegal and unlawful.
 
-
 All people that have contributed to this game include:
 
-- Seth Traman             Lead Developer
-- Nate Goldsborough       Developer, Copyright Manager, General Maintnence
-- Casimir Kash            Developer, Graphics
-- KJ Avakian              Developer
-- Gavin Montheye          PR
-- Hunter Sokolis          Graphics
-- Michael Rimmele         Graphics
-- Brendan O'Rourke        Graphics
+- Seth Traman               Lead Developer
+- Nate Goldsborough         Developer, Copyright Manager, General Maintnence
+- Casimir Kash              Developer, Graphics, Beta Testing
+- KJ Avakian                Developer
+- Gavin Montheye            PR
+- Hunter Sokolis            Graphics
+- Michael Rimmele           Graphics
+- Brendan O'Rourke          Graphics
+- Jasper Burns              Storyline
+- William VanDerLaan        Beta Testing, Logos

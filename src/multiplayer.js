@@ -1,7 +1,7 @@
 /* global socket */
 
 module.exports = (globals, player) => {
-
+    
     socket.emit('requestOldPlayers', {});
 
     socket.on('createPlayer', data => {
@@ -17,7 +17,7 @@ module.exports = (globals, player) => {
 
     socket.on('addOtherPlayer', data => {
         if (data.id !== player.id) {
-            let cube = globals.load.box({
+            let cube = globals.box({
                 l: 1,
                 w: 1,
                 h: 2,
@@ -29,7 +29,7 @@ module.exports = (globals, player) => {
                 id: data.id,
                 data
             });
-            globals.load.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
+            globals.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
         }
     });
 
@@ -62,7 +62,7 @@ module.exports = (globals, player) => {
         pos,
         vel,
     }) => {
-        let ball = globals.load.ball({
+        let ball = globals.ball({
             array: 'projectiles'
         });
         ball.body.position.set(pos.x, pos.y, pos.z);

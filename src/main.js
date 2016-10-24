@@ -5,7 +5,7 @@ let player = require('./player');
 
 const dt = 1 / 60;
 
-require('./load')(globals);
+// require('./load')(globals);
 require('./init/manager')(globals);
 require('./shooting')(globals);
 require('./multiplayer')(globals, player);
@@ -48,6 +48,8 @@ function animate(delta) {
     for (let key in globals.LABELS) globals.LABELS[key]();
 
     globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
+    if (globals.BODIES['player'].body.velocity.x > 15) globals.BODIES['player'].body.velocity.x = 10;
+    if (globals.BODIES['player'].body.velocity.z > 15) globals.BODIES['player'].body.velocity.z = 10;
 
     $('#health-bar')
         .val(player.hp / 10 * 100);
