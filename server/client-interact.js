@@ -89,7 +89,7 @@ module.exports = (io, User, conf_url) => {
 
         // client left :(
         socket.on('disconnect', function () {
-          console.log(player.acc.username + ' has logged off.\n\n\n\n');
+          console.log(player.acc.username + ' has exited game play.\n\n\n\n');
           io.emit('removeOtherPlayer', player);
           players.removePlayer(player);
         }); //
