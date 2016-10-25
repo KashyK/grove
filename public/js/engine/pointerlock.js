@@ -94,7 +94,7 @@ if (havePointerLock) {
 }
 else {
 
-    instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+    instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API. Please open in chrome';
 
 }
 

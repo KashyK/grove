@@ -25,8 +25,6 @@ module.exports = (globals) => {
                 array: 'projectiles'
             });
             
-            ball.mesh.add(new THREE.PointLight(0x00FFFF, 1, 20, 2));
-
             getShootDir(shootDirection);
             ball.body.velocity.set(shootDirection.x * shootVelo,
                 shootDirection.y * shootVelo,

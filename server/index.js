@@ -36,7 +36,7 @@ app.get('/', (req, res) => {
 });
 app.get('/logout', (req, res) => {
   if (req.session.user) {
-    console.log(req.session.user.username + ' has logged out!\n\n');
+    console.log(req.session.user.username + ' has logged out.\n\n');
     delete req.session.user;
   }
   res.redirect('/');

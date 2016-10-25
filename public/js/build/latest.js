@@ -561,7 +561,6 @@ module.exports = function (globals, player) {
 
         globals.scene.remove(playerForId(data.id).mesh);
         globals.world.remove(playerForId(data.id).body);
-        alert(globals.PLAYERS[playerForId(data.id)]);
         console.log(data.id + ' disconnected');
     });
 
@@ -677,8 +676,6 @@ module.exports = function (globals) {
                     array: 'projectiles'
                 });
 
-                ball.mesh.add(new THREE.PointLight(0x00FFFF, 1, 20, 2));
-
                 getShootDir(shootDirection);
                 ball.body.velocity.set(shootDirection.x * shootVelo, shootDirection.y * shootVelo, shootDirection.z * shootVelo);
 
@@ -699,7 +696,7 @@ module.exports = function (globals) {
                     setTimeout(function () {
                         globals.remove.bodies.push(ball.body);
                         globals.remove.meshes.push(ball.mesh);
-                    }, 10000000000000);
+                    }, 1500);
                 });
 
                 socket.emit('bullet', {

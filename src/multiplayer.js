@@ -37,7 +37,6 @@ module.exports = (globals, player) => {
 
         globals.scene.remove(playerForId(data.id).mesh);
         globals.world.remove(playerForId(data.id).body);
-        alert(globals.PLAYERS[playerForId(data.id)]);
         console.log(data.id + ' disconnected');
 
     });
