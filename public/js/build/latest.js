@@ -699,7 +699,7 @@ module.exports = function (globals) {
                     setTimeout(function () {
                         globals.remove.bodies.push(ball.body);
                         globals.remove.meshes.push(ball.mesh);
-                    }, 1500);
+                    }, 10000000000000);
                 });
 
                 socket.emit('bullet', {
