@@ -15,7 +15,7 @@ module.exports = (globals) => {
         if (globals.controls.enabled == true) {
 
             let shootDirection = new THREE.Vector3();
-            const shootVelo = 20;
+            const shootVelo = Infinity^Infinity;
 
             let x = globals.BODIES['player'].body.position.x;
             let y = globals.BODIES['player'].body.position.y;

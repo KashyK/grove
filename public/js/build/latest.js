@@ -95,7 +95,7 @@ module.exports.label = load.label;
 module.exports.ball = load.ball;
 
 },{"./load":8}],3:[function(require,module,exports){
-"use strict";
+'use strict';
 
 /* global THREE, CANNON */
 
@@ -124,23 +124,30 @@ module.exports = function (globals) {
     globals.scene.add(light);
 
     // floor
-    var geometry = new THREE.PlaneGeometry(300, 300, 50, 50);
-    geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
-    for (var i = 0; i < geometry.vertices.length; i++) {
-        geometry.vertices[i].y += Math.tan(geometry.vertices[i].x) * Math.tan(geometry.vertices[i].z);
-    }var mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
-        color: 0x00FF00,
-        shininess: 10,
-        vertexColors: THREE.FaceColors
-    }));
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    globals.scene.add(mesh);
+    $.getJSON('https://grove.nanoscaleapi.io/maps/hills.json', function (map) {
+        if (map.generate) {
+            var geometry = new THREE.PlaneGeometry(map.generate.width, map.generate.height, map.generate.wsegs, map.generate.hsegs);
+            geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
-    globals.load(mesh, {
-        mass: 0,
-        material: globals.groundMaterial
+            alert(map.generate.math);
+
+            for (var i = 0; i < geometry.vertices.length; i++) {
+                geometry.vertices[i].y += Math[map.generate.math](geometry.vertices[i].x) * map.generate.math(geometry.vertices[i].z) * map.generate.factor;
+            }var mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
+                color: 0x00FF00,
+                shininess: 10,
+                vertexColors: THREE.FaceColors
+            }));
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            globals.scene.add(mesh);
+
+            globals.load(mesh, {
+                mass: 0,
+                material: globals.groundMaterial
+            });
+        }
     });
 };
 
@@ -150,7 +157,7 @@ module.exports = function (globals) {
 /* global $ */
 
 module.exports = function () {
-    $('#splash-title').text('In the beginning, a Tree was planted. This tree has becom eknown as The Grove Tree');
+    $('#splash-title').text('In the beginning, the Grove Tree was planted.');
     setTimeout(function () {
 
         $('#splash-title').fadeOut(950);
@@ -666,7 +673,7 @@ module.exports = function (globals) {
             (function () {
 
                 var shootDirection = new THREE.Vector3();
-                var shootVelo = 20;
+                var shootVelo = Infinity ^ Infinity;
 
                 var x = globals.BODIES['player'].body.position.x;
                 var y = globals.BODIES['player'].body.position.y;

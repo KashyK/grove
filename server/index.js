@@ -33,6 +33,9 @@ app.get('/', (req, res) => {
     user: req.session.user
   });
   else res.render('../views/index.ejs');
+  console.log('Home Activated.');
+  
+  
 });
 app.get('/logout', (req, res) => {
   if (req.session.user) {
@@ -43,23 +46,27 @@ app.get('/logout', (req, res) => {
 });
 app.get('/login', (req, res) => {
   res.render('../views/login.ejs');
+  console.log('Login Activated.');
 });
 app.get('/register', (req, res) => {
   res.render('../views/register.ejs');
+  console.log('Register Activated.');
 });
 app.get('/play', (req, res) => {
   if (req.session.user && req.session.user.username) res.render('../views/play.ejs', {
     user: req.session.user
+    
   });
   else res.redirect('/login');
+  console.log('Login Activated.');
 });
 app.use('/robots.txt', (req, res) => {
   res.sendFile(require('path').resolve('views/robots.txt'));
-  console.log('Robots Activated.')
+  console.log('Robots Activated.');
 });
 app.get('/license', (req, res) => {
   res.sendFile(require('path').resolve('views/LICENSE.txt'));
-  console.log('License Activated.')
+  console.log('License Activated.');
 });
 app.get('/ArtifexLISC', (req, res) => {
   res.sendFile(require('path').resolve('views/ArtifexLISC.txt'));
@@ -81,3 +88,24 @@ http.listen(process.env.PORT || 8080, (listening) => {
     console.log('Server running! ( View license at https://grove-mmo.herokuapp.com/license )');
   }
 });
+
+console.log('Login Initializing');
+console.log('Register Initializing.');
+console.log('Play Initializing.');
+console.log('Dashboard Initializing.');
+console.log('Siracha Initializing.');
+console.log('Admin Initializing.');
+console.log('Siracha Initializing.');
+console.log('Robots Initializing.');
+console.log('License Initializing.');
+console.log('App Initializing.');
+console.log('Login Started');
+console.log('Register Started.');
+console.log('Play Started.');
+console.log('Dashboard Started.');
+console.log('Siracha Started.');
+console.log('Admin Started.');
+console.log('Siracha Started.');
+console.log('Robots Started.');
+console.log('License Started.');
+console.log('App Started.');

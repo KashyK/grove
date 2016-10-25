@@ -25,23 +25,30 @@ module.exports = function (globals) {
     globals.scene.add(light);
 
     // floor
-    let geometry = new THREE.PlaneGeometry(300, 300, 50, 50);
-    geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
-    for (let i = 0; i < geometry.vertices.length; i++)
-        geometry.vertices[i].y += (Math.tan(geometry.vertices[i].x) * Math.tan(geometry.vertices[i].z));
+    $.getJSON('https://grove.nanoscaleapi.io/maps/hills.json', function (map) {
+        if (map.generate) {
+            let geometry = new THREE.PlaneGeometry(map.generate.width, map.generate.height, map.generate.wsegs, map.generate.hsegs);
+            geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
-    let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
-        color: 0x00FF00,
-        shininess: 10,
-        vertexColors: THREE.FaceColors
-    }));
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    globals.scene.add(mesh);
+            alert(map.generate.math);
 
-    globals.load(mesh, {
-        mass: 0,
-        material: globals.groundMaterial
+            for (let i = 0; i < geometry.vertices.length; i++)
+                geometry.vertices[i].y += (Math[map.generate.math](geometry.vertices[i].x) * map.generate.math(geometry.vertices[i].z)) * map.generate.factor;
+
+            let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
+                color: 0x00FF00,
+                shininess: 10,
+                vertexColors: THREE.FaceColors
+            }));
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            globals.scene.add(mesh);
+
+            globals.load(mesh, {
+                mass: 0,
+                material: globals.groundMaterial
+            });
+        }
     });
 };
