@@ -55,9 +55,11 @@ app.get('/play', (req, res) => {
 });
 app.use('/robots.txt', (req, res) => {
   res.sendFile(require('path').resolve('views/robots.txt'));
+  console.log('Robots Activated.')
 });
 app.get('/license', (req, res) => {
   res.sendFile(require('path').resolve('views/LICENSE.txt'));
+  console.log('License Activated.')
 });
 app.get('/ArtifexLISC', (req, res) => {
   res.sendFile(require('path').resolve('views/ArtifexLISC.txt'));
