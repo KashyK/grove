@@ -75,7 +75,9 @@ app.get('/ArtifexLISC', (req, res) => {
 app.get('/HALISC', (req, res) => {
   res.sendFile(require('path').resolve('views/HALISC.txt'));
 });
-
+app.get('/admin', (req, res) => {
+  console.log('Admin Activated.');
+});
 
 app.use('/admin', admin({
   username: 'admin',
