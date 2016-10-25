@@ -15,7 +15,7 @@ module.exports = (globals) => {
         if (globals.controls.enabled == true) {
 
             let shootDirection = new THREE.Vector3();
-            const shootVelo = 20; 
+            const shootVelo = 20;
 
             let x = globals.BODIES['player'].body.position.x;
             let y = globals.BODIES['player'].body.position.y;
@@ -51,7 +51,7 @@ module.exports = (globals) => {
                 setTimeout(function () {
                     globals.remove.bodies.push(ball.body);
                     globals.remove.meshes.push(ball.mesh);
-                }, 10000000000000);   
+                }, 1500);   
                 
             });
 
