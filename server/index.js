@@ -59,6 +59,12 @@ app.use('/robots.txt', (req, res) => {
 app.get('/license', (req, res) => {
   res.sendFile(require('path').resolve('views/LICENSE.txt'));
 });
+app.get('/ArtifexLISC', (req, res) => {
+  res.sendFile(require('path').resolve('views/ArtifexLISC.txt'));
+});
+app.get('/HALISC', (req, res) => {
+  res.sendFile(require('path').resolve('views/HALISC.txt'));
+});
 
 
 app.use('/admin', admin({

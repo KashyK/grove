@@ -1,7 +1,7 @@
 /* global $ */
 
 module.exports = () => {
-    $('#splash-title').text('In the beginning, a Tree was planted...');
+    $('#splash-title').text('In the beginning, a Tree was planted. This tree has becom eknown as The Grove Tree');
     setTimeout(function () {
 
         $('#splash-title').fadeOut(950);
