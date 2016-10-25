@@ -53,10 +53,11 @@ app.get('/register', (req, res) => {
   console.log('Register Activated.');
 });
 app.get('/play', (req, res) => {
+  console.log('Play Activated.');
   if (req.session.user && req.session.user.username) res.render('../views/play.ejs', {
     user: req.session.user
     
-  });
+  }); 
   else res.redirect('/login');
   console.log('Login Activated.');
 });
