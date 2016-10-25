@@ -24,10 +24,14 @@
                 margin-top: -100px;
                 padding: 15px 30px !important;
             }
+             .grove {
+            font-family: Megrim, cursive;
+        }
         </style>
     </head>
 
     <body>
+        <div class="grove">
         <div class='container-fluid'>
             <span style='color:white;text-align:center;' id='error'></span>
         </div>
@@ -68,28 +72,29 @@
                     </div>
                 </div>
             </div>
+            </div>
         </form>
         <script>
             $('select[name="race"]').change(function (a) {
                 $('select[name="race"] option:selected').each(function () {
                     switch ($(this).text()) {
                     case 'Human':
-                        $('#race-icon').attr('src', '/img/2D/icons/shrug.svg');
+                        
                         $('#racename').text('Human');
                         $('#info').text('Humans are good at... at... making mistakes?  Hey, they\'re human!');
                         break;
                     case 'Elf':
-                        $('#race-icon').attr('src', '/img/2D/icons/woman-elf-face.svg');
+                        
                         $('#racename').text('Elf');
                         $('#info').text('Elves are light on their feet and are good at magic, but look out - they\'re fragile!');
                         break;
                     case 'Dwarf':
-                        $('#race-icon').attr('src', '/img/2D/icons/dwarf-face.svg');
+                        
                         $('#racename').text('Dwarf');
                         $('#info').text('Dwarves aren\'t very smart and are kinda slow, but when it comes to muscle, they could take out Hulk Hogan!');
                         break;
                     case 'Vampire':
-                        $('#race-icon').attr('src', '/img/2D/icons/fanged-skull.svg');
+                      
                         $('#racename').text('Vampire');
                         $('#info').text('Vampires are full of dark traits and are excellent at magic and sneaking around.  Except when it comes to fire or the sun.  Then you\'ve got roasted vampire on the menu.');
                         break;

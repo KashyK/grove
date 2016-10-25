@@ -8,8 +8,9 @@
         <script src='/bower_components/jquery/dist/jquery.min.js'></script>
         <script src='/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
         <style>
+        @import url('https://fonts.googleapis.com/css?family=Megrim');
+            html,
             body {
-                /*Change this after we are back up*/
                 background-image: url('/img/forest.png');
                 background-size: cover;
             }
@@ -25,19 +26,6 @@
                 margin-top: -100px;
                 padding: 15px 30px !important;
             }
-        </style>
-
-        <!-- redirect the page to heroku
-
-        <meta http-equiv="refresh" content="0; URL='https://grove-mmo.herokuapp.com'" /> 
-       
-        END    -->
-    </head>
-
-    <div class="alert">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> Open In chrome!
-    </div>
-    <style>
         .alert {
             padding: 20px;
             background-color: #f44336;
@@ -59,15 +47,33 @@
         .closebtn:hover {
             color: black;
         }
-    </style>
- 
+        .grove {
+            font-family: Megrim, cursive;
+        }
+        </style>
+
+        <!-- redirect the page to heroku
+
+        <meta http-equiv="refresh" content="0; URL='https://grove-mmo.herokuapp.com'" /> 
+       
+        END    -->
+    </head>
+<div class="grove">
+    <div class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> Open In chrome!
+    </div>
+    
 <body>
-    <h1>The Grove</h1>
+    
+        
+            <h1>The Grove</h1>
+    
     <button class='btn btn-success btn-lg'><a href='/login' style='color:white;text-decoration:none;'>Login</a></button><br><br><br><br>
     <button class='btn btn-success btn-lg'><a href='/register' style='color:white;text-decoration:none;'>Register</a></button><br><br><br><br>
     <button class='btn btn-success btn-lg'><a href='/license' style='color:white;text-decoration:none;'>License</a></button><br><br><br><br>
     <img src='/img/HybridAlpaca.png' width='75' style='position:fixed;right:0;bottom:0;'>
     <img src='/img/Artifex.png' width='75' style='position:fixed;left:0;bottom:0;'>
+    </div>
 </body>
 
 
