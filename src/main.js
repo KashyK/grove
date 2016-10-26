@@ -48,11 +48,11 @@ function animate(delta) {
     for (let key in globals.LABELS) globals.LABELS[key]();
 
     globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
-    if (globals.BODIES['player'].body.velocity.x > 15) globals.BODIES['player'].body.velocity.x = 10;
-    if (globals.BODIES['player'].body.velocity.z > 15) globals.BODIES['player'].body.velocity.z = 10;
+    if (globals.BODIES['player'].body.velocity.x > 15) globals.BODIES['player'].body.velocity.x = 15;
+    if (globals.BODIES['player'].body.velocity.z > 15) globals.BODIES['player'].body.velocity.z = 15;
 
     $('#health-bar')
-        .val(player.hp / 10 * 100);
+        .val(player.hp / 15 * 100);
     $('#health').text(player.hp + ' HP');
 
     globals.world.step(dt);

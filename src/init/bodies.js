@@ -31,15 +31,22 @@ module.exports = function (globals) {
             let geometry = new THREE.PlaneGeometry(map.generate.width, map.generate.height, map.generate.wsegs, map.generate.hsegs);
             geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
-            alert(map.generate.math);
+            for (let i = 0; i < geometry.vertices.length; i++) {
+                geometry.vertices[i].y += (
+                    Math[map.generate.math1](geometry.vertices[i].x) * Math[map.generate.math2](geometry.vertices[i].z)
+                ) * map.generate.factor;
+            }
 
-            for (let i = 0; i < geometry.vertices.length; i++)
-                geometry.vertices[i].y += (Math[map.generate.math](geometry.vertices[i].x) * map.generate.math(geometry.vertices[i].z)) * map.generate.factor;
+            let texture = new THREE.TextureLoader().load("/img/grass_GUNT.png");
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(50, 50);
 
             let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
                 color: 0x00FF00,
                 shininess: 10,
-                vertexColors: THREE.FaceColors
+                vertexColors: THREE.FaceColors,
+                // map: texture
             }));
             mesh.castShadow = true;
             mesh.receiveShadow = true;

@@ -34,8 +34,6 @@ app.get('/', (req, res) => {
   });
   else res.render('../views/index.ejs');
   console.log('Home Activated.');
-  
-  
 });
 app.get('/logout', (req, res) => {
   if (req.session.user) {
@@ -56,10 +54,8 @@ app.get('/play', (req, res) => {
   console.log('Play Activated.');
   if (req.session.user && req.session.user.username) res.render('../views/play.ejs', {
     user: req.session.user
-    
-  }); 
+  });
   else res.redirect('/login');
-  console.log('Login Activated.');
 });
 app.use('/robots.txt', (req, res) => {
   res.sendFile(require('path').resolve('views/robots.txt'));

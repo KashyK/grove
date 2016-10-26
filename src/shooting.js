@@ -15,7 +15,7 @@ module.exports = (globals) => {
         if (globals.controls.enabled == true) {
 
             let shootDirection = new THREE.Vector3();
-            const shootVelo = Infinity^Infinity;
+            const shootVelo = 20;
 
             let x = globals.BODIES['player'].body.position.x;
             let y = globals.BODIES['player'].body.position.y;
@@ -24,9 +24,10 @@ module.exports = (globals) => {
             let ball = globals.ball({
                 array: 'projectiles'
             });
-            
+
             getShootDir(shootDirection);
-            ball.body.velocity.set(shootDirection.x * shootVelo,
+            ball.body.velocity.set(
+                shootDirection.x * shootVelo,
                 shootDirection.y * shootVelo,
                 shootDirection.z * shootVelo);
 
@@ -49,8 +50,8 @@ module.exports = (globals) => {
                 setTimeout(function () {
                     globals.remove.bodies.push(ball.body);
                     globals.remove.meshes.push(ball.mesh);
-                }, 1500);   
-                
+                }, 1500);
+
             });
 
             socket.emit('bullet', {
