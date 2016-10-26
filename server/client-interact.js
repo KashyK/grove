@@ -15,7 +15,7 @@ module.exports = (io, User, conf_url) => {
         // check for potential errors
         if (err) console.err(err);
         // user not found (in case this ever happened)
-        if (!o) console.error('USER NOT FOUND FOR MULTIPLAYER\n\n\n\n');
+        if (!o) console.error('USER NOT FOUND FOR MULTIPLAYER    ');
 
         // add the new player to list of players
         players.addPlayer(socket.id, o);
@@ -54,12 +54,12 @@ module.exports = (io, User, conf_url) => {
             username: dat.user.username,
             password: dat.user.password
           }, (err, obj) => {
-            if (err) console.log('ERROR!\n\n\n\n');
+            if (err) console.log('ERROR!    ');
             if (obj) {
               obj.inventory = dat.inv;
               obj.save();
             }
-            else console.log('Credentials not valid!\n\n\n\n');
+            else console.log('Credentials not valid!    ');
           });
         });
 
@@ -69,18 +69,18 @@ module.exports = (io, User, conf_url) => {
             username: dat.user.username,
             password: dat.user.password
           }, (err, obj) => {
-            if (err) console.log('ERROR!\n\n\n\n');
+            if (err) console.log('ERROR!    ');
             if (obj) {
               obj.map = dat.map;
               obj.save();
               socket.emit('reload', true);
             }
-            else console.log('Credentials not valid!\n\n\n\n');
+            else console.log('Credentials not valid!    ');
           });
         });
-
+        
         //////////////////////////////////////////////////
-
+        
         // chat handler
         socket.on('chat message', msg => {
           console.log('message: ' + msg);
@@ -89,7 +89,7 @@ module.exports = (io, User, conf_url) => {
 
         // client left :(
         socket.on('disconnect', function () {
-          console.log(player.acc.username + ' has exited game play.\n\n\n\n');
+          console.log(player.acc.username + ' has exited game play.    ');
           io.emit('removeOtherPlayer', player);
           players.removePlayer(player);
         }); //

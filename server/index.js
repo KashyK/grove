@@ -1,6 +1,6 @@
 'use strict';
 
-let app, admin, http, io;
+let app, admin, compression, minify, http, io;
 
 app = require('express')();
 
@@ -9,6 +9,10 @@ admin = require('sriracha');
 http = require('http').Server(app);
 
 io = require('socket.io')(http);
+
+compression = require('compression');
+
+minify = require('express-minify-html');
 
 let postal = require('postal');
 let events = postal.channel();
@@ -24,6 +28,19 @@ app.use(bodyParser.urlencoded({
 app.use(session({
   secret: 'keyboard cat'
 }));
+app.use(compression());
+app.use(minify({
+  override: true,
+  htmlMinifier: {
+    removeComments: true,
+    collapseWhitespace: true,
+    collapseBooleanAttributes: true,
+    removeAttributeQuotes: true,
+    removeEmptyAttributes: true,
+    minifyJS: true
+  }
+}));
+app.use(require('express')['static']('public'));
 
 let User = require(__dirname + '/mongo')(app, events);
 require(__dirname + '/client-interact')(io, User);
@@ -37,7 +54,7 @@ app.get('/', (req, res) => {
 });
 app.get('/logout', (req, res) => {
   if (req.session.user) {
-    console.log(req.session.user.username + ' has logged out.\n\n');
+    console.log(req.session.user.username + ' has logged out.  ');
     delete req.session.user;
   }
   res.redirect('/');
@@ -52,6 +69,7 @@ app.get('/register', (req, res) => {
 });
 app.get('/play', (req, res) => {
   console.log('Play Activated.');
+
   if (req.session.user && req.session.user.username) res.render('../views/play.ejs', {
     user: req.session.user
   });
@@ -65,30 +83,7 @@ app.get('/license', (req, res) => {
   res.sendFile(require('path').resolve('views/LICENSE.txt'));
   console.log('License Activated.');
 });
-app.get('/img/Grove-logos/Grove-logo-2.png', (req, res) => {
-  res.sendFile(require('path').resolve('/img/Grove-logos/Grove-logo-2.png'));
-  console.log('Image Activated.');
-});
-app.get('/img/Grove-logos/Grove-logo-1.png', (req, res) => {
-  res.sendFile(require('path').resolve('/img/Grove-logos/Grove-logo-1.png'));
-  console.log('Image Activated.');
-});
-app.get('/img/Grove-logos/Grove-logo-3.png', (req, res) => {
-  res.sendFile(require('path').resolve('/img/Grove-logos/Grove-logo-3.png'));
-  console.log('Image Activated.');
-});
-app.get('/img/Grove-logos/Grove-logo.png', (req, res) => {
-  res.sendFile(require('path').resolve('/img/Grove-logos/Grove-logo.png'));
-  console.log('Image Activated.');
-});
-app.get('/img/Grove-logos/Grove-logo-4.png', (req, res) => {
-  res.sendFile(require('path').resolve('/img/Grove-logos/Grove-logo-4.png'));
-  console.log('Image Activated.');
-});
-app.get('/img/Grove-logos/Grove-logo-1.png', (req, res) => {
-  res.sendFile(require('path').resolve('/img/Grove-logos/Grove-logo-1.png'));
-  console.log('Image Activated.');
-});
+
 app.get('/admin', (req, res) => {
   console.log('Admin Activated.');
 });
@@ -98,10 +93,9 @@ app.use('/admin', admin({
   password: 'porpose'
 }));
 
-app.use(require('express')['static']('public'));
-
 http.listen(process.env.PORT || 8080, (listening) => {
   if (!process.env.NODE_ENV) {
+    console.log('Listening For conections on 0.0.0.0');
     console.log('Server running! ( View license at https://grove-mmo.herokuapp.com/license )');
   }
 });

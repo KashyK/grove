@@ -1,4 +1,48 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AIS = [];
+
+var AI = function () {
+    function AI() {
+        var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '{{ AI CONSTRUCTOR }}';
+        var hp = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
+        var dmg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
+
+        _classCallCheck(this, AI);
+
+        this.name = name;
+        this.hp = hp;
+        this.dmg = dmg;
+        this.target = null;
+
+        this.shape = new THREE.Mesh(new THREE.BoxGeometry(5, 10, 5), new THREE.MeshLambertMaterial({
+            color: 0xFFFFFF
+        }));
+        AIS.push(this);
+    }
+
+    _createClass(AI, [{
+        key: 'update',
+        value: function update() {
+            for (var key in AIS) {
+                key;
+            }
+        }
+    }]);
+
+    return AI;
+}();
+
+module.exports.ai = AI;
+
+var dave = new AI();
+
+},{}],2:[function(require,module,exports){
 "use strict";
 
 /* global THREE, CANNON */
@@ -50,7 +94,7 @@ module.exports.box = load.box;
 module.exports.label = load.label;
 module.exports.ball = load.ball;
 
-},{"./load":8}],2:[function(require,module,exports){
+},{"./load":8}],3:[function(require,module,exports){
 'use strict';
 
 /* global THREE, CANNON */
@@ -107,7 +151,7 @@ module.exports = function (globals) {
     });
 };
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 /* global $ */
@@ -207,7 +251,7 @@ module.exports = function () {
     });
 };
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 function init(globals) {
@@ -227,7 +271,7 @@ function init(globals) {
 
 module.exports = init;
 
-},{"./bodies":2,"./dom":3,"./player":5,"./world":6}],5:[function(require,module,exports){
+},{"./bodies":3,"./dom":4,"./player":6,"./world":7}],6:[function(require,module,exports){
 'use strict';
 
 /* global THREE, CANNON, PointerLockControls */
@@ -261,7 +305,7 @@ module.exports = function (globals) {
     window.controls = globals.controls;
 };
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
 /* global CANNON */
@@ -282,50 +326,6 @@ module.exports = function (globals) {
     globals.world.gravity.set(0, -20, 0);
     globals.world.broadphase = new CANNON.NaiveBroadphase();
 };
-
-},{}],7:[function(require,module,exports){
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var AIS = [];
-
-var AI = function () {
-    function AI() {
-        var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '{{ AI CONSTRUCTOR }}';
-        var hp = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
-        var dmg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
-
-        _classCallCheck(this, AI);
-
-        this.name = name;
-        this.hp = hp;
-        this.dmg = dmg;
-        this.target = null;
-
-        this.shape = new THREE.Mesh(new THREE.BoxGeometry(5, 10, 5), new THREE.MeshLambertMaterial({
-            color: 0xFFFFFF
-        }));
-        AIS.push(this);
-    }
-
-    _createClass(AI, [{
-        key: 'update',
-        value: function update() {
-            for (var key in AIS) {
-                key;
-            }
-        }
-    }]);
-
-    return AI;
-}();
-
-module.exports.ai = AI;
-
-var dave = new AI();
 
 },{}],8:[function(require,module,exports){
 'use strict';
@@ -448,7 +448,7 @@ module.exports.box = box;
 module.exports.label = label;
 module.exports.ball = ball;
 
-},{"./globals":1}],9:[function(require,module,exports){
+},{"./globals":2}],9:[function(require,module,exports){
 'use strict';
 
 /* global socket */
@@ -529,7 +529,7 @@ function onWindowResize() {
     globals.renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-},{"./globals":1,"./init/manager":4,"./multiplayer":10,"./player":11,"./shooting":12}],10:[function(require,module,exports){
+},{"./globals":2,"./init/manager":5,"./multiplayer":10,"./player":11,"./shooting":12}],10:[function(require,module,exports){
 'use strict';
 
 /* global socket */

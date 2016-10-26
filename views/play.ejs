@@ -8,17 +8,6 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
         <link rel='icon' href='/img/favicon.ico'>
 
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="//code.jquery.com/jquery-2.2.3.min.js" crossorigin="anonymous"></script>
-        <script src='/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
-
-        <script src='/js/vendor/three.min.js'></script>
-        <script src='/js/vendor/cannon.min.js'></script>
-        <script src='/js/vendor/THREEx.PointerLockControls.js'></script>
-        <script src='/js/vendor/THREEx.ObjCoord.js'></script>
-        <script src='/js/vendor/cannon.debug.js'></script>
-
         <style>
             @import url('https://fonts.googleapis.com/css?family=Megrim');
             html,
@@ -60,7 +49,6 @@
                 left: 5%;
                 bottom: 0px;
                 width: 90%;
-                /*height: 100%;*/
             }
         </style>
     </head>
@@ -69,7 +57,7 @@
 
         <div id="blocker">
             <div id="instructions">
-                <span style="font-size:50px" id='splash-title'><%= user.username %></span>
+                <span style="font-size:50px" id='splash-title'>Loading...</span>
                 <br /> Click to Skip
             </div>
         </div>
@@ -82,7 +70,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <h4 class="modal-title">Paused</h4>
-                        <img src='/img/Grove-logos/Grove-logo-1.png' width='70' height:'70'>
+                        <img src='/img/Grove-logos/Grove logo 3.png' width='70'>
                     </div>
                     <div class="modal-body">
                         <p>The Grove is currently paused...</p>
@@ -100,6 +88,17 @@
             <progress id='health-bar' class="progress progress-success" value="100" max="100"></progress>
         </div>
 
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="//code.jquery.com/jquery-2.2.3.min.js" crossorigin="anonymous"></script>
+        <script src='/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
+        <!--<script src="//cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>-->
+
+        <script src='/js/vendor/three.min.js'></script>
+        <script src='/js/vendor/cannon.min.js'></script>
+        <script src='/js/vendor/THREEx.PointerLockControls.js'></script>
+        <script src='/js/vendor/THREEx.ObjCoord.js'></script>
+        <script src='/js/vendor/cannon.debug.js'></script>
+
         <script>
             console.log('Game Play has Started.');
 
@@ -116,27 +115,28 @@
                 username: '<%= user.username %>',
                 password: '<%= user.password %>'
             });
-            $('form').submit(function () {
-                var msg = $('#m').val();
-                msg = msg.replace(/@map/gi, userdata.map.capitalize());
-                msg = msg.replace(/@race/gi, userdata.race.capitalize());
-                msg = msg.replace(/@class/gi, userdata.class.capitalize());
-                msg = msg.replace(/:D/gi, '😃');
-                msg = msg.replace(/:\)/gi, '😊️');
-                socket.emit('chat message', userdata.username + ': ' + msg);
-                $('#m').val('');
-                return false;
-            });
+            // $('form').submit(function () {
+            //     var msg = $('#m').val();
+            //     msg = msg.replace(/@map/gi, userdata.map.capitalize());
+            //     msg = msg.replace(/@race/gi, userdata.race.capitalize());
+            //     msg = msg.replace(/@class/gi, userdata.class.capitalize());
+            //     msg = msg.replace(/:D/gi, '😃');
+            //     msg = msg.replace(/:\)/gi, '😊️');
+            //     socket.emit('chat message', userdata.username + ': ' + msg);
+            //     $('#m').val('');
+            //     return false;
+            // });
 
-            socket.on('chat message', msg => {
-                var elem = $('<li>').text(msg).appendTo('#messages');
-                setTimeout(function () {
-                    elem.fadeOut();
-                }, 10000);
-            });
+            // socket.on('chat message', msg => {
+            //     var elem = $('<li>').text(msg).appendTo('#messages');
+            //     setTimeout(function () {
+            //         elem.fadeOut();
+            //     }, 10000);
+            // });
         </script>
+
         <script src='/js/engine/pointerlock.js'></script>
-        <script src='/js/build/latest.min.js'></script>
+        <script src='/js/latest.min.js'></script>
     </body>
 
 
@@ -147,7 +147,7 @@
         var sc_security = "782685fb";
         var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "http://www.");
         document.write("<sc" + "ript type='text/javascript' src='" + scJsHost + "statcounter.com/counter/counter.js'></" + "script>");
-        console.log('StatCounter Activated.')
+        console.log('StatCounter Activated.');
     </script>
     <!-- End of StatCounter Code for Default Guide -->
 

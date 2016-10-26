@@ -6,8 +6,8 @@ module.exports = function (grunt) {
 
         watch: {
             scripts: {
-                files: ['src/**/*.js'],
-                tasks: ['browserify', 'uglify'],
+                files: ['src/js/**/*.js'],
+                tasks: ['browserify', 'uglify', 'sass'],
                 options: {
                     spawn: false
                 },
@@ -16,8 +16,8 @@ module.exports = function (grunt) {
 
         browserify: {
             client: {
-                src: ['src/**/*.js'],
-                dest: 'public/js/build/latest.js',
+                src: ['src/js/**/*.js'],
+                dest: 'public/js/latest.js',
                 options: {
                     transform: [['babelify', {
                         presets: ['es2015']
@@ -29,7 +29,18 @@ module.exports = function (grunt) {
         uglify: {
             my_target: {
                 files: {
-                    'public/js/build/latest.min.js': ['public/js/build/latest.js']
+                    'public/js/latest.min.js': ['public/js/latest.js']
+                }
+            }
+        },
+
+        sass: { // Task
+            dist: { // Target
+                options: { // Target options
+                    style: 'compressed'
+                },
+                files: { // Dictionary of files
+                    'public/css/play.css': 'src/css/play.sass', // 'destination': 'source'
                 }
             }
         }
@@ -39,8 +50,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-sass');
 
     // Default task(s).
-    grunt.registerTask('default', ['browserify', 'uglify', 'watch']);
-    
+    grunt.registerTask('default', ['browserify', 'uglify', 'watch', 'sass']);
+
 };
