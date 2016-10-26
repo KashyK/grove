@@ -65,11 +65,29 @@ app.get('/license', (req, res) => {
   res.sendFile(require('path').resolve('views/LICENSE.txt'));
   console.log('License Activated.');
 });
-app.get('/ArtifexLISC', (req, res) => {
-  res.sendFile(require('path').resolve('views/ArtifexLISC.txt'));
+app.get('/img/Grove-logos/Grove-logo-2.png', (req, res) => {
+  res.sendFile(require('path').resolve('/img/Grove-logos/Grove-logo-2.png'));
+  console.log('Image Activated.');
 });
-app.get('/HALISC', (req, res) => {
-  res.sendFile(require('path').resolve('views/HALISC.txt'));
+app.get('/img/Grove-logos/Grove-logo-1.png', (req, res) => {
+  res.sendFile(require('path').resolve('/img/Grove-logos/Grove-logo-1.png'));
+  console.log('Image Activated.');
+});
+app.get('/img/Grove-logos/Grove-logo-3.png', (req, res) => {
+  res.sendFile(require('path').resolve('/img/Grove-logos/Grove-logo-3.png'));
+  console.log('Image Activated.');
+});
+app.get('/img/Grove-logos/Grove-logo.png', (req, res) => {
+  res.sendFile(require('path').resolve('/img/Grove-logos/Grove-logo.png'));
+  console.log('Image Activated.');
+});
+app.get('/img/Grove-logos/Grove-logo-4.png', (req, res) => {
+  res.sendFile(require('path').resolve('/img/Grove-logos/Grove-logo-4.png'));
+  console.log('Image Activated.');
+});
+app.get('/img/Grove-logos/Grove-logo-1.png', (req, res) => {
+  res.sendFile(require('path').resolve('/img/Grove-logos/Grove-logo-1.png'));
+  console.log('Image Activated.');
 });
 app.get('/admin', (req, res) => {
   console.log('Admin Activated.');
