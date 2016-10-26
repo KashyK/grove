@@ -6,7 +6,7 @@ module.exports = function (grunt) {
 
         watch: {
             scripts: {
-                files: ['src/js/**/*.js'],
+                files: ['src/**/*.js'],
                 tasks: ['browserify', 'uglify', 'sass'],
                 options: {
                     spawn: false
@@ -16,7 +16,7 @@ module.exports = function (grunt) {
 
         browserify: {
             client: {
-                src: ['src/js/**/*.js'],
+                src: ['src/js/**/*.*'],
                 dest: 'public/js/latest.js',
                 options: {
                     transform: [['babelify', {
@@ -53,6 +53,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-sass');
 
     // Default task(s).
-    grunt.registerTask('default', ['browserify', 'uglify', 'watch', 'sass']);
+    grunt.registerTask('default', ['browserify', 'uglify', 'sass', 'watch']);
 
 };
