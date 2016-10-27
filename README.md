@@ -42,7 +42,7 @@ Copying or redistributing this game or content without the consent of Artifex Ga
 All people that have contributed to this game include:
 
 - Seth Traman               Lead Developer
-- Nate Goldsborough         Developer, Copyright Manager, General Maintnence, Logos
+- Nate Goldsborough         Developer, Copyright Manager, General Maintenance, Logos
 - Casimir Kash              Developer, Graphics, Beta Testing
 - KJ Avakian                Developer
 - Gavin Montheye            PR

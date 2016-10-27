@@ -1,3 +1,6 @@
 module.exports = {
-    hp: 15
+    hp: {
+        val: 15,
+        max: 15
+    }
 };

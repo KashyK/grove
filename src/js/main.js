@@ -48,12 +48,12 @@ function animate(delta) {
     for (let key in globals.LABELS) globals.LABELS[key]();
 
     globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
-    if (globals.BODIES['player'].body.velocity.x > 15) globals.BODIES['player'].body.velocity.x = 15;
-    if (globals.BODIES['player'].body.velocity.z > 15) globals.BODIES['player'].body.velocity.z = 15;
+    if (globals.BODIES['player'].body.velocity.x > 10) globals.BODIES['player'].body.velocity.x = 10;
+    if (globals.BODIES['player'].body.velocity.z > 10) globals.BODIES['player'].body.velocity.z = 10;
 
     $('#health-bar')
-        .val(player.hp / 15 * 100);
-    $('#health').text(player.hp + ' HP');
+        .val(player.hp.val / player.hp.max * 100);
+    $('#health').text(player.hp.val + ' HP');
 
     globals.world.step(dt);
     globals.controls.update(Date.now() - globals.delta);

@@ -96,12 +96,13 @@ function ball(opts) {
     };
 }
 
-function label(mesh, txt) {
-    var element = document.createElement('h2');
+function label(mesh, txt='', icon = 'run') {
+    var element = document.createElement('span');
     document.body.appendChild(element);
-    element.style.color = 'white';
     element.style.position = 'absolute';
-    element.innerHTML = txt || 'BLAH BLAH BLAH';
+    element.style.paddingRight = '10px';
+    element.style.backgroundColor = '#aaa';
+    element.innerHTML = `<img src=/img/icons/${icon}.png> ${txt}`;
     globals.LABELS.push(function () {
         var position = THREEx.ObjCoord.cssPosition(mesh, globals.camera, globals.renderer);
         var boundingRect = element.getBoundingClientRect();

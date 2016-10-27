@@ -428,12 +428,16 @@ function ball(opts) {
     };
 }
 
-function label(mesh, txt) {
-    var element = document.createElement('h2');
+function label(mesh) {
+    var txt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+    var icon = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'run';
+
+    var element = document.createElement('span');
     document.body.appendChild(element);
-    element.style.color = 'white';
     element.style.position = 'absolute';
-    element.innerHTML = txt || 'BLAH BLAH BLAH';
+    element.style.paddingRight = '10px';
+    element.style.backgroundColor = '#aaa';
+    element.innerHTML = '<img src=/img/icons/' + icon + '.png> ' + txt;
     globals.LABELS.push(function () {
         var position = THREEx.ObjCoord.cssPosition(mesh, globals.camera, globals.renderer);
         var boundingRect = element.getBoundingClientRect();
@@ -501,11 +505,11 @@ function animate(delta) {
     for (var _key2 in globals.LABELS) {
         globals.LABELS[_key2]();
     }globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
-    if (globals.BODIES['player'].body.velocity.x > 15) globals.BODIES['player'].body.velocity.x = 15;
-    if (globals.BODIES['player'].body.velocity.z > 15) globals.BODIES['player'].body.velocity.z = 15;
+    if (globals.BODIES['player'].body.velocity.x > 10) globals.BODIES['player'].body.velocity.x = 10;
+    if (globals.BODIES['player'].body.velocity.z > 10) globals.BODIES['player'].body.velocity.z = 10;
 
-    $('#health-bar').val(player.hp / 15 * 100);
-    $('#health').text(player.hp + ' HP');
+    $('#health-bar').val(player.hp.val / player.hp.max * 100);
+    $('#health').text(player.hp.val + ' HP');
 
     globals.world.step(dt);
     globals.controls.update(Date.now() - globals.delta);
@@ -651,7 +655,10 @@ module.exports = function (globals, player) {
 "use strict";
 
 module.exports = {
-    hp: 15
+    hp: {
+        val: 15,
+        max: 15
+    }
 };
 
 },{}],12:[function(require,module,exports){

@@ -84,10 +84,6 @@ app.get('/license', (req, res) => {
   console.log('License Activated.');
 });
 
-app.get('/admin', (req, res) => {
-  console.log('Admin Activated.');
-});
-
 app.use('/admin', admin({
   username: 'admin',
   password: 'porpose'
