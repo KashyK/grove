@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "body-parser": "^1.15.1",
+    "compression": "^1.6.2",
     "ejs-locals": "^1.0.2",
     "express": "^4.13.4",
     "express-minify-html": "^0.6.0",
