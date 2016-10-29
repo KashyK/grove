@@ -52,8 +52,8 @@ function animate(delta) {
     if (globals.BODIES['player'].body.velocity.z > 10) globals.BODIES['player'].body.velocity.z = 10;
 
     $('#health-bar')
-        .val(player.hp.val / player.hp.max * 100);
-    $('#health').text(player.hp.val + ' HP');
+        .val(player.hp.val / player.hp.max * 100 > 0 ? player.hp.val / player.hp.max * 100 : 0);
+    $('#health').text(player.hp.val > 0 ? player.hp.val : 0 + ' HP');
 
     globals.world.step(dt);
     globals.controls.update(Date.now() - globals.delta);

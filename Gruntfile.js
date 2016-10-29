@@ -37,10 +37,12 @@ module.exports = function (grunt) {
         sass: { // Task
             dist: { // Target
                 options: { // Target options
-                    style: 'compressed'
+                    style: 'compressed',
+                    sourcemap: 'none'
                 },
                 files: { // Dictionary of files
                     'public/css/play.css': 'src/css/play.sass', // 'destination': 'source'
+                    'public/css/index.css': 'src/css/index.sass', // 'destination': 'source'
                 }
             }
         }

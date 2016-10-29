@@ -15,7 +15,10 @@
         <div id="blocker">
             <div id="instructions">
                 <span style="font-size:50px" id='splash-title'>Loading...</span>
-                <br /> Click to Skip
+                <br>
+                <div id='splash-secondary'>
+                    <div id='loading-bar'></div>
+                </div>
             </div>
         </div>
 
@@ -41,7 +44,7 @@
         </div>
 
         <div id='hud'>
-            <div id='health' class="text-xs-center" id="example-caption-6">Loading...</div>
+            <div id='health' class="text-xs-center">Loading...</div>
             <progress id='health-bar' class="progress progress-success" value="100" max="100"></progress>
         </div>
 
@@ -67,6 +70,11 @@
                 alert('Error message: ' + msg + '\nURL: ' + url + '\nLine Number: ' + linenumber);
                 return true;
             };
+            
+            THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
+                // alert(`${loaded} out of ${total}`);
+            };
+            
             var socket = io();
             socket.emit('client-credentials', {
                 username: '<%= user.username %>',

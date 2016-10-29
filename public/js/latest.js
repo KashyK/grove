@@ -95,7 +95,7 @@ module.exports.label = load.label;
 module.exports.ball = load.ball;
 
 },{"./load":8}],3:[function(require,module,exports){
-'use strict';
+"use strict";
 
 /* global THREE, CANNON */
 
@@ -134,10 +134,15 @@ module.exports = function (globals) {
                 geometry.vertices[i].y += Math[map.generate.math1](geometry.vertices[i].x) * Math[map.generate.math2](geometry.vertices[i].z) * map.generate.factor;
             }
 
+            var texture = new THREE.TextureLoader().load("/img/grass.png");
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(25, 25);
+
             var mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
-                color: 0x00FF00,
+                color: 0xFFFFFF,
                 shininess: 10,
-                vertexColors: THREE.FaceColors
+                map: texture
             }));
             mesh.castShadow = true;
             mesh.receiveShadow = true;
@@ -508,8 +513,8 @@ function animate(delta) {
     if (globals.BODIES['player'].body.velocity.x > 10) globals.BODIES['player'].body.velocity.x = 10;
     if (globals.BODIES['player'].body.velocity.z > 10) globals.BODIES['player'].body.velocity.z = 10;
 
-    $('#health-bar').val(player.hp.val / player.hp.max * 100);
-    $('#health').text(player.hp.val + ' HP');
+    $('#health-bar').val(player.hp.val / player.hp.max * 100 > 0 ? player.hp.val / player.hp.max * 100 : 0);
+    $('#health').text(player.hp.val > 0 ? player.hp.val : 0 + ' HP');
 
     globals.world.step(dt);
     globals.controls.update(Date.now() - globals.delta);

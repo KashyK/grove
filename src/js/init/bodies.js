@@ -37,10 +37,15 @@ module.exports = function (globals) {
                 ) * map.generate.factor;
             }
 
+            let texture = new THREE.TextureLoader().load("/img/grass.png");
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(25, 25);
+
             let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
-                color: 0x00FF00,
+                color: 0xFFFFFF,
                 shininess: 10,
-                vertexColors: THREE.FaceColors,
+                map: texture
             }));
             mesh.castShadow = true;
             mesh.receiveShadow = true;
