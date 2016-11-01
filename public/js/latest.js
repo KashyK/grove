@@ -629,8 +629,8 @@ module.exports = function (globals, player) {
     });
 
     globals.socket.on('bullet', function (_ref) {
-        var pos = _ref.pos;
-        var vel = _ref.vel;
+        var pos = _ref.pos,
+            vel = _ref.vel;
 
         var ball = globals.ball({
             array: 'projectiles'

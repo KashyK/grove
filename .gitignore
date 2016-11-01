@@ -4,3 +4,4 @@ push.sh
 npm-debug.log
 .c9
 .git
+.sass-cache
