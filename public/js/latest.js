@@ -56,6 +56,8 @@ module.exports = {
 
     world: new CANNON.World(),
 
+    socket: io(),
+
     BODIES: {
         items: [],
         projectiles: []
@@ -97,18 +99,18 @@ module.exports.ball = load.ball;
 },{"./load":8}],3:[function(require,module,exports){
 "use strict";
 
-/* global THREE, CANNON */
+/* global THREE, CANNON, $ */
 
-module.exports = function (globals) {
+module.exports = function (globals, player) {
 
     globals.scene.fog = new THREE.FogExp2(0x110011, 0.02);
 
     var ambient = new THREE.AmbientLight(0x111111);
     globals.scene.add(ambient);
 
-    var light = new THREE.SpotLight(0xffffff);
-    light.position.set(10, 30, 20);
-    light.target.position.set(0, 0, 0);
+    var light = new THREE.DirectionalLight(0xffffff);
+    light.position.set(0, 30, 0);
+    // light.target.position.set(0, 0, 0);
     light.castShadow = true;
 
     light.shadowCameraNear = globals.camera.near;
@@ -125,34 +127,51 @@ module.exports = function (globals) {
 
     // floor
 
-    $.getJSON('https://grove.nanoscaleapi.io/maps/hills.json', function (map) {
-        if (map.generate) {
-            var geometry = new THREE.PlaneGeometry(map.generate.width, map.generate.height, map.generate.wsegs, map.generate.hsegs);
-            geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
+    // $.getJSON('https://grove.nanoscaleapi.io/maps/hills.json', (map) => {
+    //     if (map.generate) {
+    //         let geometry = new THREE.PlaneGeometry(map.generate.width, map.generate.height, map.generate.wsegs, map.generate.hsegs);
+    //         geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
-            for (var i = 0; i < geometry.vertices.length; i++) {
-                geometry.vertices[i].y += Math[map.generate.math1](geometry.vertices[i].x) * Math[map.generate.math2](geometry.vertices[i].z) * map.generate.factor;
+    //         for (let i = 0; i < geometry.vertices.length; i++) {
+    //             geometry.vertices[i].y += (
+    //                 Math[map.generate.math1](geometry.vertices[i].x) * Math[map.generate.math2](geometry.vertices[i].z)
+    //             ) * map.generate.factor;
+    //         }
+
+    //         let texture = new THREE.TextureLoader().load("/img/grass.png");
+    //         texture.wrapS = THREE.RepeatWrapping;
+    //         texture.wrapT = THREE.RepeatWrapping;
+    //         texture.repeat.set(25, 25);
+
+    //         let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
+    //             color: 0xFFFFFF,
+    //             shininess: 10,
+    //             map: texture
+    //         }));
+    //         mesh.castShadow = true;
+    //         mesh.receiveShadow = true;
+    //         globals.scene.add(mesh);
+
+    //         globals.load(mesh, {
+    //             mass: 0,
+    //             material: globals.groundMaterial
+    //         });
+    //     }
+    // });
+
+    var loader = new THREE.ObjectLoader();
+    loader.load("/models/" + player.serverdata.acc.map + "/" + player.serverdata.acc.map + ".json", function (object) {
+        globals.scene.add(object);
+        object.traverse(function (child) {
+            if (child instanceof THREE.Mesh) {
+                var _o = globals.load(child, {
+                    mass: 0,
+                    material: globals.groundMaterial
+                });
+                _o.body.position.z += 15;
+                _o.mesh.position.z += 15;
             }
-
-            var texture = new THREE.TextureLoader().load("/img/grass.png");
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(25, 25);
-
-            var mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({
-                color: 0xFFFFFF,
-                shininess: 10,
-                map: texture
-            }));
-            mesh.castShadow = true;
-            mesh.receiveShadow = true;
-            globals.scene.add(mesh);
-
-            globals.load(mesh, {
-                mass: 0,
-                material: globals.groundMaterial
-            });
-        }
+        });
     });
 };
 
@@ -259,10 +278,10 @@ module.exports = function () {
 },{}],5:[function(require,module,exports){
 'use strict';
 
-function init(globals) {
+function init(globals, player) {
 
     require('./world')(globals);
-    require('./bodies')(globals);
+    require('./bodies')(globals, player);
     require('./player')(globals);
     require('./dom')(globals);
 
@@ -291,11 +310,11 @@ module.exports = function (globals) {
         material: globals.groundMaterial
     });
     sphereBody.addShape(sphereShape);
-    sphereBody.position.set(0, 5, 0);
+    sphereBody.position.set(0, 15, 0);
     // sphereBody.linearDamping = 0.9;
     sphereBody.angularDamping = 0.9;
     globals.world.add(sphereBody);
-    var mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 2.5, 1), new THREE.MeshLambertMaterial());
+    var mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 2, 1), new THREE.MeshLambertMaterial());
     mesh.castShadow = true;
     globals.scene.add(mesh);
     globals.BODIES['player'] = {
@@ -460,7 +479,7 @@ module.exports.ball = ball;
 },{"./globals":2}],9:[function(require,module,exports){
 'use strict';
 
-/* global socket */
+/* global $ */
 
 var globals = require('./globals');
 var player = require('./player');
@@ -468,11 +487,15 @@ var player = require('./player');
 var dt = 1 / 60;
 
 // require('./load')(globals);
-require('./init/manager')(globals);
 require('./shooting')(globals);
 require('./multiplayer')(globals, player);
 
-animate();
+THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
+    alert(loaded + ' out of ' + total);
+    if (loaded == total) {
+        animate();
+    }
+};
 
 function animate(delta) {
 
@@ -518,13 +541,13 @@ function animate(delta) {
 
     globals.world.step(dt);
     globals.controls.update(Date.now() - globals.delta);
-    // globals.rendererDEBUG.update();
+    globals.rendererDEBUG.update();
     globals.renderer.render(globals.scene, globals.camera);
     globals.delta = Date.now();
 
     if (player && player.serverdata && globals && globals.updatePlayerData) {
         globals.updatePlayerData();
-        socket.emit('updatePosition', player.serverdata);
+        globals.socket.emit('updatePosition', player.serverdata);
     }
 }
 
@@ -538,26 +561,34 @@ function onWindowResize() {
     globals.renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-},{"./globals":2,"./init/manager":5,"./multiplayer":10,"./player":11,"./shooting":12}],10:[function(require,module,exports){
+},{"./globals":2,"./multiplayer":10,"./player":11,"./shooting":12}],10:[function(require,module,exports){
 'use strict';
-
-/* global socket */
 
 module.exports = function (globals, player) {
 
-    socket.emit('requestOldPlayers', {});
+    globals.socket.emit('client-credentials', {
+        username: window.__D.username,
+        password: window.__D.password
+    });
 
-    socket.on('createPlayer', function (data) {
+    window.__D = undefined;
+    delete window.__D;
+
+    globals.socket.emit('requestOldPlayers', {});
+
+    globals.socket.on('createPlayer', function (data) {
         if (typeof player.serverdata === 'undefined') {
 
             player.serverdata = data;
             player.id = data.id;
 
             player.inventory = player.serverdata.acc.inventory;
+
+            require('./init/manager')(globals, player);
         }
     });
 
-    socket.on('addOtherPlayer', function (data) {
+    globals.socket.on('addOtherPlayer', function (data) {
         if (data.id !== player.id) {
             var cube = globals.box({
                 l: 1,
@@ -575,14 +606,14 @@ module.exports = function (globals, player) {
         }
     });
 
-    socket.on('removeOtherPlayer', function (data) {
+    globals.socket.on('removeOtherPlayer', function (data) {
 
         globals.scene.remove(playerForId(data.id).mesh);
         globals.world.remove(playerForId(data.id).body);
         console.log(data.id + ' disconnected');
     });
 
-    socket.on('updatePosition', function (data) {
+    globals.socket.on('updatePosition', function (data) {
 
         var somePlayer = playerForId(data.id);
         if (somePlayer) {
@@ -597,7 +628,7 @@ module.exports = function (globals, player) {
         }
     });
 
-    socket.on('bullet', function (_ref) {
+    globals.socket.on('bullet', function (_ref) {
         var pos = _ref.pos;
         var vel = _ref.vel;
 
@@ -614,11 +645,11 @@ module.exports = function (globals, player) {
         });
     });
 
-    socket.on('hit', function (data) {
+    globals.socket.on('hit', function (data) {
         if (data.id == player.id) player.hp -= data.dmg;
         if (player.hp <= 0) {
             alert('Why excuse me fine sir, but it appears that you are dead!');
-            socket.disconnect();
+            globals.socket.disconnect();
         }
     });
 
@@ -642,13 +673,13 @@ module.exports = function (globals, player) {
         return globals.PLAYERS[index];
     };
 
-    socket.on('clear', function () {
+    globals.socket.on('clear', function () {
         for (var i = globals.scene.children.length - 1; i >= 0; i--) {
             globals.scene.remove(globals.scene.children[i]);
         }
     });
 
-    socket.on('reload', function () {
+    globals.socket.on('reload', function () {
         window.location.reload();
     });
 
@@ -656,7 +687,7 @@ module.exports = function (globals, player) {
     globals.playerForId = playerForId;
 };
 
-},{}],11:[function(require,module,exports){
+},{"./init/manager":5}],11:[function(require,module,exports){
 "use strict";
 
 module.exports = {
@@ -669,7 +700,7 @@ module.exports = {
 },{}],12:[function(require,module,exports){
 'use strict';
 
-/* global THREE, CANNON, socket */
+/* global THREE, CANNON */
 
 module.exports = function (globals) {
 
@@ -712,7 +743,7 @@ module.exports = function (globals) {
                     // for(let key in event) alert(key);
                     var contact = event.contact;
                     if (contact.bj.id != ball.body.id) for (var key in globals.PLAYERS) {
-                        if (contact.bj == globals.PLAYERS[key].body) socket.emit('hit-player', globals.PLAYERS[key].id);
+                        if (contact.bj == globals.PLAYERS[key].body) globals.socket.emit('hit-player', globals.PLAYERS[key].id);
                     }
                     setTimeout(function () {
                         globals.remove.bodies.push(ball.body);
@@ -720,7 +751,7 @@ module.exports = function (globals) {
                     }, 1500);
                 });
 
-                socket.emit('bullet', {
+                globals.socket.emit('bullet', {
                     pos: {
                         x: x,
                         y: y,

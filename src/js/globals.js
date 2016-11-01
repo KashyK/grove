@@ -8,6 +8,8 @@ module.exports = {
     camera: new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 10000),
 
     world: new CANNON.World(),
+    
+    socket: io(),
 
     BODIES: {
         items: [],

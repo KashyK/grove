@@ -3,34 +3,9 @@
 
     <head>
         <title>Login | The Grove</title>
-        <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.min.css'>
         <link rel='icon' href='/img/favicon.ico'>
-        <script src='/bower_components/jquery/dist/jquery.min.js'></script>
-        <script src='/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
-        <style>
-            /*@import url('https://fonts.googleapis.com/css?family=Megrim');*/
-            
-            body {
-                background-image: url('/img/forest.png');
-                background-size: cover;
-            }
-            
-            h1 {
-                color: white;
-                margin: 150px;
-                font-size: 70px;
-            }
-            
-            button {
-                margin-left: 150px;
-                margin-top: -100px;
-                padding: 15px 30px !important;
-            }
-            
-            * {
-                font-family: Megrim, cursive;
-            }
-        </style>
+        <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.min.css'>
+        <link rel='stylesheet' href='/css/login.css'>
     </head>
 
     <body>
@@ -52,16 +27,7 @@
             </div>
         </form>
         <script>
-            function getParameterByName(name, url) {
-                if (!url) url = window.location.href;
-                name = name.replace(/[\[\]]/g, "\\$&");
-                var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                    results = regex.exec(url);
-                if (!results) return null;
-                if (!results[2]) return '';
-                return decodeURIComponent(results[2].replace(/\+/g, " "));
-            }
-            if (getParameterByName('err') == 'not_found') document.getElementById('error').innerHTML = '<h3>Error: User not found!</h3>';
+            function gp(a, b){if (!b) b = window.location.href;a = a.replace(/[\[\]]/g, "\\$&");var r = new RegExp("[?&]" + a + "(=([^&#]*)|&|#|$)"),v = r.exec(b);if (!v) return null;if (!v[2]) return '';return decodeURIComponent(v[2].replace(/\+/g, " "));}if (gp('err') == 'not_found') document.getElementById('error').innerHTML = '<h3>Error: User not found!</h3>';
         </script>
     </body>
 

@@ -43,6 +43,7 @@ module.exports = function (grunt) {
                 files: { // Dictionary of files
                     'public/css/play.css': 'src/css/play.sass', // 'destination': 'source'
                     'public/css/index.css': 'src/css/index.sass', // 'destination': 'source'
+                    'public/css/login.css': 'src/css/login.sass', // 'destination': 'source'
                 }
             }
         }

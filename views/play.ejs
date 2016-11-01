@@ -5,7 +5,7 @@
         <title>Play | The Grove</title>
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
         <link rel='stylesheet' href='/css/play.css'>
         <link rel='icon' href='/img/favicon.ico'>
     </head>
@@ -13,13 +13,13 @@
     <body>
 
         <div id="blocker">
-            <div id="instructions">
+            <center id="instructions">
                 <span style="font-size:50px" id='splash-title'>Loading...</span>
                 <br>
                 <div id='splash-secondary'>
                     <div id='loading-bar'></div>
                 </div>
-            </div>
+            </center>
         </div>
 
         <div class="modal fade" id='pause'>
@@ -30,7 +30,6 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <h4 class="modal-title">Paused</h4>
-                        <img src='/img/Grove-logos/Grove-logo-1.png' width='70'>
                     </div>
                     <div class="modal-body">
                         <p>The Grove is currently paused...</p>
@@ -60,6 +59,12 @@
         <script src='/js/vendor/cannon.debug.js'></script>
 
         <script>
+        
+            window.__D = {
+                username: '<%= user.username %>',
+                password: '<%= user.password %>'
+            }
+        
             console.log('Game Play has Started.');
 
             String.prototype.capitalize = function () {
@@ -67,19 +72,12 @@
             };
 
             window.onerror = (msg, url, linenumber) => {
-                alert('Error message: ' + msg + '\nURL: ' + url + '\nLine Number: ' + linenumber);
+                alert(`Error message: ${msg}\nURL: ${url}\nLine Number: ${linenumber}`);
                 return true;
             };
             
-            THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
-                // alert(`${loaded} out of ${total}`);
-            };
+            // var socket = io();
             
-            var socket = io();
-            socket.emit('client-credentials', {
-                username: '<%= user.username %>',
-                password: '<%= user.password %>'
-            });
             // $('form').submit(function () {
             //     var msg = $('#m').val();
             //     msg = msg.replace(/@map/gi, userdata.map.capitalize());
@@ -106,7 +104,7 @@
 
 
     <!-- Start of StatCounter Code for Default Guide -->
-    <script type="text/javascript">
+    <script>
         var sc_project = 11138604;
         var sc_invisible = 1;
         var sc_security = "782685fb";

@@ -1,4 +1,4 @@
-/* global socket */
+/* global $ */
 
 let globals = require('./globals');
 let player = require('./player');
@@ -6,11 +6,15 @@ let player = require('./player');
 const dt = 1 / 60;
 
 // require('./load')(globals);
-require('./init/manager')(globals);
 require('./shooting')(globals);
 require('./multiplayer')(globals, player);
 
-animate();
+THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
+    alert(`${loaded} out of ${total}`);
+    if (loaded == total) {
+        animate();
+    }
+};
 
 function animate(delta) {
 
@@ -57,13 +61,13 @@ function animate(delta) {
 
     globals.world.step(dt);
     globals.controls.update(Date.now() - globals.delta);
-    // globals.rendererDEBUG.update();
+    globals.rendererDEBUG.update();
     globals.renderer.render(globals.scene, globals.camera);
     globals.delta = Date.now();
 
     if (player && player.serverdata && globals && globals.updatePlayerData) {
         globals.updatePlayerData();
-        socket.emit('updatePosition', player.serverdata);
+        globals.socket.emit('updatePosition', player.serverdata);
     }
 
 }

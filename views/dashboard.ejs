@@ -2,24 +2,21 @@
 
 <head>
     <title>The Grove | Dashboard </title>
-    <script src='/bower_components/jquery/dist/jquery.min.js'></script>
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.min.css'>
     <link rel='icon' href='/img/favicon.ico'>
     <style>
         body {
-            background-image: url(/img/forest.png);
-            background-size: cover;
-        }
-        .grove {
-            font-family: Megrim, cursive;
+            background-image: url(/img/bg.jpg);
+            background-size: cover cover;
+            overflow: hidden;
         }
     </style>
 </head>
 
 <body>
-    <div class="grove">
-    <div class='row'>
-        <div class='col-md-5' style='padding:15px;padding-left:30px;'>
+    <br>
+    <div class='row container-fluid'>
+        <div class='col-md-5'>
             <div class='jumbotron' style='text-indent:25px;'>
                 <h1><%= user.username %></h1>
                 <p class='lead'>Your Race: <%= user.race %></p>
@@ -29,12 +26,7 @@
                 <a href='/logout' class='btn btn-lg btn-block btn-danger-outline'>Logout</a>
             </div>
             <hr>
-            <!--- <h3>Inventory</h3>
-            <div id='inventory'></div>
-       </div> -->
-        <div class='col-md-5' style='padding:15px;padding-left:30px;'>
-            </ul>
+            <h3> <%= user.inventory.join(', ') %> </h3>
         </div>
-    </div>
     </div>
 </body>

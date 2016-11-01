@@ -1,10 +1,16 @@
-/* global socket */
-
 module.exports = (globals, player) => {
-    
-    socket.emit('requestOldPlayers', {});
 
-    socket.on('createPlayer', data => {
+    globals.socket.emit('client-credentials', {
+        username: window.__D.username,
+        password: window.__D.password
+    });
+
+    window.__D = undefined;
+    delete window.__D;
+
+    globals.socket.emit('requestOldPlayers', {});
+
+    globals.socket.on('createPlayer', data => {
         if (typeof player.serverdata === 'undefined') {
 
             player.serverdata = data;
@@ -12,10 +18,12 @@ module.exports = (globals, player) => {
 
             player.inventory = player.serverdata.acc.inventory;
 
+            require('./init/manager')(globals, player);
+
         }
     });
 
-    socket.on('addOtherPlayer', data => {
+    globals.socket.on('addOtherPlayer', data => {
         if (data.id !== player.id) {
             let cube = globals.box({
                 l: 1,
@@ -33,7 +41,7 @@ module.exports = (globals, player) => {
         }
     });
 
-    socket.on('removeOtherPlayer', data => {
+    globals.socket.on('removeOtherPlayer', data => {
 
         globals.scene.remove(playerForId(data.id).mesh);
         globals.world.remove(playerForId(data.id).body);
@@ -41,7 +49,7 @@ module.exports = (globals, player) => {
 
     });
 
-    socket.on('updatePosition', data => {
+    globals.socket.on('updatePosition', data => {
 
         let somePlayer = playerForId(data.id);
         if (somePlayer) {
@@ -57,7 +65,7 @@ module.exports = (globals, player) => {
 
     });
 
-    socket.on('bullet', ({
+    globals.socket.on('bullet', ({
         pos,
         vel,
     }) => {
@@ -74,11 +82,11 @@ module.exports = (globals, player) => {
         });
     });
 
-    socket.on('hit', (data) => {
+    globals.socket.on('hit', (data) => {
         if (data.id == player.id) player.hp -= data.dmg;
         if (player.hp <= 0) {
             alert('Why excuse me fine sir, but it appears that you are dead!');
-            socket.disconnect();
+            globals.socket.disconnect();
         }
     });
 
@@ -104,13 +112,13 @@ module.exports = (globals, player) => {
         return globals.PLAYERS[index];
     };
 
-    socket.on('clear', function () {
+    globals.socket.on('clear', function () {
         for (var i = globals.scene.children.length - 1; i >= 0; i--) {
             globals.scene.remove(globals.scene.children[i]);
         }
     });
 
-    socket.on('reload', function () {
+    globals.socket.on('reload', function () {
         window.location.reload();
     });
 

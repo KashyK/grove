@@ -1,18 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Megrim')
 $font-stack: Megrim, sans-serif
-=display-box()
-  display: -webkit-box
-  display: -moz-box
-  display: box
-  -webkit-box-orient: horizontal
-  -moz-box-orient: horizontal
-  box-orient: horizontal
-  -webkit-box-pack: center
-  -moz-box-pack: center
-  box-pack: center
-  -webkit-box-align: center
-  -moz-box-align: center
-  box-align: center
 
 html,
 body
@@ -27,12 +14,9 @@ body
   background-color: rgba(0, 0, 0, 1.0)
   z-index: 5
 
-#instructions 
-  width: 100%
-  height: 100%
-  +display-box
+#instructions
+  margin-top: 20%
   color: #ffffff
-  text-align: center
   cursor: pointer
   font: 100% $font-stack
 

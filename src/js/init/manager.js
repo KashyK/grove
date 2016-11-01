@@ -1,7 +1,7 @@
-function init(globals) {
+function init(globals, player) {
 
     require('./world')(globals);
-    require('./bodies')(globals);
+    require('./bodies')(globals, player);
     require('./player')(globals);
     require('./dom')(globals);
 
@@ -10,7 +10,7 @@ function init(globals) {
     globals.renderer.setClearColor(globals.scene.fog.color, 1);
     globals.renderer.setSize(window.innerWidth, window.innerHeight);
 
-    document.body.appendChild( globals.renderer.domElement );
+    document.body.appendChild(globals.renderer.domElement);
 
 }
 

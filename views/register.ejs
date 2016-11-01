@@ -3,10 +3,9 @@
 
     <head>
         <title>Sign Up | The Grove</title>
-        <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.min.css'>
         <link rel='icon' href='/img/favicon.ico'>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
         <script src='/bower_components/jquery/dist/jquery.min.js'></script>
-        <script src='/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
         <style>
             body {
                 background-image: url('/img/forest.png');
@@ -24,14 +23,10 @@
                 margin-top: -100px;
                 padding: 15px 30px !important;
             }
-             .grove {
-            font-family: Megrim, cursive;
-        }
         </style>
     </head>
 
     <body>
-        <div class="grove">
         <div class='container-fluid'>
             <span style='color:white;text-align:center;' id='error'></span>
         </div>
@@ -57,21 +52,20 @@
                 <br>
                 <br>
                 <input name='type' type='hidden' value='register'>
-                <input type='submit' class='btn btn-primary'> 
+                <input type='submit' class='btn btn-primary'>
                 <br>
                 <br>
                 <div class="row">
                     <div class="col-sm-6 col-md-3">
-                        <div class="thumbnail">
-                            <img src="/img/Grove-logos/Grove-logo-1.png" alt="..." width='200' id='race-icon'>
-                            <div class="caption">
-                                <h3 id='racename'>Human</h3>
-                                <p id='info'>Humans are good at... at... making mistakes? Hey, they're human!</p>
+                        <div class="card">
+                            <img class="card-img-top" src="/img/icons/run.png" alt="Race Icon">
+                            <div class="card-block">
+                                <h4 class="card-title" id='racename'>Human</h4>
+                                <p class="card-text">Humans are good at... at... making mistakes? Hey, they're human!</p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </div>
         </form>
         <script>
@@ -79,24 +73,34 @@
                 $('select[name="race"] option:selected').each(function () {
                     switch ($(this).text()) {
                     case 'Human':
-                        
+                        $('#race-icon').atr('src', '/img/icons/run.png');
                         $('#racename').text('Human');
                         $('#info').text('Humans are good at... at... making mistakes?  Hey, they\'re human!');
                         break;
                     case 'Elf':
-                        
+                        $('#race-icon').attr('src', '/img/icons/woman-elf-face.png');
                         $('#racename').text('Elf');
                         $('#info').text('Elves are light on their feet and are good at magic, but look out - they\'re fragile!');
                         break;
                     case 'Dwarf':
-                        
+                        $('#race-icon').attr('src', '/img/icons/dwarf-face.png');
                         $('#racename').text('Dwarf');
                         $('#info').text('Dwarves aren\'t very smart and are kinda slow, but when it comes to muscle, they could take out Hulk Hogan!');
                         break;
+                    case 'Ængel':
+                        $('#race-icon').attr('src', '/img/icons/angel-wings.png');
+                        $('#racename').text('Ængel');
+                        $('#info').text('Ambassadors of light, Ægels can slay even the darkest of shadows.');
+                        break;
                     case 'Vampire':
-                      
+                        $('#race-icon').attr('src', '/img/icons/fanged-skull.png');
                         $('#racename').text('Vampire');
                         $('#info').text('Vampires are full of dark traits and are excellent at magic and sneaking around.  Except when it comes to fire or the sun.  Then you\'ve got roasted vampire on the menu.');
+                        break;
+                    case 'Dæmon':
+                        $('#race-icon').attr('src', '/img/icons/horned-skull.png');
+                        $('#racename').text('Dæmon');
+                        $('#info').text('Infused with dark essences, these ghastly creatures combine magic and brute force into a deadly show of strength.');
                         break;
                     }
                 });

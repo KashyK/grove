@@ -10,12 +10,12 @@ module.exports = function (globals) {
         material: globals.groundMaterial
     });
     sphereBody.addShape(sphereShape);
-    sphereBody.position.set(0, 5, 0);
+    sphereBody.position.set(0, 15, 0);
     // sphereBody.linearDamping = 0.9;
     sphereBody.angularDamping = 0.9;
     globals.world.add(sphereBody);
     var mesh = new THREE.Mesh(
-        new THREE.BoxGeometry(1, 2.5, 1),
+        new THREE.BoxGeometry(1, 2, 1),
         new THREE.MeshLambertMaterial()
     );
     mesh.castShadow = true;

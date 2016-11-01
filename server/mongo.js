@@ -9,7 +9,8 @@ module.exports = (app, events) => {
         race: String,
         inventory: [],
         map: String,
-        level: Number
+        level: Number,
+        status: String
     });
     db.on('error', console.error);
     db.once('open', function () {
@@ -85,7 +86,8 @@ module.exports = (app, events) => {
             class: req.body.class,
             race: req.body.race,
             map: 'tutorial',
-            level: 1
+            level: 1,
+            status: 'u.' + Date.now()
         });
         u.save((err, obj) => {
             if (err) console.error('ERROR!');

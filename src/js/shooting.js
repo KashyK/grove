@@ -1,4 +1,4 @@
-/* global THREE, CANNON, socket */
+/* global THREE, CANNON */
 
 module.exports = (globals) => {
 
@@ -45,7 +45,7 @@ module.exports = (globals) => {
                 if (contact.bj.id != ball.body.id)
                     for (let key in globals.PLAYERS) {
                         if (contact.bj == globals.PLAYERS[key].body)
-                            socket.emit('hit-player', globals.PLAYERS[key].id);
+                            globals.socket.emit('hit-player', globals.PLAYERS[key].id);
                     }
                 setTimeout(function () {
                     globals.remove.bodies.push(ball.body);
@@ -54,7 +54,7 @@ module.exports = (globals) => {
 
             });
 
-            socket.emit('bullet', {
+            globals.socket.emit('bullet', {
                 pos: {
                     x,
                     y,
@@ -62,7 +62,7 @@ module.exports = (globals) => {
                 },
                 vel: {
                     x: ball.body.velocity.x,
-                    y: ball.body.velocity.y,
+                    y: ball.body.velocity.y, 
                     z: ball.body.velocity.z
                 },
             });
