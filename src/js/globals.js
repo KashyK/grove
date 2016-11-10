@@ -29,7 +29,7 @@ module.exports = {
     groundMaterial: new CANNON.Material("groundMaterial")
 };
 
-module.exports.rendererDEBUG = new THREE.CannonDebugRenderer(module.exports.scene, module.exports.world);
+// module.exports.rendererDEBUG = new THREE.CannonDebugRenderer(module.exports.scene, module.exports.world);
 // Adjust constraint equation parameters for ground/ground contact
 let ground_ground_cm = new CANNON.ContactMaterial(module.exports.groundMaterial, module.exports.groundMaterial, {
     friction: 1e60,

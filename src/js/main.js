@@ -10,7 +10,10 @@ require('./shooting')(globals);
 require('./multiplayer')(globals, player);
 
 THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
-    alert(`${loaded} out of ${total}`);
+    console.log(`${loaded} out of ${total}`);
+    $('#loading-bar')
+        .width(loaded / total * 100 + '%')
+        .text(loaded + ' / ' + total + ' - ' + Math.floor(loaded / total * 100) + '%');
     if (loaded == total) {
         animate();
     }
@@ -61,7 +64,7 @@ function animate(delta) {
 
     globals.world.step(dt);
     globals.controls.update(Date.now() - globals.delta);
-    globals.rendererDEBUG.update();
+    // globals.rendererDEBUG.update();
     globals.renderer.render(globals.scene, globals.camera);
     globals.delta = Date.now();
 

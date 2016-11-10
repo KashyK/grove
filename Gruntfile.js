@@ -38,7 +38,8 @@ module.exports = function (grunt) {
             dist: { // Target
                 options: { // Target options
                     style: 'compressed',
-                    sourcemap: 'none'
+                    sourcemap: 'none',
+                    noCache: true
                 },
                 files: { // Dictionary of files
                     'public/css/play.css': 'src/css/play.sass', // 'destination': 'source'

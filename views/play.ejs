@@ -4,13 +4,15 @@
     <head>
         <title>Play | The Grove</title>
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
         <link rel='stylesheet' href='/css/play.css'>
         <link rel='icon' href='/img/favicon.ico'>
     </head>
 
     <body>
+
+        <div id='crosshair' style='position:fixed;left:50%;top:50%;'>[ &times; ]</div>
 
         <div id="blocker">
             <center id="instructions">
@@ -22,23 +24,13 @@
             </center>
         </div>
 
-        <div class="modal fade" id='pause'>
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title">Paused</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>The Grove is currently paused...</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" data-dismiss="modal">Resume</button>
-                        <a class="btn btn-danger" href='/'>Quit</a>
-                    </div>
-                </div>
+        <div id="pause" class="modal">
+            <div class="modal-content">
+                <h4>Modal Header</h4>
+                <p>A bunch of text</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
             </div>
         </div>
 
@@ -49,8 +41,7 @@
 
         <script src="/socket.io/socket.io.js"></script>
         <script src="//code.jquery.com/jquery-2.2.3.min.js" crossorigin="anonymous"></script>
-        <script src='/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
-        <!--<script src="//cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>-->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
 
         <script src='/js/vendor/three.min.js'></script>
         <script src='/js/vendor/cannon.min.js'></script>
@@ -59,43 +50,19 @@
         <script src='/js/vendor/cannon.debug.js'></script>
 
         <script>
-        
             window.__D = {
                 username: '<%= user.username %>',
                 password: '<%= user.password %>'
-            }
-        
-            console.log('Game Play has Started.');
+            };
 
+            console.log('Game Play has Started.');
             String.prototype.capitalize = function () {
                 return this.charAt(0).toUpperCase() + this.slice(1);
             };
-
             window.onerror = (msg, url, linenumber) => {
                 alert(`Error message: ${msg}\nURL: ${url}\nLine Number: ${linenumber}`);
                 return true;
             };
-            
-            // var socket = io();
-            
-            // $('form').submit(function () {
-            //     var msg = $('#m').val();
-            //     msg = msg.replace(/@map/gi, userdata.map.capitalize());
-            //     msg = msg.replace(/@race/gi, userdata.race.capitalize());
-            //     msg = msg.replace(/@class/gi, userdata.class.capitalize());
-            //     msg = msg.replace(/:D/gi, '😃');
-            //     msg = msg.replace(/:\)/gi, '😊️');
-            //     socket.emit('chat message', userdata.username + ': ' + msg);
-            //     $('#m').val('');
-            //     return false;
-            // });
-
-            // socket.on('chat message', msg => {
-            //     var elem = $('<li>').text(msg).appendTo('#messages');
-            //     setTimeout(function () {
-            //         elem.fadeOut();
-            //     }, 10000);
-            // });
         </script>
 
         <script src='/js/engine/pointerlock.js'></script>

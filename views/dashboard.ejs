@@ -1,32 +1,103 @@
 <!doctype html>
+<html>
 
-<head>
-    <title>The Grove | Dashboard </title>
-    <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.min.css'>
-    <link rel='icon' href='/img/favicon.ico'>
-    <style>
-        body {
-            background-image: url(/img/bg.jpg);
-            background-size: cover cover;
-            overflow: hidden;
-        }
-    </style>
-</head>
+    <head>
+        <title>The Grove | Dashboard </title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+        <link rel='icon' href='/img/favicon.ico'>
 
-<body>
-    <br>
-    <div class='row container-fluid'>
-        <div class='col-md-5'>
-            <div class='jumbotron' style='text-indent:25px;'>
-                <h1><%= user.username %></h1>
-                <p class='lead'>Your Race: <%= user.race %></p>
-                <p class='lead'>Your Class: <%= user.class %></p>
-                <p class='lead'>Your Map is: <%= user.map %></p>
-                <a href='/play' class='btn btn-lg btn-block btn-success-outline'>Play</a>
-                <a href='/logout' class='btn btn-lg btn-block btn-danger-outline'>Logout</a>
+        <style>
+            html,
+            body {
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+            
+            .header {
+                font-weight: 300
+            }
+        </style>
+    </head>
+
+    <body>
+        <nav>
+            <div class="nav-wrapper">
+                <div class="row">
+                    <div class='col s2'>
+                        <a href="#" class="brand-logo">&nbsp;<%= user.username %></a>
+                    </div>
+                    <div class="col s10">
+                        <ul id="tabs">
+                            <li class="tab col s3"><a class='active wave-effect waves-light' href="#home">Home</a></li>
+                            <li class="tab col s3"><a href="#stats">Stats</a></li>
+                            <li class="tab col s3"><a href="#about">About</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <hr>
-            <h3> <%= user.inventory.join(', ') %> </h3>
+        </nav>
+        <div id='home' class='row' style='height:100%;'>
+            <div class='col s4 grey lighten-2' style='height:100%;padding-left:20px;'>
+                <br>
+                <h3 class='header'>Actions</h3>
+                <br>
+                <a href='/play' class='waves-effect waves-light btn-large light-green z-depth-3'>Enter The Grove</a>
+                <br><br>
+                <a href='/' class='waves-effect waves-light btn-large red z-depth-3'>Delete Account</a>
+            </div>
+            <div class='col s8 teal lighten-2' style='height:100%;padding-left:40px;'>
+                <br>
+                <h3 class='header'>Active Quests:</h3>
+                <p class='flow-text'>You currently aren't in a quest! Go to a local tavern and ask around for quests, or go to the Knight's Court to see daily and weekly challenges.</p>
+                <h3 class='header'>Current Group:</h3>
+                <p class='flow-text'>You aren't in a group! Click in-game friends and click the 'join group' icon to join into their group.</p>
+            </div>
         </div>
-    </div>
-</body>
+        <div id='stats' class='container'>
+            <br>
+            <table class='centered'>
+                <thead>
+                    <tr>
+                        <th>Stat</th>
+                        <th>Value</th>
+                        <th>Stat</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Level</td>
+                        <td>
+                            <%= user.level %>
+                        </td>
+                        <td>Map</td>
+                        <td>
+                            <%= user.map %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Race</td>
+                        <td>
+                            <%= user.race %>
+                        </td>
+                        <td>Class</td>
+                        <td>
+                            <%= user.class %>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div id='about'>Boring legal things</div>
+        <script>
+            $(document).ready(function () {
+                $('ul#tabs').tabs();
+            });
+        </script>
+    </body>
+
+</html>

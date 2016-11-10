@@ -25,7 +25,7 @@ if (havePointerLock) {
 
             hud.style.display = 'none';
 
-            $('#pause').modal();
+            $('#pause').modal('open');
 
             // blocker.style.display = '-webkit-box';
             // blocker.style.display = '-moz-box';
