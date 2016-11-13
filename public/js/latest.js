@@ -143,12 +143,24 @@ module.exports = function (globals, player) {
             }
         });
     });
-    // loader.load(`/models/alchemy-table/alchemy-table.json`, (object) => {
-    //     globals.scene.add(object);
-    //     object.castShadow = true;
-    //     object.recieveShadow = true;
-    //     object.position.set(0, 30, 10);
-    // });
+    var loader2 = new THREE.ObjectLoader();
+    loader2.load("/models/alchemy-table/alchemy-table.json", function (object) {
+        globals.scene.add(object);
+        object.traverse(function (child) {
+            if (child instanceof THREE.Mesh) {
+                if (!/puddle/gi.test(child.name)) child.castShadow = true;
+                if (!/puddle/gi.test(child.name)) child.recieveShadow = true;
+                var _o = globals.load(child, {
+                    mass: 0,
+                    material: globals.groundMaterial
+                });
+                _o.mesh.position.y += 8.7;
+                _o.mesh.position.z += 10;
+                _o.body.position.y += 8.7;
+                _o.body.position.z += 10;
+            }
+        });
+    });
 };
 
 },{}],4:[function(require,module,exports){
