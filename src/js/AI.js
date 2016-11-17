@@ -10,7 +10,7 @@ class AI {
         
         
         this.shape = new THREE.Mesh(
-            new THREE.BoxGeometry(5, 10, 5),
+            new THREE.BoxGeometry(5, 40, 5),
             new THREE.MeshLambertMaterial({
                 color: 0xFFFFFF
             })

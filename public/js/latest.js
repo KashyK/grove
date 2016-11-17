@@ -20,7 +20,7 @@ var AI = function () {
         this.dmg = dmg;
         this.target = null;
 
-        this.shape = new THREE.Mesh(new THREE.BoxGeometry(5, 10, 5), new THREE.MeshLambertMaterial({
+        this.shape = new THREE.Mesh(new THREE.BoxGeometry(5, 40, 5), new THREE.MeshLambertMaterial({
             color: 0xFFFFFF
         }));
         AIS.push(this);
@@ -79,12 +79,8 @@ module.exports = {
 // module.exports.rendererDEBUG = new THREE.CannonDebugRenderer(module.exports.scene, module.exports.world);
 // Adjust constraint equation parameters for ground/ground contact
 var ground_ground_cm = new CANNON.ContactMaterial(module.exports.groundMaterial, module.exports.groundMaterial, {
-    friction: 1e60,
-    restitution: 0.3,
-    contactEquationStiffness: 1e8,
-    contactEquationRelaxation: 3,
-    frictionEquationStiffness: 1e8,
-    frictionEquationRegularizationTime: 3
+    friction: 50,
+    restitution: 0.3
 });
 
 // Add contact material to the world
@@ -103,14 +99,13 @@ module.exports.ball = load.ball;
 
 module.exports = function (globals, player) {
 
-    globals.scene.fog = new THREE.FogExp2(0x110011, 0.02);
+    globals.scene.fog = new THREE.FogExp2(0x2080B6, 0.02);
 
     var ambient = new THREE.AmbientLight(0x111111);
     globals.scene.add(ambient);
 
-    var light = new THREE.SpotLight(0xffffff, 3, 100, 1, 0.5, 1);
-    light.position.set(0, 50, 0);
-    light.target.position.set(0, 0, 0);
+    var light = new THREE.SpotLight(0xffffff, 2);
+    light.position.set(30, 10, 30);
     light.castShadow = true;
 
     light.shadowCameraNear = globals.camera.near;
@@ -122,8 +117,10 @@ module.exports = function (globals, player) {
     light.shadowMapWidth = 3072;
     light.shadowMapHeight = 3072;
 
-    light.shadowCameraVisible = false;
+    light.shadowCameraVisible = true;
     globals.scene.add(light);
+
+    globals.scene.add(new THREE.AmbientLight(0x333333));
 
     var loader = new THREE.ObjectLoader();
     loader.load("/models/" + player.serverdata.acc.map + "/" + player.serverdata.acc.map + ".json", function (object) {
@@ -138,26 +135,25 @@ module.exports = function (globals, player) {
                     mass: 0,
                     material: globals.groundMaterial
                 });
-                _o.body.position.z += 15;
-                _o.mesh.position.z += 15;
             }
         });
     });
     var loader2 = new THREE.ObjectLoader();
     loader2.load("/models/alchemy-table/alchemy-table.json", function (object) {
         globals.scene.add(object);
+        var torch = new THREE.PointLight(0x00FF00, 0.15);
+        torch.position.set(0, 10, 10);
+        globals.scene.add(torch);
         object.traverse(function (child) {
             if (child instanceof THREE.Mesh) {
-                if (!/puddle/gi.test(child.name)) child.castShadow = true;
-                if (!/puddle/gi.test(child.name)) child.recieveShadow = true;
                 var _o = globals.load(child, {
                     mass: 0,
                     material: globals.groundMaterial
                 });
                 _o.mesh.position.y += 8.7;
-                _o.mesh.position.z += 10;
+                _o.mesh.position.z += 20;
                 _o.body.position.y += 8.7;
-                _o.body.position.z += 10;
+                _o.body.position.z += 20;
             }
         });
     });
@@ -183,7 +179,7 @@ module.exports = function () {
 
                 $('#splash-title').fadeOut(950);
                 setTimeout(function () {
-                    $('#splash-title').text('There were those jealous of this extreme power...');
+                    $('#splash-title').text('However, §ome were jealous of this extreme power...');
                 }, 950);
                 $('#splash-title').fadeIn(950);
 
@@ -199,7 +195,7 @@ module.exports = function () {
 
                         $('#splash-title').fadeOut(950);
                         setTimeout(function () {
-                            $('#splash-title').text('They attempted to create a power of their own, to combat those naturally infused...');
+                            $('#splash-title').text('They attempted to create a power of their own, to combat those who had power...');
                         }, 950);
                         $('#splash-title').fadeIn(950);
 
@@ -274,7 +270,16 @@ function init(globals, player) {
     require('./dom')(globals);
 
     globals.renderer.shadowMapEnabled = true;
-    globals.renderer.shadowMapSoft = false;
+    globals.renderer.shadowMapSoft = true;
+
+    globals.renderer.shadowCameraNear = 3;
+    globals.renderer.shadowCameraFar = globals.camera.far;
+    globals.renderer.shadowCameraFov = 50;
+
+    globals.renderer.shadowMapBias = 0.0039;
+    globals.renderer.shadowMapDarkness = 0.5;
+    globals.renderer.shadowMapWidth = 1024;
+    globals.renderer.shadowMapHeight = 1024;
     globals.renderer.setClearColor(globals.scene.fog.color, 1);
     globals.renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -298,7 +303,7 @@ module.exports = function (globals) {
         material: globals.groundMaterial
     });
     sphereBody.addShape(sphereShape);
-    sphereBody.position.set(0, 15, 0);
+    sphereBody.position.set(0, 8, 0);
     // sphereBody.linearDamping = 0.9;
     sphereBody.angularDamping = 0.9;
     globals.world.add(sphereBody);
@@ -328,7 +333,7 @@ module.exports = function (globals) {
 
     globals.world.defaultContactMaterial.contactEquationStiffness = 1e9;
     globals.world.defaultContactMaterial.contactEquationRelaxation = 4;
-    globals.world.defaultContactMaterial.friction = 1e9;
+    globals.world.defaultContactMaterial.friction = 2;
 
     solver.iterations = 7;
     solver.tolerance = 0.1;
@@ -444,19 +449,76 @@ function label(mesh) {
     var txt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
     var icon = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'run';
 
-    var element = document.createElement('span');
-    document.body.appendChild(element);
-    element.style.position = 'absolute';
-    element.style.paddingRight = '10px';
-    element.style.backgroundColor = '#aaa';
-    element.innerHTML = '<img src=/img/icons/' + icon + '.png> ' + txt;
-    globals.LABELS.push(function () {
-        var position = THREEx.ObjCoord.cssPosition(mesh, globals.camera, globals.renderer);
-        var boundingRect = element.getBoundingClientRect();
-        element.style.left = position.x - boundingRect.width / 2 + 'px';
-        element.style.top = position.y - boundingRect.height / 2 - 70 + 'px';
-        if (globals.frustum.intersectsObject(mesh)) element.style.opacity = 1;else element.style.opacity = 0;
+
+    var fontface = "Arial";
+
+    var fontsize = 18;
+
+    var borderThickness = 4;
+
+    var borderColor = {
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 1.0
+    };
+
+    var backgroundColor = {
+        r: 255,
+        g: 255,
+        b: 255,
+        a: 1.0
+    };
+
+    var canvas = document.createElement('canvas');
+    var context = canvas.getContext('2d');
+    context.font = "Bold " + fontsize + "px " + fontface;
+
+    // get size data (height depends only on font size)
+    var metrics = context.measureText(txt);
+    var textWidth = metrics.width;
+
+    // background color
+    context.fillStyle = "rgba(" + backgroundColor.r + "," + backgroundColor.g + "," + backgroundColor.b + "," + backgroundColor.a + ")";
+    // border color
+    context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + "," + borderColor.b + "," + borderColor.a + ")";
+
+    context.lineWidth = borderThickness;
+    roundRect(context, borderThickness / 2, borderThickness / 2, textWidth + borderThickness, fontsize * 1.4 + borderThickness, 6);
+    // 1.4 is extra height factor for text below baseline: g,j,p,q.
+
+    // text color
+    context.fillStyle = "rgba(0, 0, 0, 1.0)";
+
+    context.fillText(txt, borderThickness, fontsize + borderThickness);
+
+    // canvas contents will be used for a texture
+    var texture = new THREE.Texture(canvas);
+    texture.needsUpdate = true;
+
+    var spriteMaterial = new THREE.SpriteMaterial({
+        map: texture,
+        useScreenCoordinates: false
     });
+    var sprite = new THREE.Sprite(spriteMaterial);
+    sprite.scale.set(5, 2.5, 1.0);
+    mesh.add(sprite);
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
 }
 
 module.exports.load = load;
@@ -474,7 +536,7 @@ var player = require('./player');
 
 var dt = 1 / 60;
 
-// require('./load')(globals);
+require('./AI');
 require('./shooting')(globals);
 require('./multiplayer')(globals, player);
 
@@ -483,6 +545,7 @@ THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
     $('#loading-bar').width(loaded / total * 100 + '%').text(loaded + ' / ' + total + ' - ' + Math.floor(loaded / total * 100) + '%');
     if (loaded == total) {
         animate();
+        require('./quests');
     }
 };
 
@@ -527,6 +590,10 @@ function animate(delta) {
 
     $('#health-bar').val(player.hp.val / player.hp.max * 100 > 0 ? player.hp.val / player.hp.max * 100 : 0);
     $('#health').text(player.hp.val > 0 ? player.hp.val : 0 + ' HP');
+    if (player.hp.val <= 0) {
+        globals.socket.disconnect();
+        alert('You have died.');
+    }
 
     globals.world.step(dt);
     globals.controls.update(Date.now() - globals.delta);
@@ -550,7 +617,7 @@ function onWindowResize() {
     globals.renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-},{"./globals":2,"./multiplayer":10,"./player":11,"./shooting":12}],10:[function(require,module,exports){
+},{"./AI":1,"./globals":2,"./multiplayer":10,"./player":11,"./quests":12,"./shooting":13}],10:[function(require,module,exports){
 'use strict';
 
 module.exports = function (globals, player) {
@@ -689,6 +756,19 @@ module.exports = {
 },{}],12:[function(require,module,exports){
 'use strict';
 
+/* global $ */
+
+$('#quest-alert > p').text('Getting Skills');
+$('#quest-alert > small').text('Use the Alchemy Table to make a health potion.');
+setTimeout(function () {
+    $('#quest-alert').animate({
+        'right': '-280px'
+    }, 1000);
+}, 5000);
+
+},{}],13:[function(require,module,exports){
+'use strict';
+
 /* global THREE, CANNON */
 
 module.exports = function (globals) {
@@ -759,4 +839,4 @@ module.exports = function (globals) {
     window.addEventListener('click', shoot);
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13]);

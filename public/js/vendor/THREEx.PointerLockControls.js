@@ -153,13 +153,31 @@ var PointerLockControls = function (camera, cannonBody) {
             if (moveBackward) {
                 inputVelocity.z = velocityFactor * delta;
             }
-
             if (moveLeft) {
                 inputVelocity.x = -velocityFactor * delta;
             }
             if (moveRight) {
                 inputVelocity.x = velocityFactor * delta;
             }
+
+            if (canJump) {
+                inputVelocity.x *= 0.8;
+                inputVelocity.y *= 0.8;
+                inputVelocity.z *= 0.8;
+            }
+
+        }
+
+        if (!moveForward && !moveBackward && !moveLeft && !moveRight) {
+            if (cannonBody.velocity.x < 0)
+                cannonBody.velocity.x += 0.15;
+            else
+                cannonBody.velocity.x -= 0.15;
+            
+            if (cannonBody.velocity.z < 0)
+                cannonBody.velocity.z += 0.15;
+            else
+                cannonBody.velocity.z -= 0.15;
         }
 
         // Convert velocity to world coordinates

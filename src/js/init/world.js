@@ -6,7 +6,7 @@ module.exports = function (globals) {
 
     globals.world.defaultContactMaterial.contactEquationStiffness = 1e9;
     globals.world.defaultContactMaterial.contactEquationRelaxation = 4;
-    globals.world.defaultContactMaterial.friction = 1e9;
+    globals.world.defaultContactMaterial.friction = 2;
 
     solver.iterations = 7;
     solver.tolerance = 0.1;

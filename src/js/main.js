@@ -5,7 +5,7 @@ let player = require('./player');
 
 const dt = 1 / 60;
 
-// require('./load')(globals);
+require('./AI');
 require('./shooting')(globals);
 require('./multiplayer')(globals, player);
 
@@ -16,6 +16,7 @@ THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
         .text(loaded + ' / ' + total + ' - ' + Math.floor(loaded / total * 100) + '%');
     if (loaded == total) {
         animate();
+        require('./quests');
     }
 };
 
@@ -61,6 +62,10 @@ function animate(delta) {
     $('#health-bar')
         .val(player.hp.val / player.hp.max * 100 > 0 ? player.hp.val / player.hp.max * 100 : 0);
     $('#health').text(player.hp.val > 0 ? player.hp.val : 0 + ' HP');
+    if (player.hp.val <= 0) {
+        globals.socket.disconnect();
+        alert('You have died.');
+    }
 
     globals.world.step(dt);
     globals.controls.update(Date.now() - globals.delta);

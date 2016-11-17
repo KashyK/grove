@@ -15,7 +15,7 @@ module.exports = () => {
 
                 $('#splash-title').fadeOut(950);
                 setTimeout(function () {
-                    $('#splash-title').text('There were those jealous of this extreme power...');
+                    $('#splash-title').text('However, §ome were jealous of this extreme power...');
                 }, 950);
                 $('#splash-title').fadeIn(950);
 
@@ -31,7 +31,7 @@ module.exports = () => {
 
                         $('#splash-title').fadeOut(950);
                         setTimeout(function () {
-                            $('#splash-title').text('They attempted to create a power of their own, to combat those naturally infused...');
+                            $('#splash-title').text('They attempted to create a power of their own, to combat those who had power...');
                         }, 950);
                         $('#splash-title').fadeIn(950);
 

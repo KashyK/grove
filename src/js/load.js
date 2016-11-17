@@ -96,21 +96,80 @@ function ball(opts) {
     };
 }
 
-function label(mesh, txt='', icon = 'run') {
-    var element = document.createElement('span');
-    document.body.appendChild(element);
-    element.style.position = 'absolute';
-    element.style.paddingRight = '10px';
-    element.style.backgroundColor = '#aaa';
-    element.innerHTML = `<img src=/img/icons/${icon}.png> ${txt}`;
-    globals.LABELS.push(function () {
-        var position = THREEx.ObjCoord.cssPosition(mesh, globals.camera, globals.renderer);
-        var boundingRect = element.getBoundingClientRect();
-        element.style.left = (position.x - boundingRect.width / 2) + 'px';
-        element.style.top = (position.y - boundingRect.height / 2 - 70) + 'px';
-        if (globals.frustum.intersectsObject(mesh)) element.style.opacity = 1;
-        else element.style.opacity = 0;
+function label(mesh, txt = '', icon = 'run') {
+
+    var fontface = "Arial";
+
+    var fontsize = 18;
+
+    var borderThickness = 4;
+
+    var borderColor = {
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 1.0
+    };
+
+    var backgroundColor = {
+        r: 255,
+        g: 255,
+        b: 255,
+        a: 1.0
+    };
+
+    var canvas = document.createElement('canvas');
+    var context = canvas.getContext('2d');
+    context.font = "Bold " + fontsize + "px " + fontface;
+
+    // get size data (height depends only on font size)
+    var metrics = context.measureText(txt);
+    var textWidth = metrics.width;
+
+    // background color
+    context.fillStyle = "rgba(" + backgroundColor.r + "," + backgroundColor.g + "," +
+        backgroundColor.b + "," + backgroundColor.a + ")";
+    // border color
+    context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + "," +
+        borderColor.b + "," + borderColor.a + ")";
+
+    context.lineWidth = borderThickness;
+    roundRect(context, borderThickness / 2, borderThickness / 2, textWidth + borderThickness, fontsize * 1.4 + borderThickness, 6);
+    // 1.4 is extra height factor for text below baseline: g,j,p,q.
+
+    // text color
+    context.fillStyle = "rgba(0, 0, 0, 1.0)";
+
+    context.fillText(txt, borderThickness, fontsize + borderThickness);
+
+    // canvas contents will be used for a texture
+    var texture = new THREE.Texture(canvas)
+    texture.needsUpdate = true;
+
+    var spriteMaterial = new THREE.SpriteMaterial({
+        map: texture,
+        useScreenCoordinates: false
     });
+    var sprite = new THREE.Sprite(spriteMaterial);
+    sprite.scale.set(5, 2.5, 1.0);
+    mesh.add(sprite);
+
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
 }
 
 module.exports.load = load;
