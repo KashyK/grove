@@ -42,7 +42,7 @@ app.use(minify({
 }));
 app.use(require('express')['static']('public'));
 
-let User = require(__dirname + '/mongo')(app, events);
+const User = require(__dirname + '/mongo')(app, events);
 require(__dirname + '/client-interact')(io, User);
 
 app.get('/', (req, res) => {

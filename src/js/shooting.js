@@ -1,6 +1,6 @@
 /* global THREE, CANNON */
 
-module.exports = (globals) => {
+module.exports = (globals, player) => {
 
     function getShootDir(targetVec) {
         let projector = new THREE.Projector();
@@ -22,7 +22,8 @@ module.exports = (globals) => {
             let z = globals.BODIES['player'].body.position.z;
 
             let ball = globals.ball({
-                array: 'projectiles'
+                array: 'projectiles',
+                c: player.weapon == 'rock' ? 0xCCCCCC : 0xFF4500
             });
 
             getShootDir(shootDirection);
@@ -40,7 +41,6 @@ module.exports = (globals) => {
             ball.id = Math.random();
 
             ball.body.addEventListener("collide", (event) => {
-                // for(let key in event) alert(key);
                 const contact = event.contact;
                 if (contact.bj.id != ball.body.id)
                     for (let key in globals.PLAYERS) {

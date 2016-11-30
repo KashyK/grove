@@ -2,12 +2,12 @@
 
 module.exports = () => {
     $(document).ready(function () {
-        $('#splash-title').text('In the beginning, the Grove Tree was planted.');
+        $('#splash-title').text('In the beginning, a Grove Tree was planted...');
         setTimeout(function () {
 
             $('#splash-title').fadeOut(950);
             setTimeout(function () {
-                $('#splash-title').text('Its presence infused the souls of mankind with a magical essence...');
+                $('#splash-title').text('It spread to make multiple trees, eventually becoming The Grove...');
             }, 950);
             $('#splash-title').fadeIn(950);
 
@@ -79,28 +79,28 @@ module.exports = () => {
 
                                                 $('#splash-title').fadeOut(950);
                                                 setTimeout(function () {
-                                                    $('#splash-title').text('THE GROVE');
+                                                    $('#splash-title').text('BLARG');
                                                 }, 950);
                                                 $('#splash-title').fadeIn(950);
 
-                                            }, 3000);
+                                            }, 5000);
 
-                                        }, 3000);
+                                        }, 5000);
 
-                                    }, 3000);
+                                    }, 5000);
 
-                                }, 3000);
+                                }, 5000);
 
-                            }, 3000);
+                            }, 5000);
 
-                        }, 3000);
+                        }, 5000);
 
-                    }, 3000);
+                    }, 5000);
 
-                }, 3000);
+                }, 5000);
 
-            }, 3000);
+            }, 5000);
 
-        }, 3000);
+        }, 5000);
     });
 };

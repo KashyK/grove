@@ -92,7 +92,30 @@ module.exports.box = load.box;
 module.exports.label = load.label;
 module.exports.ball = load.ball;
 
-},{"./load":8}],3:[function(require,module,exports){
+},{"./load":9}],3:[function(require,module,exports){
+'use strict';
+
+/* global $ */
+
+$('#gui').hide();
+
+module.exports.quests = function () {
+    $('#quest-alert > p').text('Getting Skills');
+    $('#quest-alert > small').text('Use the Alchemy Table to make a health potion.');
+    setTimeout(function () {
+        $('#quest-alert').animate({
+            'right': '-280px'
+        }, 1000);
+    }, 5000);
+};
+
+module.exports.inventory = function (player) {
+    $('#gui').toggle();
+    $('#blocker').toggle();
+    $('#gui-title').text('Inventory');
+};
+
+},{}],4:[function(require,module,exports){
 "use strict";
 
 /* global THREE, CANNON, $ */
@@ -159,19 +182,19 @@ module.exports = function (globals, player) {
     });
 };
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 /* global $ */
 
 module.exports = function () {
     $(document).ready(function () {
-        $('#splash-title').text('In the beginning, the Grove Tree was planted.');
+        $('#splash-title').text('In the beginning, a Grove Tree was planted...');
         setTimeout(function () {
 
             $('#splash-title').fadeOut(950);
             setTimeout(function () {
-                $('#splash-title').text('Its presence infused the souls of mankind with a magical essence...');
+                $('#splash-title').text('It spread to make multiple trees, eventually becoming The Grove...');
             }, 950);
             $('#splash-title').fadeIn(950);
 
@@ -243,23 +266,23 @@ module.exports = function () {
 
                                                 $('#splash-title').fadeOut(950);
                                                 setTimeout(function () {
-                                                    $('#splash-title').text('THE GROVE');
+                                                    $('#splash-title').text('BLARG');
                                                 }, 950);
                                                 $('#splash-title').fadeIn(950);
-                                            }, 3000);
-                                        }, 3000);
-                                    }, 3000);
-                                }, 3000);
-                            }, 3000);
-                        }, 3000);
-                    }, 3000);
-                }, 3000);
-            }, 3000);
-        }, 3000);
+                                            }, 5000);
+                                        }, 5000);
+                                    }, 5000);
+                                }, 5000);
+                            }, 5000);
+                        }, 5000);
+                    }, 5000);
+                }, 5000);
+            }, 5000);
+        }, 5000);
     });
 };
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 function init(globals, player) {
@@ -288,7 +311,7 @@ function init(globals, player) {
 
 module.exports = init;
 
-},{"./bodies":3,"./dom":4,"./player":6,"./world":7}],6:[function(require,module,exports){
+},{"./bodies":4,"./dom":5,"./player":7,"./world":8}],7:[function(require,module,exports){
 'use strict';
 
 /* global THREE, CANNON, PointerLockControls */
@@ -322,7 +345,7 @@ module.exports = function (globals) {
     window.controls = globals.controls;
 };
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 
 /* global CANNON */
@@ -344,7 +367,7 @@ module.exports = function (globals) {
     globals.world.broadphase = new CANNON.NaiveBroadphase();
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 var globals = require('./globals');
@@ -426,7 +449,7 @@ function ball(opts) {
 
     ballBody.addShape(ballShape);
     var ballMesh = new THREE.Mesh(ballGeometry, new THREE.MeshPhongMaterial({
-        color: 0x00CCFF
+        color: opts.c || 0x00CCFF
     }));
     globals.world.add(ballBody);
     globals.scene.add(ballMesh);
@@ -526,18 +549,18 @@ module.exports.box = box;
 module.exports.label = label;
 module.exports.ball = ball;
 
-},{"./globals":2}],9:[function(require,module,exports){
+},{"./globals":2}],10:[function(require,module,exports){
 'use strict';
 
-/* global $ */
+/* global $, THREE */
 
 var globals = require('./globals');
 var player = require('./player');
 
 var dt = 1 / 60;
 
-require('./AI');
-require('./shooting')(globals);
+// require('./AI');
+require('./shooting')(globals, player);
 require('./multiplayer')(globals, player);
 
 THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
@@ -545,7 +568,7 @@ THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
     $('#loading-bar').width(loaded / total * 100 + '%').text(loaded + ' / ' + total + ' - ' + Math.floor(loaded / total * 100) + '%');
     if (loaded == total) {
         animate();
-        require('./quests');
+        require('./gui').quests();
     }
 };
 
@@ -553,57 +576,55 @@ function animate(delta) {
 
     requestAnimationFrame(animate);
 
-    globals.camera.updateMatrixWorld(); // make sure the camera matrix is updated
-    globals.camera.matrixWorldInverse.getInverse(globals.camera.matrixWorld);
-    globals.cameraViewProjectionMatrix.multiplyMatrices(globals.camera.projectionMatrix, globals.camera.matrixWorldInverse);
-    globals.frustum.setFromMatrix(globals.cameraViewProjectionMatrix);
+    if (controls.enabled) {
 
-    if (globals.remove.bodies.length && globals.remove.meshes.length) {
-        for (var key in globals.remove.bodies) {
-            globals.world.remove(globals.remove.bodies[key]);
-            delete globals.remove.bodies[key];
+        globals.camera.updateMatrixWorld(); // make sure the camera matrix is updated
+        globals.camera.matrixWorldInverse.getInverse(globals.camera.matrixWorld);
+        globals.cameraViewProjectionMatrix.multiplyMatrices(globals.camera.projectionMatrix, globals.camera.matrixWorldInverse);
+        globals.frustum.setFromMatrix(globals.cameraViewProjectionMatrix);
+
+        if (globals.remove.bodies.length && globals.remove.meshes.length) {
+            for (var key in globals.remove.bodies) {
+                globals.world.remove(globals.remove.bodies[key]);
+                delete globals.remove.bodies[key];
+            }
+            for (var _key in globals.remove.meshes) {
+                globals.scene.remove(globals.remove.meshes[_key]);
+                delete globals.remove.meshes[_key];
+            }
         }
-        for (var _key in globals.remove.meshes) {
-            globals.scene.remove(globals.remove.meshes[_key]);
-            delete globals.remove.meshes[_key];
+
+        // Update bullets, etc.
+        for (var i = 0; i < globals.BODIES['projectiles'].length; i++) {
+            globals.BODIES['projectiles'][i].mesh.position.copy(globals.BODIES['projectiles'][i].body.position);
+            globals.BODIES['projectiles'][i].mesh.quaternion.copy(globals.BODIES['projectiles'][i].body.quaternion);
         }
-    }
 
-    // Update bullets, etc.
-    for (var i = 0; i < globals.BODIES['projectiles'].length; i++) {
-        globals.BODIES['projectiles'][i].mesh.position.copy(globals.BODIES['projectiles'][i].body.position);
-        globals.BODIES['projectiles'][i].mesh.quaternion.copy(globals.BODIES['projectiles'][i].body.quaternion);
-    }
+        // Update items
+        for (var _i = 0; _i < globals.BODIES['items'].length; _i++) {
+            globals.BODIES['items'][_i].mesh.position.copy(globals.BODIES['items'][_i].body.position);
+            globals.BODIES['items'][_i].mesh.quaternion.copy(globals.BODIES['items'][_i].body.quaternion);
+        }
 
-    // Update items
-    for (var _i = 0; _i < globals.BODIES['items'].length; _i++) {
-        globals.BODIES['items'][_i].mesh.position.copy(globals.BODIES['items'][_i].body.position);
-        globals.BODIES['items'][_i].mesh.quaternion.copy(globals.BODIES['items'][_i].body.quaternion);
-    }
+        globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
 
-    // Update labels
-    for (var _key2 in globals.LABELS) {
-        globals.LABELS[_key2]();
-    }globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
-    if (globals.BODIES['player'].body.velocity.x > 10) globals.BODIES['player'].body.velocity.x = 10;
-    if (globals.BODIES['player'].body.velocity.z > 10) globals.BODIES['player'].body.velocity.z = 10;
+        $('#health-bar').val(player.hp.val / player.hp.max * 100 > 0 ? player.hp.val / player.hp.max * 100 : 0);
+        $('#health').text(player.hp.val > 0 ? player.hp.val : 0 + ' HP');
+        if (player.hp.val <= 0) {
+            globals.socket.disconnect();
+            alert('You have died.');
+        }
 
-    $('#health-bar').val(player.hp.val / player.hp.max * 100 > 0 ? player.hp.val / player.hp.max * 100 : 0);
-    $('#health').text(player.hp.val > 0 ? player.hp.val : 0 + ' HP');
-    if (player.hp.val <= 0) {
-        globals.socket.disconnect();
-        alert('You have died.');
-    }
+        globals.world.step(dt);
+        globals.controls.update(Date.now() - globals.delta);
+        // globals.rendererDEBUG.update();
+        globals.renderer.render(globals.scene, globals.camera);
+        globals.delta = Date.now();
 
-    globals.world.step(dt);
-    globals.controls.update(Date.now() - globals.delta);
-    // globals.rendererDEBUG.update();
-    globals.renderer.render(globals.scene, globals.camera);
-    globals.delta = Date.now();
-
-    if (player && player.serverdata && globals && globals.updatePlayerData) {
-        globals.updatePlayerData();
-        globals.socket.emit('updatePosition', player.serverdata);
+        if (player && player.serverdata && globals && globals.updatePlayerData) {
+            globals.updatePlayerData();
+            globals.socket.emit('updatePosition', player.serverdata);
+        }
     }
 }
 
@@ -617,7 +638,7 @@ function onWindowResize() {
     globals.renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-},{"./AI":1,"./globals":2,"./multiplayer":10,"./player":11,"./quests":12,"./shooting":13}],10:[function(require,module,exports){
+},{"./globals":2,"./gui":3,"./multiplayer":11,"./player":12,"./shooting":13}],11:[function(require,module,exports){
 'use strict';
 
 module.exports = function (globals, player) {
@@ -743,35 +764,51 @@ module.exports = function (globals, player) {
     globals.playerForId = playerForId;
 };
 
-},{"./init/manager":5}],11:[function(require,module,exports){
-"use strict";
-
-module.exports = {
-    hp: {
-        val: 15,
-        max: 15
-    }
-};
-
-},{}],12:[function(require,module,exports){
+},{"./init/manager":6}],12:[function(require,module,exports){
 'use strict';
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /* global $ */
 
-$('#quest-alert > p').text('Getting Skills');
-$('#quest-alert > small').text('Use the Alchemy Table to make a health potion.');
-setTimeout(function () {
-    $('#quest-alert').animate({
-        'right': '-280px'
-    }, 1000);
-}, 5000);
+var Player = function Player() {
+    _classCallCheck(this, Player);
 
-},{}],13:[function(require,module,exports){
+    this.hp = {
+        val: 10,
+        max: 10
+    };
+    this.mp = {
+        val: 5,
+        max: 5
+    };
+    this.weapon = 'rock';
+};
+
+var player = new Player();
+
+window.addEventListener('keydown', function (e) {
+    try {
+        if ($('#hb-' + String.fromCharCode(e.keyCode)).length) {
+            $('.hotbar').removeClass('active');
+            $('#hb-' + String.fromCharCode(e.keyCode)).addClass('active');
+            if ($('#hb-' + String.fromCharCode(e.keyCode)).text() !== '-') {
+                player.weapon = $('#hb-' + String.fromCharCode(e.keyCode)).text().toLowerCase();
+            }
+        } else if (String.fromCharCode(e.keyCode) == 'I') {
+            require('./gui').inventory(player);
+        }
+    } catch (err) {}
+});
+
+module.exports = player;
+
+},{"./gui":3}],13:[function(require,module,exports){
 'use strict';
 
 /* global THREE, CANNON */
 
-module.exports = function (globals) {
+module.exports = function (globals, player) {
 
     function getShootDir(targetVec) {
         var projector = new THREE.Projector();
@@ -794,7 +831,8 @@ module.exports = function (globals) {
                 var z = globals.BODIES['player'].body.position.z;
 
                 var ball = globals.ball({
-                    array: 'projectiles'
+                    array: 'projectiles',
+                    c: player.weapon == 'rock' ? 0xCCCCCC : 0xFF4500
                 });
 
                 getShootDir(shootDirection);
@@ -809,7 +847,6 @@ module.exports = function (globals) {
                 ball.id = Math.random();
 
                 ball.body.addEventListener("collide", function (event) {
-                    // for(let key in event) alert(key);
                     var contact = event.contact;
                     if (contact.bj.id != ball.body.id) for (var key in globals.PLAYERS) {
                         if (contact.bj == globals.PLAYERS[key].body) globals.socket.emit('hit-player', globals.PLAYERS[key].id);

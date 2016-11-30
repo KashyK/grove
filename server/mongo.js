@@ -1,5 +1,6 @@
 'use strict';
 module.exports = (app, events) => {
+    const items = require(__dirname + '/items');
     let mongoose = require('mongoose');
     let db = mongoose.connection;
     let User = mongoose.model('User', {
@@ -7,13 +8,13 @@ module.exports = (app, events) => {
         password: String,
         class: String,
         race: String,
-        inventory: [],
+        inventory: Array,
         map: String,
         level: Number,
         status: String
     });
     db.on('error', console.error);
-    db.once('open', function () {
+    db.once('open', () => {
         console.log(`Successfully connected to MongoDB`);
     });
     mongoose.connect('mongodb://hybridalpaca:cellman123@ds139685.mlab.com:39685/grove');
@@ -28,7 +29,6 @@ module.exports = (app, events) => {
                 obj.inventory = dat.inv;
                 obj.save((err, data) => {
                     if (err) console.error(err);
-                    req.session.user = obj;
                     events.publish('done', {
                         o: data
                     });
@@ -62,11 +62,9 @@ module.exports = (app, events) => {
             username: req.body.username,
             password: require('md5')(req.body.password)
         }, (err, obj) => {
-            if (err) {
-                console.log(err);
-            }
+            if (err) console.error(err);
             else if (obj) {
-                console.log(obj.username + ' logged on.');
+                console.log(obj.username + ' logged in.');
                 req.session.user = obj;
                 res.redirect('/');
                 events.publish('pageview', {
@@ -85,17 +83,19 @@ module.exports = (app, events) => {
             password: require('md5')(req.body.password),
             class: req.body.class,
             race: req.body.race,
+            inventory: [items.weapons['rock']],
             map: 'tutorial',
             level: 1,
             status: 'u.' + Date.now()
         });
         u.save((err, obj) => {
-            if (err) console.error('ERROR!');
+            if (err) console.error(err);
             else if (obj) {
                 console.log(obj.username + ' created an account.');
                 req.session.user = obj;
                 res.redirect('/');
             }
+            else throw new Error('Something happened!');
         });
     });
     return User;

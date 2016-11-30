@@ -5,6 +5,8 @@ module.exports = (io, User, conf_url) => {
 
   io.on('connection', socket => {
 
+    // client sends server account data, and server checks if it is valid.
+    // This is rather backwards, but it works :*]
     socket.on('client-credentials', creds => {
 
       User.findOne({
@@ -43,9 +45,9 @@ module.exports = (io, User, conf_url) => {
         });
 
         //////////////////////////////////////////////////
-        
+
         require('./physics')(socket, io);
-        
+
         //////////////////////////////////////////////////
 
         // client interacted with their inventory
@@ -78,9 +80,9 @@ module.exports = (io, User, conf_url) => {
             else console.log('Credentials not valid!    ');
           });
         });
-        
+
         //////////////////////////////////////////////////
-        
+
         // chat handler
         socket.on('chat message', msg => {
           console.log('message: ' + msg);

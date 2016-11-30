@@ -1,7 +1,6 @@
 # The Grove
 
-(UNDER DEVELOPMENT)
-
+(BETA - UNDER DEVELOPMENT)
 
 Welcome to The Grove, a browser-based MMORPG.
 A list of server technologies are:
@@ -9,7 +8,7 @@ A list of server technologies are:
 - node.js
 - express
 - socket.io
-- Node Packet Manager (npm)
+- Node Package Manager (npm)
 
 And client technologies are:
 

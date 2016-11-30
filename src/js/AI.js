@@ -7,8 +7,6 @@ class AI {
         this.dmg = dmg;
         this.target = null;
         
-        
-        
         this.shape = new THREE.Mesh(
             new THREE.BoxGeometry(5, 40, 5),
             new THREE.MeshLambertMaterial({

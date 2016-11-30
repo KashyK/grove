@@ -13,8 +13,7 @@
             body {
                 width: 100%;
                 height: 100%;
-                overflow: hidden; 
-                background-image: url('/img/forest.jpg');
+                overflow: hidden;
             }
             
             .header {
@@ -47,12 +46,14 @@
                 <br>
                 <a href='/play' class='waves-effect waves-light btn-large light-green z-depth-3'>Enter The Grove</a>
                 <br><br>
-                <a href='/' class='waves-effect waves-light btn-large red z-depth-3'>Delete Account</a>
+                <a href='/logout' class='waves-effect waves-light btn-large red z-depth-3'>Logout</a>
             </div>
             <div class='col s8 teal lighten-2' style='height:100%;padding-left:40px;'>
                 <br>
                 <h3 class='header'>Active Quests:</h3>
-                <p class='flow-text'>You currently aren't in a quest! Go to a local tavern and ask around for quests, or go to the Knight's Court to see daily and weekly challenges.</p>
+                <div id='quests'>
+                    <p class='flow-text'>» Getting Smarts | <small>Use the alchemy table to make a health potion.</small></p>
+                </div>
                 <h3 class='header'>Current Group:</h3>
                 <p class='flow-text'>You aren't in a group! Click in-game friends and click the 'join group' icon to join into their group.</p>
             </div>
@@ -93,7 +94,26 @@
             </table>
 
         </div>
-        <div id='about'>Boring legal things</div>
+        <div id='about'> License:
+        The Grove is copyright 2016 by Hybrid Alpaca Game Studios. All images, story, and game are copyright of Hybrid Alapca Game Studios. 
+Copying or redistributing this game or content without the consent of Hybrid Alpaca Game Studios is illegal and unlawful.
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+
+All people that have contributed to this game include:
+- Seth Traman               Lead Developer
+- Nate Goldsborough         Developer, Copyright Manager, General Maintenanc
+- Casimir Kash              Developer, Graphics, Beta Testing
+- KJ Avakian                Developer
+- Gavin Montheye            PR
+- Hunter Sokolis            Graphics
+- Michael Rimmele           Graphics
+- Brendan O'Rourke          Graphics
+- Jasper Burns              Storyline
+- Hunter Sokolis            Graphics, Humor Support
+- William VanDerLaan        Beta Testing, Logos </div>
         <script>
             $(document).ready(function () {
                 $('ul#tabs').tabs();

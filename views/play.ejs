@@ -23,6 +23,8 @@
                 </div>
             </center>
         </div>
+        
+        <div id='underlay'></div>
 
         <div id="pause" class="modal">
             <div class="modal-content">
@@ -37,11 +39,28 @@
         <div id='hud'>
             <div id='health' class="text-xs-center">Loading...</div>
             <progress id='health-bar' class="progress progress-success" value="100" max="100"></progress>
+            <div class='row container'>
+                <div class='col s1 hotbar active' id='hb-1'>Rock</div>
+                <div class='col s1 hotbar' id='hb-2'>Fireball</div>
+                <div class='col s1 hotbar' id='hb-3'>-</div>
+                <div class='col s1 hotbar' id='hb-4'>-</div>
+                <div class='col s1 hotbar' id='hb-5'>-</div>
+                <div class='col s1 hotbar' id='hb-6'>-</div>
+                <div class='col s1 hotbar' id='hb-7'>-</div>
+                <div class='col s1 hotbar' id='hb-8'>-</div>
+                <div class='col s1 offset-s1 hotbar' id='hb-lh'>LH</div>
+                <div class='col s1 hotbar' id='hb-rh'>RH</div>
+            </div>
         </div>
-        
+
         <div id='quest-alert'>
             <p>Loading...</p>
             <small>Loading...</small>
+        </div>
+        
+        <div id='gui'>
+            <h1 id='gui-title'></h1>
+            <span id='gui-content'></span>
         </div>
 
         <script src="/socket.io/socket.io.js"></script>
