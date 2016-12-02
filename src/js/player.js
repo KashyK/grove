@@ -10,7 +10,7 @@ class Player {
             val: 5,
             max: 5
         };
-        this.weapon = 'rock';
+        this.equipped = 'rock';
     }
 }
 
@@ -22,8 +22,8 @@ window.addEventListener('keydown', e => {
             $('.hotbar').removeClass('active');
             $(`#hb-${String.fromCharCode(e.keyCode)}`).addClass('active');
             if ($(`#hb-${String.fromCharCode(e.keyCode)}`).text() !== '-') {
-                player.weapon = $(`#hb-${String.fromCharCode(e.keyCode)}`).text().toLowerCase();
-            }
+                player.equipped = $(`#hb-${String.fromCharCode(e.keyCode)}`).text().toLowerCase();
+            } else player.equipped = null;
         }
         else if (String.fromCharCode(e.keyCode) == 'I') {
             require('./gui').inventory(player);

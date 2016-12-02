@@ -12,7 +12,7 @@ module.exports = (globals, player) => {
     }
 
     function shoot(e) {
-        if (globals.controls.enabled == true) {
+        if (globals.controls.enabled == true && player.equipped) {
 
             let shootDirection = new THREE.Vector3();
             const shootVelo = 20;
@@ -23,7 +23,7 @@ module.exports = (globals, player) => {
 
             let ball = globals.ball({
                 array: 'projectiles',
-                c: player.weapon == 'rock' ? 0xCCCCCC : 0xFF4500
+                c: player.equipped == 'rock' ? 0xCCCCCC : 0xFF4500
             });
 
             getShootDir(shootDirection);
@@ -47,7 +47,7 @@ module.exports = (globals, player) => {
                         if (contact.bj == globals.PLAYERS[key].body)
                             globals.socket.emit('hit-player', globals.PLAYERS[key].id);
                     }
-                setTimeout(function () {
+                setTimeout(() => {
                     globals.remove.bodies.push(ball.body);
                     globals.remove.meshes.push(ball.mesh);
                 }, 1500);

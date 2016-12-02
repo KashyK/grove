@@ -5,16 +5,18 @@ let player = require('./player');
 
 const dt = 1 / 60;
 
-// require('./AI');
+require('./gui').init();
 require('./shooting')(globals, player);
 require('./multiplayer')(globals, player);
 
 THREE.DefaultLoadingManager.onProgress = (item, loaded, total) => {
     console.log(`${loaded} out of ${total}`);
     $('#loading-bar')
-        .width(loaded / total * 100 + '%')
-        .text(loaded + ' / ' + total + ' - ' + Math.floor(loaded / total * 100) + '%');
+        .width(`${loaded / total * 100}%`)
+        .text(`${loaded} / ${total} - ${Math.floor(loaded / total * 100)}%`);
     if (loaded == total) {
+        $('#loading-bar').remove();
+        $('.play-btn').show();
         animate();
         require('./gui').quests();
     }
@@ -58,7 +60,7 @@ function animate(delta) {
 
         $('#health-bar')
             .val(player.hp.val / player.hp.max * 100 > 0 ? player.hp.val / player.hp.max * 100 : 0);
-        $('#health').text(player.hp.val > 0 ? player.hp.val : 0 + ' HP');
+        $('#health').text(`${player.hp.val > 0 ? player.hp.val : 0} HP`);
         if (player.hp.val <= 0) {
             globals.socket.disconnect();
             alert('You have died.');
@@ -69,7 +71,7 @@ function animate(delta) {
         // globals.rendererDEBUG.update();
         globals.renderer.render(globals.scene, globals.camera);
         globals.delta = Date.now();
-
+        
         if (player && player.serverdata && globals && globals.updatePlayerData) {
             globals.updatePlayerData();
             globals.socket.emit('updatePosition', player.serverdata);

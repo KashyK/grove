@@ -20,19 +20,21 @@
                 <br>
                 <div id='splash-secondary'>
                     <div id='loading-bar'></div>
+                    <button class='play-btn waves-effect waves-light btn-large light-green z-depth-3'>Play</button>
                 </div>
             </center>
         </div>
-        
-        <div id='underlay'></div>
 
-        <div id="pause" class="modal">
-            <div class="modal-content">
-                <h4>Modal Header</h4>
-                <p>A bunch of text</p>
+        <div id='underlay'></div>
+        
+        <div id='pause' class="card blue-grey darken-1">
+            <div class="card-content white-text">
+                <span class="card-title">Paused</span>
+                <p>The Grove is currently paused.</p>
             </div>
-            <div class="modal-footer">
-                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+            <div class="card-action">
+                <a href="/">Quit</a>
+                <a href="#" class='play-btn'>Resume</a>
             </div>
         </div>
 
@@ -57,10 +59,11 @@
             <p>Loading...</p>
             <small>Loading...</small>
         </div>
-        
+
         <div id='gui'>
-            <h1 id='gui-title'></h1>
+            <h3 id='gui-title'></h3>
             <span id='gui-content'></span>
+            <div id='gui-exit' class='play-btn btn waves-effect waves-light light-green z-depth-3'>Resume</div>
         </div>
 
         <script src="/socket.io/socket.io.js"></script>

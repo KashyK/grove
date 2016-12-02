@@ -97,7 +97,15 @@ module.exports.ball = load.ball;
 
 /* global $ */
 
-$('#gui').hide();
+module.exports.init = function () {
+    $('#gui').toggle();
+    $('#underlay').toggle();
+    $('.play-btn').hide();
+    $('#gui-exit').click(function () {
+        $('#gui').toggle();
+        $('#underlay').toggle();
+    });
+};
 
 module.exports.quests = function () {
     $('#quest-alert > p').text('Getting Skills');
@@ -110,9 +118,14 @@ module.exports.quests = function () {
 };
 
 module.exports.inventory = function (player) {
-    $('#gui').toggle();
-    $('#blocker').toggle();
+    $('#gui').show();
+    $('#underlay').show();
     $('#gui-title').text('Inventory');
+    var txt = '';
+    for (var item in player.inventory) {
+        txt += '<span title=\'' + player.inventory[item].desc + '\'>' + player.inventory[item].name + '</span>';
+    }$('#gui-content').html(txt);
+    if ($('#gui-content').is(':visible')) document.exitPointerLock();
 };
 
 },{}],4:[function(require,module,exports){
@@ -326,7 +339,7 @@ module.exports = function (globals) {
         material: globals.groundMaterial
     });
     sphereBody.addShape(sphereShape);
-    sphereBody.position.set(0, 8, 0);
+    sphereBody.position.set(0, 10, 0);
     // sphereBody.linearDamping = 0.9;
     sphereBody.angularDamping = 0.9;
     globals.world.add(sphereBody);
@@ -559,7 +572,7 @@ var player = require('./player');
 
 var dt = 1 / 60;
 
-// require('./AI');
+require('./gui').init();
 require('./shooting')(globals, player);
 require('./multiplayer')(globals, player);
 
@@ -567,6 +580,8 @@ THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
     console.log(loaded + ' out of ' + total);
     $('#loading-bar').width(loaded / total * 100 + '%').text(loaded + ' / ' + total + ' - ' + Math.floor(loaded / total * 100) + '%');
     if (loaded == total) {
+        $('#loading-bar').remove();
+        $('.play-btn').show();
         animate();
         require('./gui').quests();
     }
@@ -609,7 +624,7 @@ function animate(delta) {
         globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
 
         $('#health-bar').val(player.hp.val / player.hp.max * 100 > 0 ? player.hp.val / player.hp.max * 100 : 0);
-        $('#health').text(player.hp.val > 0 ? player.hp.val : 0 + ' HP');
+        $('#health').text((player.hp.val > 0 ? player.hp.val : 0) + ' HP');
         if (player.hp.val <= 0) {
             globals.socket.disconnect();
             alert('You have died.');
@@ -782,7 +797,7 @@ var Player = function Player() {
         val: 5,
         max: 5
     };
-    this.weapon = 'rock';
+    this.equipped = 'rock';
 };
 
 var player = new Player();
@@ -793,8 +808,8 @@ window.addEventListener('keydown', function (e) {
             $('.hotbar').removeClass('active');
             $('#hb-' + String.fromCharCode(e.keyCode)).addClass('active');
             if ($('#hb-' + String.fromCharCode(e.keyCode)).text() !== '-') {
-                player.weapon = $('#hb-' + String.fromCharCode(e.keyCode)).text().toLowerCase();
-            }
+                player.equipped = $('#hb-' + String.fromCharCode(e.keyCode)).text().toLowerCase();
+            } else player.equipped = null;
         } else if (String.fromCharCode(e.keyCode) == 'I') {
             require('./gui').inventory(player);
         }
@@ -820,7 +835,7 @@ module.exports = function (globals, player) {
     }
 
     function shoot(e) {
-        if (globals.controls.enabled == true) {
+        if (globals.controls.enabled == true && player.equipped) {
             (function () {
 
                 var shootDirection = new THREE.Vector3();
@@ -832,7 +847,7 @@ module.exports = function (globals, player) {
 
                 var ball = globals.ball({
                     array: 'projectiles',
-                    c: player.weapon == 'rock' ? 0xCCCCCC : 0xFF4500
+                    c: player.equipped == 'rock' ? 0xCCCCCC : 0xFF4500
                 });
 
                 getShootDir(shootDirection);

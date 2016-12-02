@@ -6,7 +6,7 @@ var PointerLockControls = function (camera, cannonBody) {
 
     var eyeYPos = 2; // eyes are 2 meters above the ground
     var velocityFactor = 0.3;
-    var jumpVelocity = 5;
+    var jumpVelocity = 3;
     var scope = this;
 
     var pitchObject = new THREE.Object3D();
@@ -168,7 +168,7 @@ var PointerLockControls = function (camera, cannonBody) {
 
         }
 
-        if (!moveForward && !moveBackward && !moveLeft && !moveRight) {
+        if (canJump && !moveForward && !moveBackward && !moveLeft && !moveRight) {
             if (cannonBody.velocity.x < 0)
                 cannonBody.velocity.x = 0;
             else

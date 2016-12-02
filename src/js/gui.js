@@ -1,6 +1,14 @@
 /* global $ */
 
-$('#gui').hide();
+module.exports.init = () => {
+    $('#gui').toggle();
+    $('#underlay').toggle();
+    $('.play-btn').hide();
+    $('#gui-exit').click(() => {
+        $('#gui').toggle();
+        $('#underlay').toggle();
+    });
+};
 
 module.exports.quests = () => {
     $('#quest-alert > p').text('Getting Skills');
@@ -13,7 +21,11 @@ module.exports.quests = () => {
 };
 
 module.exports.inventory = player => {
-    $('#gui').toggle();
-    $('#blocker').toggle();
+    $('#gui').show();
+    $('#underlay').show();
     $('#gui-title').text('Inventory');
+    let txt = '';
+    for (let item in player.inventory) txt += `<span title='${player.inventory[item].desc}'>${player.inventory[item].name}</span>`;
+    $('#gui-content').html(txt);
+    if ($('#gui-content').is(':visible')) document.exitPointerLock();
 };

@@ -16,6 +16,8 @@ if (havePointerLock) {
 
             blocker.style.display = 'none';
 
+            $('#pause').hide();
+
             hud.style.display = '';
 
         }
@@ -25,7 +27,7 @@ if (havePointerLock) {
 
             hud.style.display = 'none';
 
-            $('#pause').modal('open');
+            $('#pause').show();
 
             // blocker.style.display = '-webkit-box';
             // blocker.style.display = '-moz-box';
@@ -84,12 +86,16 @@ if (havePointerLock) {
         else {
 
             element.requestPointerLock();
+            
+            element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
+
+            element.requestFullscreen();
 
         }
 
     }
 
-    document.body.addEventListener('click', click, false);
+    $('.play-btn').click(click);
 
 }
 else {
