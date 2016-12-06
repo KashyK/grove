@@ -50,9 +50,14 @@ var dave = new AI();
 module.exports = {
     scene: new THREE.Scene(),
     renderer: new THREE.WebGLRenderer({
-        antialias: true
+        antialias: true,
+        preserveDrawingBuffer: true
     }),
     camera: new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 10000),
+    topCamera: new THREE.OrthographicCamera(100 / -2, 100 / 2, 100 / 2, 100 / -2, 1, 1000),
+    renderTarget: new THREE.WebGLRenderTarget(512, 512, {
+        format: THREE.RGBFormat
+    }),
 
     world: new CANNON.World(),
 
@@ -85,6 +90,8 @@ var ground_ground_cm = new CANNON.ContactMaterial(module.exports.groundMaterial,
 
 // Add contact material to the world
 module.exports.world.addContactMaterial(ground_ground_cm);
+module.exports.topCamera.position.set(0, 10, 0);
+module.exports.topCamera.rotation.x -= Math.PI / 2;
 
 var load = require('./load');
 module.exports.load = load.load;
@@ -117,18 +124,35 @@ module.exports.quests = function () {
     }, 5000);
 };
 
-module.exports.inventory = function (player) {
+// quests, inv, map, player
+
+module.exports.stats = function (player) {
     $('#gui').show();
     $('#underlay').show();
-    $('#gui-title').text('Inventory');
-    var txt = '';
-    for (var item in player.inventory) {
-        txt += '<span title=\'' + player.inventory[item].desc + '\'>' + player.inventory[item].name + '</span>';
-    }$('#gui-content').html(txt);
+    $('#gui-title').text('');
+    $('#gui-content').html('<h1 style=margin-top:21.5%;text-align:center;width:90%;color:white>\n    <span id=gui-q>quests</span> | <span id=gui-i>inventory</span> | <span id=gui-m>map</span> | <span id=gui-p>player</span>\n    </h1>');
+    $('#gui-q').click(function () {
+        $('#gui-title').html('Quests');
+        $('#gui-content').html('questy stuff');
+    });
+    $('#gui-i').click(function () {
+        $('#gui-title').html('Inventory');
+        $('#gui-content').html('Inventory items');
+    });
+    $('#gui-m').click(function () {
+        $('#gui-title').html('Map');
+        var strMime = "image/jpeg";
+        var imgData = require('./globals').renderer.domElement.toDataURL(strMime);
+        $('#gui-content').html('<img src=' + imgData + '>');
+    });
+    $('#gui-p').click(function () {
+        $('#gui-title').html('Player');
+        $('#gui-content').html('ur stats');
+    });
     if ($('#gui-content').is(':visible')) document.exitPointerLock();
 };
 
-},{}],4:[function(require,module,exports){
+},{"./globals":2}],4:[function(require,module,exports){
 "use strict";
 
 /* global THREE, CANNON, $ */
@@ -157,6 +181,13 @@ module.exports = function (globals, player) {
     globals.scene.add(light);
 
     globals.scene.add(new THREE.AmbientLight(0x333333));
+
+    var planelikeGeometry = new THREE.CubeGeometry(400, 200, 200);
+    var plane = new THREE.Mesh(planelikeGeometry, new THREE.MeshBasicMaterial({
+        map: globals.renderTarget.texture
+    }));
+    plane.position.set(0, 100, -500);
+    globals.scene.add(plane);
 
     var loader = new THREE.ObjectLoader();
     loader.load("/models/" + player.serverdata.acc.map + "/" + player.serverdata.acc.map + ".json", function (object) {
@@ -633,6 +664,7 @@ function animate(delta) {
         globals.world.step(dt);
         globals.controls.update(Date.now() - globals.delta);
         // globals.rendererDEBUG.update();
+        globals.renderer.render(globals.scene, globals.topCamera, globals.renderTarget, true);
         globals.renderer.render(globals.scene, globals.camera);
         globals.delta = Date.now();
 
@@ -810,8 +842,8 @@ window.addEventListener('keydown', function (e) {
             if ($('#hb-' + String.fromCharCode(e.keyCode)).text() !== '-') {
                 player.equipped = $('#hb-' + String.fromCharCode(e.keyCode)).text().toLowerCase();
             } else player.equipped = null;
-        } else if (String.fromCharCode(e.keyCode) == 'I') {
-            require('./gui').inventory(player);
+        } else if (String.fromCharCode(e.keyCode) == 'Q') {
+            require('./gui').stats(player);
         }
     } catch (err) {}
 });

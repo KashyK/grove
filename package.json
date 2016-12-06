@@ -10,6 +10,7 @@
     "express": "^4.13.4",
     "express-minify-html": "^0.6.0",
     "express-session": "^1.14.1",
+    "jade": "^1.11.0",
     "md5": "^2.2.1",
     "mongoose": "^4.4.17",
     "postal": "^2.0.4",

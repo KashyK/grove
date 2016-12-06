@@ -25,8 +25,8 @@ window.addEventListener('keydown', e => {
                 player.equipped = $(`#hb-${String.fromCharCode(e.keyCode)}`).text().toLowerCase();
             } else player.equipped = null;
         }
-        else if (String.fromCharCode(e.keyCode) == 'I') {
-            require('./gui').inventory(player);
+        else if (String.fromCharCode(e.keyCode) == 'Q') {
+            require('./gui').stats(player);
         }
     }
     catch (err) {}

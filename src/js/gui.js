@@ -13,19 +13,39 @@ module.exports.init = () => {
 module.exports.quests = () => {
     $('#quest-alert > p').text('Getting Skills');
     $('#quest-alert > small').text('Use the Alchemy Table to make a health potion.');
-    setTimeout(function () {
+    setTimeout(function() {
         $('#quest-alert').animate({
             'right': '-280px'
         }, 1000);
     }, 5000);
 };
 
-module.exports.inventory = player => {
+// quests, inv, map, player
+
+module.exports.stats = player => {
     $('#gui').show();
     $('#underlay').show();
-    $('#gui-title').text('Inventory');
-    let txt = '';
-    for (let item in player.inventory) txt += `<span title='${player.inventory[item].desc}'>${player.inventory[item].name}</span>`;
-    $('#gui-content').html(txt);
+    $('#gui-title').text('');
+    $('#gui-content').html(`<h1 style=margin-top:21.5%;text-align:center;width:90%;color:white>
+    <span id=gui-q>quests</span> | <span id=gui-i>inventory</span> | <span id=gui-m>map</span> | <span id=gui-p>player</span>
+    </h1>`);
+    $('#gui-q').click(() => {
+        $('#gui-title').html('Quests');
+        $('#gui-content').html('questy stuff');
+    });
+    $('#gui-i').click(() => {
+        $('#gui-title').html('Inventory');
+        $('#gui-content').html('Inventory items');
+    });
+    $('#gui-m').click(() => {
+        $('#gui-title').html('Map');
+        const strMime = "image/jpeg";
+        const imgData = require('./globals').renderer.domElement.toDataURL(strMime);
+        $('#gui-content').html(`<img src=${imgData}>`);
+    });
+    $('#gui-p').click(() => {
+        $('#gui-title').html('Player');
+        $('#gui-content').html('ur stats');
+    });
     if ($('#gui-content').is(':visible')) document.exitPointerLock();
 };

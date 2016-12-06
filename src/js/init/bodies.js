@@ -25,6 +25,13 @@ module.exports = (globals, player) => {
 
     globals.scene.add(new THREE.AmbientLight(0x333333));
 
+    var planelikeGeometry = new THREE.CubeGeometry(400, 200, 200);
+    var plane = new THREE.Mesh(planelikeGeometry, new THREE.MeshBasicMaterial({
+        map: globals.renderTarget.texture
+    }));
+    plane.position.set(0, 100, -500);
+    globals.scene.add(plane);
+
     let loader = new THREE.ObjectLoader();
     loader.load(`/models/${player.serverdata.acc.map}/${player.serverdata.acc.map}.json`, (object) => {
         globals.scene.add(object);
