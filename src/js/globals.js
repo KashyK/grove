@@ -6,7 +6,7 @@ module.exports = {
         antialias: true,
         preserveDrawingBuffer: true
     }),
-    camera: new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 10000),
+    camera: new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 20000),
 
     world: new CANNON.World(),
 
@@ -45,3 +45,4 @@ module.exports.load = load.load;
 module.exports.box = load.box;
 module.exports.label = load.label;
 module.exports.ball = load.ball;
+module.exports.plane = load.plane;

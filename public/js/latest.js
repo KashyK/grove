@@ -53,7 +53,7 @@ module.exports = {
         antialias: true,
         preserveDrawingBuffer: true
     }),
-    camera: new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 10000),
+    camera: new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 20000),
 
     world: new CANNON.World(),
 
@@ -92,6 +92,7 @@ module.exports.load = load.load;
 module.exports.box = load.box;
 module.exports.label = load.label;
 module.exports.ball = load.ball;
+module.exports.plane = load.plane;
 
 },{"./load":9}],3:[function(require,module,exports){
 'use strict';
@@ -176,7 +177,6 @@ module.exports = function (globals, player) {
 
     globals.scene.add(new THREE.AmbientLight(0x333333));
 
-    var geo = new THREE.BoxGeometry(2, 3, 0);
     var uni = {
         time: {
             value: 1.0
@@ -185,19 +185,38 @@ module.exports = function (globals, player) {
             value: new THREE.Vector2()
         }
     };
-    var mat = new THREE.ShaderMaterial({
-        uniforms: uni,
-        vertexShader: document.getElementById('vertexShader').textContent,
-        fragmentShader: document.getElementById('fragmentShader').textContent
-    });
 
-    var cube = new THREE.Mesh(geo, mat);
-    cube.castShadow = true;
-    globals.scene.add(cube);
-    cube.position.set(0, 9, 8);
     setInterval(function () {
         uni.time.value += 0.1;
     }, 40);
+
+    var box = globals.box({
+        l: 2,
+        h: 3,
+        w: 0.01,
+        mat: new THREE.ShaderMaterial({
+            uniforms: uni,
+            vertexShader: document.getElementById('vertexShader').textContent,
+            fragmentShader: document.getElementById('portalShader').textContent
+        })
+    });
+    box.body.position.set(0, 11, 8);
+
+    var imagePrefix = "img/skybox/";
+    var directions = ["px", "nx", "py", "ny", "pz", "nz"];
+    var imageSuffix = ".jpg";
+    var skyGeometry = new THREE.CubeGeometry(500, 500, 500);
+
+    var materialArray = [];
+    for (var i = 0; i < 6; i++) {
+        materialArray.push(new THREE.MeshBasicMaterial({
+            map: THREE.ImageUtils.loadTexture(imagePrefix + directions[i] + imageSuffix),
+            side: THREE.BackSide,
+            fog: false
+        }));
+    }var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
+    var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+    globals.BODIES['player'].mesh.add(skyBox);
 
     var loader = new THREE.ObjectLoader();
     loader.load('/models/' + player.serverdata.acc.map + '/' + player.serverdata.acc.map + '.json', function (object) {
@@ -342,8 +361,8 @@ module.exports = function () {
 function init(globals, player) {
 
     require('./world')(globals);
-    require('./bodies')(globals, player);
     require('./player')(globals);
+    require('./bodies')(globals, player);
     require('./dom')(globals);
 
     globals.renderer.shadowMapEnabled = true;
@@ -424,6 +443,8 @@ module.exports = function (globals) {
 },{}],9:[function(require,module,exports){
 'use strict';
 
+/* global CANNON, THREE */
+
 var globals = require('./globals');
 
 function load(mesh, opts) {
@@ -464,20 +485,18 @@ function load(mesh, opts) {
 function box(opts) {
     opts = opts ? opts : {};
 
-    var halfExtents = new CANNON.Vec3(opts.l || 1, opts.h || 1, opts.w || 1);
+    var halfExtents = new CANNON.Vec3(opts.l !== undefined ? opts.l : 1, opts.h !== undefined ? opts.h : 1, opts.w !== undefined ? opts.w : 1);
     var boxShape = new CANNON.Box(halfExtents);
     var boxGeometry = new THREE.BoxGeometry(halfExtents.x * 2, halfExtents.y * 2, halfExtents.z * 2);
     var boxBody = new CANNON.Body({
         mass: opts.mass || 0
     });
     boxBody.addShape(boxShape);
-    var boxMesh = new THREE.Mesh(boxGeometry, new THREE.MeshPhongMaterial({
+    var boxMesh = new THREE.Mesh(boxGeometry, opts.mat !== undefined ? opts.mat : new THREE.MeshPhongMaterial({
         color: 0xFF0000
     }));
     globals.world.add(boxBody);
     globals.scene.add(boxMesh);
-    boxBody.position.set(opts.x || 0, opts.y || 10, opts.z || 0);
-    boxMesh.position.set(opts.x || 0, opts.y || 10, opts.z || 0);
     boxMesh.castShadow = true;
     boxMesh.receiveShadow = true;
     globals.BODIES['items'].push({
@@ -498,11 +517,11 @@ function ball(opts) {
     var ballShape = new CANNON.Sphere(opts.radius || 0.2);
     var ballGeometry = new THREE.SphereGeometry(ballShape.radius, 32, 32);
     var ballBody = new CANNON.Body({
-        mass: 10
+        mass: opts.mass !== undefined ? opts.mass : 10
     });
 
     ballBody.addShape(ballShape);
-    var ballMesh = new THREE.Mesh(ballGeometry, new THREE.MeshPhongMaterial({
+    var ballMesh = new THREE.Mesh(ballGeometry, opts.mat || new THREE.MeshPhongMaterial({
         color: opts.c || 0x00CCFF
     }));
     globals.world.add(ballBody);
@@ -519,6 +538,36 @@ function ball(opts) {
         body: ballBody,
         shape: ballShape,
         mesh: ballMesh
+    };
+}
+
+function plane(opts) {
+    // BROKEN!!!!!
+    var geometry = new THREE.PlaneGeometry(5, 20, 32);
+    var material = new THREE.MeshBasicMaterial({
+        color: 0xffff00,
+        side: THREE.DoubleSide
+    });
+    var plane = new THREE.Mesh(geometry, material);
+    globals.scene.add(plane);
+
+    var groundShape = new CANNON.Plane();
+    var groundBody = new CANNON.Body({
+        mass: 0,
+        shape: groundShape
+    });
+    globals.world.add(groundBody);
+
+    globals.BODIES[opts.array || 'items'].push({
+        body: groundBody,
+        shape: groundShape,
+        mesh: plane
+    });
+
+    return {
+        body: groundBody,
+        shape: groundShape,
+        mesh: plane
     };
 }
 
@@ -602,6 +651,7 @@ module.exports.load = load;
 module.exports.box = box;
 module.exports.label = label;
 module.exports.ball = ball;
+module.exports.plane = plane;
 
 },{"./globals":2}],10:[function(require,module,exports){
 'use strict';

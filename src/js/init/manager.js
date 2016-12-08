@@ -1,8 +1,8 @@
 function init(globals, player) {
 
     require('./world')(globals);
-    require('./bodies')(globals, player);
     require('./player')(globals);
+    require('./bodies')(globals, player);
     require('./dom')(globals);
 
     globals.renderer.shadowMapEnabled = true;

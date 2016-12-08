@@ -1,3 +1,5 @@
+/* global CANNON, THREE */
+
 let globals = require('./globals');
 
 function load(mesh, opts) {
@@ -38,20 +40,18 @@ function load(mesh, opts) {
 function box(opts) {
     opts = opts ? opts : {};
 
-    var halfExtents = new CANNON.Vec3(opts.l || 1, opts.h || 1, opts.w || 1);
+    var halfExtents = new CANNON.Vec3(opts.l !== undefined ? opts.l : 1, opts.h !== undefined ? opts.h : 1, opts.w !== undefined ? opts.w : 1);
     var boxShape = new CANNON.Box(halfExtents);
     var boxGeometry = new THREE.BoxGeometry(halfExtents.x * 2, halfExtents.y * 2, halfExtents.z * 2);
     var boxBody = new CANNON.Body({
         mass: opts.mass || 0
     });
     boxBody.addShape(boxShape);
-    var boxMesh = new THREE.Mesh(boxGeometry, new THREE.MeshPhongMaterial({
+    var boxMesh = new THREE.Mesh(boxGeometry, opts.mat !== undefined ? opts.mat : new THREE.MeshPhongMaterial({
         color: 0xFF0000
     }));
     globals.world.add(boxBody);
     globals.scene.add(boxMesh);
-    boxBody.position.set(opts.x || 0, opts.y || 10, opts.z || 0);
-    boxMesh.position.set(opts.x || 0, opts.y || 10, opts.z || 0);
     boxMesh.castShadow = true;
     boxMesh.receiveShadow = true;
     globals.BODIES['items'].push({
@@ -72,11 +72,11 @@ function ball(opts) {
     var ballShape = new CANNON.Sphere(opts.radius || 0.2);
     var ballGeometry = new THREE.SphereGeometry(ballShape.radius, 32, 32);
     var ballBody = new CANNON.Body({
-        mass: 10
+        mass: opts.mass !== undefined ? opts.mass : 10
     });
 
     ballBody.addShape(ballShape);
-    var ballMesh = new THREE.Mesh(ballGeometry, new THREE.MeshPhongMaterial({
+    var ballMesh = new THREE.Mesh(ballGeometry, opts.mat || new THREE.MeshPhongMaterial({
         color: opts.c || 0x00CCFF
     }));
     globals.world.add(ballBody);
@@ -93,6 +93,35 @@ function ball(opts) {
         body: ballBody,
         shape: ballShape,
         mesh: ballMesh
+    };
+}
+
+function plane(opts) { // BROKEN!!!!!
+    var geometry = new THREE.PlaneGeometry(5, 20, 32);
+    var material = new THREE.MeshBasicMaterial({
+        color: 0xffff00,
+        side: THREE.DoubleSide
+    });
+    var plane = new THREE.Mesh(geometry, material);
+    globals.scene.add(plane);
+
+    var groundShape = new CANNON.Plane();
+    var groundBody = new CANNON.Body({
+        mass: 0,
+        shape: groundShape
+    });
+    globals.world.add(groundBody);
+
+    globals.BODIES[opts.array || 'items'].push({
+        body: groundBody,
+        shape: groundShape,
+        mesh: plane
+    });
+
+    return {
+        body: groundBody,
+        shape: groundShape,
+        mesh: plane
     };
 }
 
@@ -176,3 +205,4 @@ module.exports.load = load;
 module.exports.box = box;
 module.exports.label = label;
 module.exports.ball = ball;
+module.exports.plane = plane;

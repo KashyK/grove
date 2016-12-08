@@ -25,7 +25,6 @@ module.exports = (globals, player) => {
 
     globals.scene.add(new THREE.AmbientLight(0x333333));
 
-    let geo = new THREE.BoxGeometry(2, 3, 0);
     let uni = {
         time: {
             value: 1.0
@@ -34,19 +33,38 @@ module.exports = (globals, player) => {
             value: new THREE.Vector2()
         }
     };
-    let mat = new THREE.ShaderMaterial({
-        uniforms: uni,
-        vertexShader: document.getElementById('vertexShader').textContent,
-        fragmentShader: document.getElementById('fragmentShader').textContent
-    });
 
-    let cube = new THREE.Mesh(geo, mat);
-    cube.castShadow = true;
-    globals.scene.add(cube);
-    cube.position.set(0, 9, 8);
-    setInterval(function() {
+    setInterval(() => {
         uni.time.value += 0.1;
     }, 40);
+
+    let box = globals.box({
+        l: 2,
+        h: 3,
+        w: 0.01,
+        mat: new THREE.ShaderMaterial({
+            uniforms: uni,
+            vertexShader: document.getElementById('vertexShader').textContent,
+            fragmentShader: document.getElementById('portalShader').textContent
+        })
+    });
+    box.body.position.set(0, 11, 8);
+
+    var imagePrefix = "img/skybox/";
+    var directions = ["px", "nx", "py", "ny", "pz", "nz"];
+    var imageSuffix = ".jpg";
+    var skyGeometry = new THREE.CubeGeometry(500, 500, 500);
+
+    var materialArray = [];
+    for (var i = 0; i < 6; i++)
+        materialArray.push(new THREE.MeshBasicMaterial({
+            map: THREE.ImageUtils.loadTexture(imagePrefix + directions[i] + imageSuffix),
+            side: THREE.BackSide,
+            fog: false
+        }));
+    var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
+    var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+    globals.BODIES['player'].mesh.add(skyBox);
 
     let loader = new THREE.ObjectLoader();
     loader.load(`/models/${player.serverdata.acc.map}/${player.serverdata.acc.map}.json`, (object) => {
