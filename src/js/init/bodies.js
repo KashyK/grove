@@ -25,12 +25,28 @@ module.exports = (globals, player) => {
 
     globals.scene.add(new THREE.AmbientLight(0x333333));
 
-    var planelikeGeometry = new THREE.CubeGeometry(400, 200, 200);
-    var plane = new THREE.Mesh(planelikeGeometry, new THREE.MeshBasicMaterial({
-        map: globals.renderTarget.texture
-    }));
-    plane.position.set(0, 100, -500);
-    globals.scene.add(plane);
+    let geo = new THREE.BoxGeometry(2, 3, 0);
+    let uni = {
+        time: {
+            value: 1.0
+        },
+        resolution: {
+            value: new THREE.Vector2()
+        }
+    };
+    let mat = new THREE.ShaderMaterial({
+        uniforms: uni,
+        vertexShader: document.getElementById('vertexShader').textContent,
+        fragmentShader: document.getElementById('fragmentShader').textContent
+    });
+
+    let cube = new THREE.Mesh(geo, mat);
+    cube.castShadow = true;
+    globals.scene.add(cube);
+    cube.position.set(0, 9, 8);
+    setInterval(function() {
+        uni.time.value += 0.1;
+    }, 40);
 
     let loader = new THREE.ObjectLoader();
     loader.load(`/models/${player.serverdata.acc.map}/${player.serverdata.acc.map}.json`, (object) => {

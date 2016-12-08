@@ -1,112 +1,105 @@
 <!doctype html>
 <html>
 
-    <head>
-        <title>Play | The Grove</title>
-        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
-        <link rel='stylesheet' href='/css/play.css'>
-        <link rel='icon' href='/img/favicon.ico'>
-    </head>
+<head>
+    <title>Play | The Grove</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <link rel='stylesheet' href='/css/play.css'>
+    <link rel='icon' href='/img/favicon.ico'>
+</head>
 
-    <body>
+<body>
 
-        <div id='crosshair' style='position:fixed;left:50%;top:50%;'>[ &times; ]</div>
+    <div id='crosshair' style='position:fixed;left:50%;top:50%;'>[ &times; ]</div>
 
-        <div id="blocker">
-            <center id="instructions">
-                <span style="font-size:50px" id='splash-title'>Loading...</span>
-                <br>
-                <div id='splash-secondary'>
-                    <div id='loading-bar'></div>
-                    <button class='play-btn waves-effect waves-light btn-large light-green z-depth-3'>Play</button>
-                </div>
-            </center>
-        </div>
-
-        <div id='underlay'></div>
-        
-        <div id='pause' class="card blue-grey darken-1">
-            <div class="card-content white-text">
-                <span class="card-title">Paused</span>
-                <p>The Grove is currently paused.</p>
+    <div id="blocker">
+        <center id="instructions">
+            <span style="font-size:50px" id='splash-title'>Loading...</span>
+            <br>
+            <div id='splash-secondary'>
+                <div id='loading-bar'></div>
+                <button class='play-btn waves-effect waves-light btn-large light-green z-depth-3'>Play</button>
             </div>
-            <div class="card-action">
-                <a href="/">Quit</a>
-                <a href="#" class='play-btn'>Resume</a>
-            </div>
+        </center>
+    </div>
+
+    <div id='underlay'></div>
+
+    <div id='pause' class="card blue-grey darken-1">
+        <div class="card-content white-text">
+            <span class="card-title">Paused</span>
+            <p>The Grove is currently paused.</p>
         </div>
-
-        <div id='hud'>
-            <div id='health' class="text-xs-center">Loading...</div>
-            <progress id='health-bar' class="progress progress-success" value="100" max="100"></progress>
-            <div class='row container'>
-                <div class='col s1 hotbar active' id='hb-1'>Rock</div>
-                <div class='col s1 hotbar' id='hb-2'>Fireball</div>
-                <div class='col s1 hotbar' id='hb-3'>-</div>
-                <div class='col s1 hotbar' id='hb-4'>-</div>
-                <div class='col s1 hotbar' id='hb-5'>-</div>
-                <div class='col s1 hotbar' id='hb-6'>-</div>
-                <div class='col s1 hotbar' id='hb-7'>-</div>
-                <div class='col s1 hotbar' id='hb-8'>-</div>
-                <div class='col s1 offset-s1 hotbar' id='hb-lh'>LH</div>
-                <div class='col s1 hotbar' id='hb-rh'>RH</div>
-            </div>
+        <div class="card-action">
+            <a href="/">Quit</a>
+            <a href="#" class='play-btn'>Resume</a>
         </div>
+    </div>
 
-        <div id='quest-alert'>
-            <p>Loading...</p>
-            <small>Loading...</small>
+    <div id='hud'>
+        <div id='health' class="text-xs-center">Loading...</div>
+        <progress id='health-bar' class="progress progress-success" value="100" max="100"></progress>
+        <div class='row container'>
+            <div class='col s1 hotbar active' id='hb-1'>Rock</div>
+            <div class='col s1 hotbar' id='hb-2'>Fireball</div>
+            <div class='col s1 hotbar' id='hb-3'>-</div>
+            <div class='col s1 hotbar' id='hb-4'>-</div>
+            <div class='col s1 hotbar' id='hb-5'>-</div>
+            <div class='col s1 hotbar' id='hb-6'>-</div>
+            <div class='col s1 hotbar' id='hb-7'>-</div>
+            <div class='col s1 hotbar' id='hb-8'>-</div>
+            <div class='col s1 offset-s1 hotbar' id='hb-lh'>LH</div>
+            <div class='col s1 hotbar' id='hb-rh'>RH</div>
         </div>
+    </div>
 
-        <div id='gui'>
-            <h3 id='gui-title'></h3>
-            <span id='gui-content'></span>
-            <div id='gui-exit' class='play-btn btn waves-effect waves-light light-green z-depth-3'>Resume</div>
-        </div>
+    <div id='quest-alert'>
+        <p>Loading...</p>
+        <small>Loading...</small>
+    </div>
 
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="//code.jquery.com/jquery-2.2.3.min.js" crossorigin="anonymous"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+    <div id='gui'>
+        <h3 id='gui-title'></h3>
+        <span id='gui-content'></span>
+        <div id='gui-exit' class='play-btn btn waves-effect waves-light light-green z-depth-3'>Resume</div>
+    </div>
+    
+    <%- partial('play/shaders') %>
+    <%- partial('play/libs') %>
 
-        <script src='/js/vendor/three.min.js'></script>
-        <script src='/js/vendor/cannon.min.js'></script>
-        <script src='/js/vendor/THREEx.PointerLockControls.js'></script>
-        <script src='/js/vendor/THREEx.ObjCoord.js'></script>
-        <script src='/js/vendor/cannon.debug.js'></script>
-
-        <script>
-            window.__D = {
-                username: '<%= user.username %>',
-                password: '<%= user.password %>'
-            };
-
-            console.log('Game Play has Started.');
-            String.prototype.capitalize = function () {
-                return this.charAt(0).toUpperCase() + this.slice(1);
-            };
-            window.onerror = (msg, url, linenumber) => {
-                alert(`Error message: ${msg}\nURL: ${url}\nLine Number: ${linenumber}`);
-                return true;
-            };
-        </script>
-
-        <script src='/js/engine/pointerlock.js'></script>
-        <script src='/js/latest.js'></script>
-    </body>
-
-
-    <!-- Start of StatCounter Code for Default Guide -->
     <script>
-        var sc_project = 11138604;
-        var sc_invisible = 1;
-        var sc_security = "782685fb";
-        var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "http://www.");
-        document.write("<sc" + "ript type='text/javascript' src='" + scJsHost + "statcounter.com/counter/counter.js'></" + "script>");
-        console.log('StatCounter Activated.');
+        window.__D = {
+            username: '<%= user.username %>',
+            password: '<%= user.password %>'
+        };
+
+        console.log('Game Play has Started.');
+        String.prototype.capitalize = function() {
+            return this.charAt(0).toUpperCase() + this.slice(1);
+        };
+        window.onerror = (msg, url, linenumber) => {
+            alert(`Error message: ${msg}\nURL: ${url}\nLine Number: ${linenumber}`);
+            return true;
+        };
     </script>
-    <!-- End of StatCounter Code for Default Guide -->
+
+    <script src='/js/engine/pointerlock.js'></script>
+    <script src='/js/latest.min.js'></script>
+</body>
+
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script>
+    var sc_project = 11138604;
+    var sc_invisible = 1;
+    var sc_security = "782685fb";
+    var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "http://www.");
+    document.write("<sc" + "ript type='text/javascript' src='" + scJsHost + "statcounter.com/counter/counter.js'></" + "script>");
+    console.log('StatCounter Activated.');
+</script>
+<!-- End of StatCounter Code for Default Guide -->
 
 
 </html>

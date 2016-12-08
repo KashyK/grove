@@ -7,10 +7,6 @@ module.exports = {
         preserveDrawingBuffer: true
     }),
     camera: new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 10000),
-    topCamera: new THREE.OrthographicCamera(100 / -2, 100 / 2, 100 / 2, 100 / -2, 1, 1000),
-    renderTarget: new THREE.WebGLRenderTarget(512, 512, {
-        format: THREE.RGBFormat
-    }),
 
     world: new CANNON.World(),
 
@@ -43,8 +39,6 @@ let ground_ground_cm = new CANNON.ContactMaterial(module.exports.groundMaterial,
 
 // Add contact material to the world
 module.exports.world.addContactMaterial(ground_ground_cm);
-module.exports.topCamera.position.set(0, 10, 0);
-module.exports.topCamera.rotation.x -= Math.PI / 2;
 
 let load = require('./load');
 module.exports.load = load.load;

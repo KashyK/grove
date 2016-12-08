@@ -54,10 +54,6 @@ module.exports = {
         preserveDrawingBuffer: true
     }),
     camera: new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 10000),
-    topCamera: new THREE.OrthographicCamera(100 / -2, 100 / 2, 100 / 2, 100 / -2, 1, 1000),
-    renderTarget: new THREE.WebGLRenderTarget(512, 512, {
-        format: THREE.RGBFormat
-    }),
 
     world: new CANNON.World(),
 
@@ -90,8 +86,6 @@ var ground_ground_cm = new CANNON.ContactMaterial(module.exports.groundMaterial,
 
 // Add contact material to the world
 module.exports.world.addContactMaterial(ground_ground_cm);
-module.exports.topCamera.position.set(0, 10, 0);
-module.exports.topCamera.rotation.x -= Math.PI / 2;
 
 var load = require('./load');
 module.exports.load = load.load;
@@ -143,7 +137,7 @@ module.exports.stats = function (player) {
         $('#gui-title').html('Map');
         var strMime = "image/jpeg";
         var imgData = require('./globals').renderer.domElement.toDataURL(strMime);
-        $('#gui-content').html('<img src=' + imgData + '>');
+        $('#gui-content').html('<img src=' + imgData + ' width=200>');
     });
     $('#gui-p').click(function () {
         $('#gui-title').html('Player');
@@ -153,7 +147,7 @@ module.exports.stats = function (player) {
 };
 
 },{"./globals":2}],4:[function(require,module,exports){
-"use strict";
+'use strict';
 
 /* global THREE, CANNON, $ */
 
@@ -182,15 +176,31 @@ module.exports = function (globals, player) {
 
     globals.scene.add(new THREE.AmbientLight(0x333333));
 
-    var planelikeGeometry = new THREE.CubeGeometry(400, 200, 200);
-    var plane = new THREE.Mesh(planelikeGeometry, new THREE.MeshBasicMaterial({
-        map: globals.renderTarget.texture
-    }));
-    plane.position.set(0, 100, -500);
-    globals.scene.add(plane);
+    var geo = new THREE.BoxGeometry(2, 3, 0);
+    var uni = {
+        time: {
+            value: 1.0
+        },
+        resolution: {
+            value: new THREE.Vector2()
+        }
+    };
+    var mat = new THREE.ShaderMaterial({
+        uniforms: uni,
+        vertexShader: document.getElementById('vertexShader').textContent,
+        fragmentShader: document.getElementById('fragmentShader').textContent
+    });
+
+    var cube = new THREE.Mesh(geo, mat);
+    cube.castShadow = true;
+    globals.scene.add(cube);
+    cube.position.set(0, 9, 8);
+    setInterval(function () {
+        uni.time.value += 0.1;
+    }, 40);
 
     var loader = new THREE.ObjectLoader();
-    loader.load("/models/" + player.serverdata.acc.map + "/" + player.serverdata.acc.map + ".json", function (object) {
+    loader.load('/models/' + player.serverdata.acc.map + '/' + player.serverdata.acc.map + '.json', function (object) {
         globals.scene.add(object);
         object.castShadow = true;
         object.recieveShadow = true;
@@ -206,7 +216,7 @@ module.exports = function (globals, player) {
         });
     });
     var loader2 = new THREE.ObjectLoader();
-    loader2.load("/models/alchemy-table/alchemy-table.json", function (object) {
+    loader2.load('/models/alchemy-table/alchemy-table.json', function (object) {
         globals.scene.add(object);
         var torch = new THREE.PointLight(0x00FF00, 0.15);
         torch.position.set(0, 10, 10);
@@ -664,7 +674,6 @@ function animate(delta) {
         globals.world.step(dt);
         globals.controls.update(Date.now() - globals.delta);
         // globals.rendererDEBUG.update();
-        globals.renderer.render(globals.scene, globals.topCamera, globals.renderTarget, true);
         globals.renderer.render(globals.scene, globals.camera);
         globals.delta = Date.now();
 

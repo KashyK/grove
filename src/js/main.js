@@ -69,7 +69,6 @@ function animate(delta) {
         globals.world.step(dt);
         globals.controls.update(Date.now() - globals.delta);
         // globals.rendererDEBUG.update();
-        globals.renderer.render(globals.scene, globals.topCamera, globals.renderTarget, true);
         globals.renderer.render(globals.scene, globals.camera);
         globals.delta = Date.now();
 

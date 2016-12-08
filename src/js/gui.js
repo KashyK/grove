@@ -41,7 +41,7 @@ module.exports.stats = player => {
         $('#gui-title').html('Map');
         const strMime = "image/jpeg";
         const imgData = require('./globals').renderer.domElement.toDataURL(strMime);
-        $('#gui-content').html(`<img src=${imgData}>`);
+        $('#gui-content').html(`<img src=${imgData} width=200>`);
     });
     $('#gui-p').click(() => {
         $('#gui-title').html('Player');
