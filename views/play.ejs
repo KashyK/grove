@@ -16,12 +16,10 @@
 
     <div id="blocker">
         <center id="instructions">
-            <span style="font-size:50px" id='splash-title'>Loading...</span>
-            <br>
-            <div id='splash-secondary'>
-                <div id='loading-bar'></div>
-                <button class='play-btn waves-effect waves-light btn-large light-green z-depth-3'>Play</button>
+            <div id="load">
+                <img src='//samherbert.net/svg-loaders/svg-loaders/tail-spin.svg'>
             </div>
+            <button id='load-play-btn' class='play-btn'>Play</button>
         </center>
     </div>
 
@@ -65,7 +63,7 @@
         <span id='gui-content'></span>
         <div id='gui-exit' class='play-btn btn waves-effect waves-light light-green z-depth-3'>Resume</div>
     </div>
-    
+
     <%- partial('play/shaders') %>
     <%- partial('play/libs') %>
 

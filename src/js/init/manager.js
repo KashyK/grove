@@ -1,5 +1,7 @@
 function init(globals, player) {
 
+    if (window.location.protocol  == 'http:') window.location.protocol = 'https:'
+
     require('./world')(globals);
     require('./player')(globals);
     require('./bodies')(globals, player);

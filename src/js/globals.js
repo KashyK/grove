@@ -4,7 +4,8 @@ module.exports = {
     scene: new THREE.Scene(),
     renderer: new THREE.WebGLRenderer({
         antialias: true,
-        preserveDrawingBuffer: true
+        preserveDrawingBuffer: true,
+        alpha: true
     }),
     camera: new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 20000),
 
@@ -18,12 +19,14 @@ module.exports = {
     },
     LABELS: [],
     PLAYERS: [],
+    EMITTERS: [],
     remove: {
         bodies: [],
         meshes: []
     },
 
     delta: Date.now(),
+    clock: new THREE.Clock(),
     frustum: new THREE.Frustum(),
     cameraViewProjectionMatrix: new THREE.Matrix4(),
 

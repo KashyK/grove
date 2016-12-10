@@ -51,7 +51,8 @@ module.exports = {
     scene: new THREE.Scene(),
     renderer: new THREE.WebGLRenderer({
         antialias: true,
-        preserveDrawingBuffer: true
+        preserveDrawingBuffer: true,
+        alpha: true
     }),
     camera: new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 20000),
 
@@ -65,12 +66,14 @@ module.exports = {
     },
     LABELS: [],
     PLAYERS: [],
+    EMITTERS: [],
     remove: {
         bodies: [],
         meshes: []
     },
 
     delta: Date.now(),
+    clock: new THREE.Clock(),
     frustum: new THREE.Frustum(),
     cameraViewProjectionMatrix: new THREE.Matrix4(),
 
@@ -150,22 +153,23 @@ module.exports.stats = function (player) {
 },{"./globals":2}],4:[function(require,module,exports){
 'use strict';
 
-/* global THREE, CANNON, $ */
+/* global THREE, CANNON, $, SPE */
 
 module.exports = function (globals, player) {
 
-    globals.scene.fog = new THREE.FogExp2(0x2080B6, 0.02);
+    globals.scene.fog = new THREE.FogExp2(0xFFFFFF, 0.02);
 
-    var ambient = new THREE.AmbientLight(0x111111);
-    globals.scene.add(ambient);
-
-    var light = new THREE.SpotLight(0xffffff, 2);
-    light.position.set(30, 10, 30);
+    var light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(50, 30, 40);
     light.castShadow = true;
 
     light.shadowCameraNear = globals.camera.near;
     light.shadowCameraFar = globals.camera.far;
-    light.shadowCameraFov = globals.camera.fov;
+    light.shadowCameraFov = 70;
+    light.shadowCameraLeft = -100;
+    light.shadowCameraRight = 100;
+    light.shadowCameraTop = 100;
+    light.shadowCameraBottom = -100;
 
     light.shadowMapBias = 0.0039;
     light.shadowMapDarkness = 0.5;
@@ -174,8 +178,9 @@ module.exports = function (globals, player) {
 
     light.shadowCameraVisible = true;
     globals.scene.add(light);
-
-    globals.scene.add(new THREE.AmbientLight(0x333333));
+    light.add(new THREE.Mesh(new THREE.CubeGeometry(5, 5, 5), new THREE.MeshBasicMaterial({
+        color: 0xFF0000
+    })));
 
     var uni = {
         time: {
@@ -188,38 +193,78 @@ module.exports = function (globals, player) {
 
     setInterval(function () {
         uni.time.value += 0.1;
+        var time = new Date().getTime() * 0.000015;
+        // var time = 2.1;
+        var nsin = Math.sin(time);
+        var ncos = Math.cos(time);
+        // set the sun
+        light.position.set(150 * nsin, 200 * nsin, 200 * ncos);
+
+        if (nsin > 0.2) // day
+            {
+                sky.material.uniforms.topColor.value.setRGB(0.25, 0.55, 1);
+                sky.material.uniforms.bottomColor.value.setRGB(1, 1, 1);
+                var f = 1;
+                light.intensity = f;
+                light.shadowDarkness = f * 0.7;
+            } else if (nsin < 0.2 && nsin > 0.0) {
+            var f = nsin / 0.2;
+            light.intensity = f;
+            light.shadowDarkness = f * 0.7;
+            sky.material.uniforms.topColor.value.setRGB(0.25 * f, 0.55 * f, 1 * f);
+            sky.material.uniforms.bottomColor.value.setRGB(1 * f, 1 * f, 1 * f);
+        } else // night
+            {
+                var f = 0;
+                light.intensity = f;
+                light.shadowDarkness = f * 0.7;
+                sky.material.uniforms.topColor.value.setRGB(0, 0, 0);
+                sky.material.uniforms.bottomColor.value.setRGB(0, 0, 0);
+            }
+
+        globals.scene.fog.color.copy(uniforms.bottomColor.value);
     }, 40);
 
-    var box = globals.box({
-        l: 2,
-        h: 3,
-        w: 0.01,
-        mat: new THREE.ShaderMaterial({
-            uniforms: uni,
-            vertexShader: document.getElementById('vertexShader').textContent,
-            fragmentShader: document.getElementById('portalShader').textContent
-        })
+    var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.2);
+    hemiLight.color.setHSL(0.6, 1, 0.6);
+    hemiLight.groundColor.setHSL(0.095, 1, 0.75);
+    hemiLight.position.set(0, 500, 0);
+    globals.scene.add(hemiLight);
+
+    var vertexShader = document.getElementById('V_SkyShader').textContent;
+    var fragmentShader = document.getElementById('F_SkyShader').textContent;
+    var uniforms = {
+        topColor: {
+            type: "c",
+            value: new THREE.Color(0x0077ff)
+        },
+        bottomColor: {
+            type: "c",
+            value: new THREE.Color(0xffffff)
+        },
+        offset: {
+            type: "f",
+            value: 33
+        },
+        exponent: {
+            type: "f",
+            value: 0.6
+        }
+    };
+    uniforms.topColor.value.copy(hemiLight.color);
+    globals.scene.fog.color.copy(uniforms.bottomColor.value);
+    var skyGeo = new THREE.SphereGeometry(4000, 32, 15);
+    var skyMat = new THREE.ShaderMaterial({
+        vertexShader: vertexShader,
+        fragmentShader: fragmentShader,
+        uniforms: uniforms,
+        side: THREE.BackSide
     });
-    box.body.position.set(0, 11, 8);
-
-    var imagePrefix = "img/skybox/";
-    var directions = ["px", "nx", "py", "ny", "pz", "nz"];
-    var imageSuffix = ".jpg";
-    var skyGeometry = new THREE.CubeGeometry(500, 500, 500);
-
-    var materialArray = [];
-    for (var i = 0; i < 6; i++) {
-        materialArray.push(new THREE.MeshBasicMaterial({
-            map: THREE.ImageUtils.loadTexture(imagePrefix + directions[i] + imageSuffix),
-            side: THREE.BackSide,
-            fog: false
-        }));
-    }var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
-    var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
-    globals.BODIES['player'].mesh.add(skyBox);
+    var sky = new THREE.Mesh(skyGeo, skyMat);
+    globals.BODIES['player'].mesh.add(sky);
 
     var loader = new THREE.ObjectLoader();
-    loader.load('/models/' + player.serverdata.acc.map + '/' + player.serverdata.acc.map + '.json', function (object) {
+    loader.load('/models/map/a-map.json', function (object) {
         globals.scene.add(object);
         object.castShadow = true;
         object.recieveShadow = true;
@@ -231,28 +276,36 @@ module.exports = function (globals, player) {
                     mass: 0,
                     material: globals.groundMaterial
                 });
+                if (child.name == 'B_Portal') {
+                    child.material = new THREE.ShaderMaterial({
+                        uniforms: uni,
+                        vertexShader: document.getElementById('V_PortalShader').textContent,
+                        fragmentShader: document.getElementById('F_PortalShader').textContent
+                    });
+                    child.add(new THREE.PointLight(0xFFFFFF, 1, 25, 2));
+                }
             }
         });
     });
-    var loader2 = new THREE.ObjectLoader();
-    loader2.load('/models/alchemy-table/alchemy-table.json', function (object) {
-        globals.scene.add(object);
-        var torch = new THREE.PointLight(0x00FF00, 0.15);
-        torch.position.set(0, 10, 10);
-        globals.scene.add(torch);
-        object.traverse(function (child) {
-            if (child instanceof THREE.Mesh) {
-                var _o = globals.load(child, {
-                    mass: 0,
-                    material: globals.groundMaterial
-                });
-                _o.mesh.position.y += 8.7;
-                _o.mesh.position.z += 20;
-                _o.body.position.y += 8.7;
-                _o.body.position.z += 20;
-            }
-        });
-    });
+    // let loader2 = new THREE.ObjectLoader();
+    // loader2.load(`/models/alchemy-table/alchemy-table.json`, (object) => {
+    //     globals.scene.add(object);
+    //     let torch = new THREE.PointLight(0x00FF00, 0.15);
+    //     torch.position.set(0, 10, 10);
+    //     globals.scene.add(torch);
+    //     object.traverse(child => {
+    //         if (child instanceof THREE.Mesh) {
+    //             let _o = globals.load(child, {
+    //                 mass: 0,
+    //                 material: globals.groundMaterial
+    //             });
+    //             _o.mesh.position.y += 8.7;
+    //             _o.mesh.position.z += 20;
+    //             _o.body.position.y += 8.7;
+    //             _o.body.position.z += 20;
+    //         }
+    //     });
+    // });
 };
 
 },{}],5:[function(require,module,exports){
@@ -360,6 +413,8 @@ module.exports = function () {
 
 function init(globals, player) {
 
+    if (window.location.protocol == 'http:') window.location.protocol = 'https:';
+
     require('./world')(globals);
     require('./player')(globals);
     require('./bodies')(globals, player);
@@ -436,7 +491,7 @@ module.exports = function (globals) {
     var split = false;
     if (split) globals.world.solver = new CANNON.SplitSolver(solver);else globals.world.solver = solver;
 
-    globals.world.gravity.set(0, -20, 0);
+    globals.world.gravity.set(0, -40, 0);
     globals.world.broadphase = new CANNON.NaiveBroadphase();
 };
 
@@ -669,10 +724,9 @@ require('./multiplayer')(globals, player);
 
 THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
     console.log(loaded + ' out of ' + total);
-    $('#loading-bar').width(loaded / total * 100 + '%').text(loaded + ' / ' + total + ' - ' + Math.floor(loaded / total * 100) + '%');
     if (loaded == total) {
-        $('#loading-bar').remove();
-        $('.play-btn').show();
+        $('#load').hide();
+        $('#load-play-btn').show();
         animate();
         require('./gui').quests();
     }
@@ -710,6 +764,10 @@ function animate(delta) {
         for (var _i = 0; _i < globals.BODIES['items'].length; _i++) {
             globals.BODIES['items'][_i].mesh.position.copy(globals.BODIES['items'][_i].body.position);
             globals.BODIES['items'][_i].mesh.quaternion.copy(globals.BODIES['items'][_i].body.quaternion);
+        }
+
+        for (var _key2 in globals.EMITTERS) {
+            globals.EMITTERS[_key2].tick(globals.clock.getDelta());
         }
 
         globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);

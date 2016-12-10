@@ -11,12 +11,9 @@ require('./multiplayer')(globals, player);
 
 THREE.DefaultLoadingManager.onProgress = (item, loaded, total) => {
     console.log(`${loaded} out of ${total}`);
-    $('#loading-bar')
-        .width(`${loaded / total * 100}%`)
-        .text(`${loaded} / ${total} - ${Math.floor(loaded / total * 100)}%`);
     if (loaded == total) {
-        $('#loading-bar').remove();
-        $('.play-btn').show();
+        $('#load').hide();
+        $('#load-play-btn').show();
         animate();
         require('./gui').quests();
     }
@@ -54,6 +51,10 @@ function animate(delta) {
         for (let i = 0; i < globals.BODIES['items'].length; i++) {
             globals.BODIES['items'][i].mesh.position.copy(globals.BODIES['items'][i].body.position);
             globals.BODIES['items'][i].mesh.quaternion.copy(globals.BODIES['items'][i].body.quaternion);
+        }
+
+        for (let key in globals.EMITTERS) {
+            globals.EMITTERS[key].tick(globals.clock.getDelta());
         }
 
         globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);

@@ -1,6 +1,6 @@
 /* global CANNON */
 
-module.exports = function (globals) {
+module.exports = (globals) => {
 
     var solver = new CANNON.GSSolver();
 
@@ -16,7 +16,7 @@ module.exports = function (globals) {
     else
         globals.world.solver = solver;
 
-    globals.world.gravity.set(0, -20, 0);
+    globals.world.gravity.set(0, -40, 0);
     globals.world.broadphase = new CANNON.NaiveBroadphase();
     
 };
