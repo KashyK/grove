@@ -13,7 +13,7 @@ THREE.DefaultLoadingManager.onProgress = (item, loaded, total) => {
     console.log(`${loaded} out of ${total}`);
     if (loaded == total) {
         $('#load').hide();
-        $('#load-play-btn').show();
+        $('.play-btn').show();
         animate();
         require('./gui').quests();
     }

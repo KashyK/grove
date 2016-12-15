@@ -1,18 +1,14 @@
 'use strict';
 
-let app, admin, compression, minify, http, io;
+let app, compression, http, io;
 
 app = require('express')();
-
-admin = require('sriracha');
 
 http = require('http').Server(app);
 
 io = require('socket.io')(http);
 
 compression = require('compression');
-
-minify = require('express-minify-html');
 
 let postal = require('postal');
 let events = postal.channel();
@@ -29,18 +25,16 @@ app.use(session({
   secret: 'keyboard cat'
 }));
 app.use(compression());
-app.use(minify({
-  override: true,
-  htmlMinifier: {
-    removeComments: true,
-    collapseWhitespace: true,
-    collapseBooleanAttributes: true,
-    removeAttributeQuotes: true,
-    removeEmptyAttributes: true,
-    minifyJS: true
-  }
-}));
+
 app.use(require('express')['static']('public'));
+
+function ensureSecure(req, res, next) {
+  if (req.secure) return next();
+  if (req.headers["x-forwarded-proto"] === "https") return next();
+  res.redirect('https://' + req.hostname + req.url); // express 4.x
+}
+
+app.all('*', ensureSecure); // at top of routing calls
 
 const User = require(__dirname + '/mongo')(app, events);
 require(__dirname + '/client-interact')(io, User);
@@ -83,11 +77,6 @@ app.get('/license', (req, res) => {
   res.sendFile(require('path').resolve('views/LICENSE.txt'));
   console.log('License Activated.');
 });
-
-app.use('/admin', admin({
-  username: 'admin',
-  password: 'porpose'
-}));
 
 http.listen(process.env.PORT || 8080, (listening) => {
   if (!process.env.NODE_ENV) {

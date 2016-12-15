@@ -10,7 +10,7 @@ module.exports = function (globals) {
         material: globals.groundMaterial
     });
     sphereBody.addShape(sphereShape);
-    sphereBody.position.set(0, 10, 0);
+    sphereBody.position.set(0, 50, 0);
     // sphereBody.linearDamping = 0.9;
     sphereBody.angularDamping = 0.9;
     globals.world.add(sphereBody);

@@ -2,7 +2,7 @@
 
 module.exports = (globals, player) => {
 
-    globals.scene.fog = new THREE.FogExp2(0xFFFFFF, 0.02);
+    globals.scene.fog = new THREE.Fog(0xFFFFFF, 2);
 
     let light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(50, 30, 40);
@@ -11,10 +11,10 @@ module.exports = (globals, player) => {
     light.shadowCameraNear = globals.camera.near;
     light.shadowCameraFar = globals.camera.far;
     light.shadowCameraFov = 70;
-    light.shadowCameraLeft = -100;
-    light.shadowCameraRight = 100;
-    light.shadowCameraTop = 100;
-    light.shadowCameraBottom = -100;
+    light.shadowCameraLeft = -800;
+    light.shadowCameraRight = 800;
+    light.shadowCameraTop = 300;
+    light.shadowCameraBottom = -300;
 
     light.shadowMapBias = 0.0039;
     light.shadowMapDarkness = 0.5;
@@ -23,9 +23,15 @@ module.exports = (globals, player) => {
 
     light.shadowCameraVisible = true;
     globals.scene.add(light);
-    light.add(new THREE.Mesh(new THREE.CubeGeometry(5, 5, 5), new THREE.MeshBasicMaterial({
-        color: 0xFF0000
-    })));
+    var spriteMaterial = new THREE.SpriteMaterial({
+        map: new THREE.ImageUtils.loadTexture('/img/glow.png'),
+        color: 0xffaaaa,
+        transparent: false,
+        blending: THREE.AdditiveBlending
+    });
+    var sprite = new THREE.Sprite(spriteMaterial);
+    sprite.scale.set(100, 100, 1.0);
+    light.add(sprite);
 
     let uni = {
         time: {
@@ -38,12 +44,12 @@ module.exports = (globals, player) => {
 
     setInterval(() => {
         uni.time.value += 0.1;
-        var time = new Date().getTime() * 0.000015;
-        // var time = 2.1;
+        // var time = new Date().getTime() * 0.000015;
+        var time = 2.1;
         var nsin = Math.sin(time);
         var ncos = Math.cos(time);
         // set the sun
-        light.position.set(150 * nsin, 200 * nsin, 200 * ncos);
+        light.position.set(450 * nsin, 600 * nsin, 600 * ncos);
 
         if (nsin > 0.2) // day
         {
@@ -52,13 +58,15 @@ module.exports = (globals, player) => {
             var f = 1;
             light.intensity = f;
             light.shadowDarkness = f * 0.7;
+            globals.scene.fog.color.set(0xCCCCCC);
         }
-        else if (nsin < 0.2 && nsin > 0.0) {
+        else if (nsin < 0.2 && nsin > 0.0) { // twilight
             var f = nsin / 0.2;
             light.intensity = f;
             light.shadowDarkness = f * 0.7;
             sky.material.uniforms.topColor.value.setRGB(0.25 * f, 0.55 * f, 1 * f);
             sky.material.uniforms.bottomColor.value.setRGB(1 * f, 1 * f, 1 * f);
+            globals.scene.fog.color.set(0xCCCCCC);
         }
         else // night
         {
@@ -67,9 +75,8 @@ module.exports = (globals, player) => {
             light.shadowDarkness = f * 0.7;
             sky.material.uniforms.topColor.value.setRGB(0, 0, 0);
             sky.material.uniforms.bottomColor.value.setRGB(0, 0, 0);
+            globals.scene.fog.color.copy(uniforms.bottomColor.value);
         }
-
-        globals.scene.fog.color.copy(uniforms.bottomColor.value);
 
     }, 40);
 
@@ -113,7 +120,7 @@ module.exports = (globals, player) => {
     globals.BODIES['player'].mesh.add(sky);
 
     let loader = new THREE.ObjectLoader();
-    loader.load(`/models/map/a-map.json`, object => {
+    loader.load(`/models/map/skjar-isles.json`, object => {
         globals.scene.add(object);
         object.castShadow = true;
         object.recieveShadow = true;
@@ -121,7 +128,7 @@ module.exports = (globals, player) => {
             if (child instanceof THREE.Mesh) {
                 child.castShadow = true;
                 child.recieveShadow = true;
-                let _o = globals.load(child, {
+                if (!/NP/gi.test(child.name)) globals.load(child, {
                     mass: 0,
                     material: globals.groundMaterial
                 });
@@ -136,24 +143,5 @@ module.exports = (globals, player) => {
             }
         });
     });
-    // let loader2 = new THREE.ObjectLoader();
-    // loader2.load(`/models/alchemy-table/alchemy-table.json`, (object) => {
-    //     globals.scene.add(object);
-    //     let torch = new THREE.PointLight(0x00FF00, 0.15);
-    //     torch.position.set(0, 10, 10);
-    //     globals.scene.add(torch);
-    //     object.traverse(child => {
-    //         if (child instanceof THREE.Mesh) {
-    //             let _o = globals.load(child, {
-    //                 mass: 0,
-    //                 material: globals.groundMaterial
-    //             });
-    //             _o.mesh.position.y += 8.7;
-    //             _o.mesh.position.z += 20;
-    //             _o.body.position.y += 8.7;
-    //             _o.body.position.z += 20;
-    //         }
-    //     });
-    // });
 
 };
