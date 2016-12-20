@@ -1,7 +1,9 @@
+/* global $, Materialize */
+
 module.exports = (globals, player) => {
-    
-    $(window).bind("online", () => require('./gui')('Online', 'Connection restored')); 
-    $(window).bind("offline", () => require('./gui')('Offline', 'Connection lost'));
+
+    $(window).bind("online", () => Materialize.toast('Connection restored', 4000));
+    $(window).bind("offline", () => Materialize.toast('Connection lost', 4000));
 
     globals.socket.emit('client-credentials', {
         username: window.__D.username,
@@ -41,6 +43,7 @@ module.exports = (globals, player) => {
                 data
             });
             globals.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
+            Materialize.toast(`${data.acc.username} joined`, 4000);
         }
     });
 
@@ -48,6 +51,7 @@ module.exports = (globals, player) => {
 
         globals.scene.remove(playerForId(data.id).mesh);
         globals.world.remove(playerForId(data.id).body);
+        Materialize.toast(`${data.acc.username} left`, 4000);
         console.log(data.id + ' disconnected');
 
     });
@@ -89,14 +93,10 @@ module.exports = (globals, player) => {
 
     globals.socket.on('hit', data => {
         if (data.id == player.id) player.hp.val--;
-        if (player.hp.val <= 0) {
-            alert('Why excuse me fine sir, but it appears that you are dead!');
-            globals.socket.disconnect();
-        }
     });
 
 
-    var updatePlayerData = function() {
+    var updatePlayerData = () => {
 
         player.serverdata.x = globals.BODIES['player'].body.position.x;
         player.serverdata.y = globals.BODIES['player'].body.position.y;

@@ -705,15 +705,17 @@ function onWindowResize() {
 }
 
 },{"./globals":2,"./gui":3,"./multiplayer":10,"./player":11,"./shooting":12}],10:[function(require,module,exports){
-'use strict';
+"use strict";
+
+/* global $, Materialize */
 
 module.exports = function (globals, player) {
 
     $(window).bind("online", function () {
-        return require('./gui')('Online', 'Connection restored');
+        return Materialize.toast('Connection restored', 4000);
     });
     $(window).bind("offline", function () {
-        return require('./gui')('Offline', 'Connection lost');
+        return Materialize.toast('Connection lost', 4000);
     });
 
     globals.socket.emit('client-credentials', {
@@ -753,6 +755,7 @@ module.exports = function (globals, player) {
                 data: data
             });
             globals.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
+            Materialize.toast(data.acc.username + " joined", 4000);
         }
     });
 
@@ -760,6 +763,7 @@ module.exports = function (globals, player) {
 
         globals.scene.remove(playerForId(data.id).mesh);
         globals.world.remove(playerForId(data.id).body);
+        Materialize.toast(data.acc.username + " left", 4000);
         console.log(data.id + ' disconnected');
     });
 
@@ -799,10 +803,6 @@ module.exports = function (globals, player) {
 
     globals.socket.on('hit', function (data) {
         if (data.id == player.id) player.hp.val--;
-        if (player.hp.val <= 0) {
-            alert('Why excuse me fine sir, but it appears that you are dead!');
-            globals.socket.disconnect();
-        }
     });
 
     var updatePlayerData = function updatePlayerData() {
@@ -839,7 +839,7 @@ module.exports = function (globals, player) {
     globals.playerForId = playerForId;
 };
 
-},{"./gui":3,"./init/manager":5}],11:[function(require,module,exports){
+},{"./init/manager":5}],11:[function(require,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
