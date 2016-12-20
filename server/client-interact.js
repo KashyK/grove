@@ -17,7 +17,7 @@ module.exports = (io, User, conf_url) => {
         // check for potential errors
         if (err) console.err(err);
         // user not found (in case this ever happened)
-        if (!o) console.error('USER NOT FOUND FOR MULTIPLAYER    ');
+        if (!o) console.error('USER NOT FOUND FOR MULTIPLAYER');
 
         // add the new player to list of players
         players.addPlayer(socket.id, o);
@@ -68,8 +68,8 @@ module.exports = (io, User, conf_url) => {
         // client changed maps
         socket.on('map-update', dat => {
           User.findOne({
-            username: dat.user.username,
-            password: dat.user.password
+            username: dat.username,
+            password: dat.password
           }, (err, obj) => {
             if (err) console.log('ERROR!    ');
             if (obj) {

@@ -1,4 +1,7 @@
 module.exports = (globals, player) => {
+    
+    $(window).bind("online", () => alert('Back online now.')); 
+    $(window).bind("offline", () => alert('You are offline!'));
 
     globals.socket.emit('client-credentials', {
         username: window.__D.username,
@@ -76,22 +79,24 @@ module.exports = (globals, player) => {
         ball.body.velocity.set(vel.x, vel.y, vel.z);
         ball.mesh.position.set(pos.x, pos.y, pos.z);
 
-        ball.body.addEventListener("collide", function (event) {
-            globals.remove.bodies.push(ball.body);
-            globals.remove.meshes.push(ball.mesh);
+        ball.body.addEventListener("collide", event => {
+            setTimeout(() => {
+                globals.remove.bodies.push(ball.body);
+                globals.remove.meshes.push(ball.mesh);
+            }, 1500);
         });
     });
 
-    globals.socket.on('hit', (data) => {
-        if (data.id == player.id) player.hp -= data.dmg;
-        if (player.hp <= 0) {
+    globals.socket.on('hit', data => {
+        if (data.id == player.id) player.hp.val--;
+        if (player.hp.val <= 0) {
             alert('Why excuse me fine sir, but it appears that you are dead!');
             globals.socket.disconnect();
         }
     });
 
 
-    var updatePlayerData = function () {
+    var updatePlayerData = function() {
 
         player.serverdata.x = globals.BODIES['player'].body.position.x;
         player.serverdata.y = globals.BODIES['player'].body.position.y;
@@ -112,15 +117,13 @@ module.exports = (globals, player) => {
         return globals.PLAYERS[index];
     };
 
-    globals.socket.on('clear', function () {
+    globals.socket.on('clear', () => {
         for (var i = globals.scene.children.length - 1; i >= 0; i--) {
             globals.scene.remove(globals.scene.children[i]);
         }
     });
 
-    globals.socket.on('reload', function () {
-        window.location.reload();
-    });
+    globals.socket.on('reload', () => window.location.reload());
 
     globals.updatePlayerData = updatePlayerData;
     globals.playerForId = playerForId;

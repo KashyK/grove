@@ -62,12 +62,26 @@ module.exports = (globals, player) => {
                 },
                 vel: {
                     x: ball.body.velocity.x,
-                    y: ball.body.velocity.y, 
+                    y: ball.body.velocity.y,
                     z: ball.body.velocity.z
                 },
             });
         }
     }
 
-    window.addEventListener('click', shoot);
+    $(document).on('click', shoot);
+    $(document).on('keydown', event => {
+        if (event.keyCode == 69) {
+            let raycaster = new THREE.Raycaster();
+            raycaster.set(globals.camera.getWorldPosition(), globals.camera.getWorldDirection());
+            let intersects = raycaster.intersectObjects(globals.scene.children, true);
+            if (intersects.length > 0) {
+                if (/door/gi.test(intersects[0].object.name)) globals.socket.emit('map-update', {
+                    username: player.serverdata.acc.username,
+                    password: player.serverdata.acc.password,
+                    map: 'skjar-isles'
+                });
+            }
+        }
+    });
 };

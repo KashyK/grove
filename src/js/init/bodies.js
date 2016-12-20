@@ -120,7 +120,7 @@ module.exports = (globals, player) => {
     globals.BODIES['player'].mesh.add(sky);
 
     let loader = new THREE.ObjectLoader();
-    loader.load(`/models/map/skjar-isles.json`, object => {
+    loader.load(`/models/${player.serverdata.acc.map}/${player.serverdata.acc.map}.json`, object => {
         globals.scene.add(object);
         object.castShadow = true;
         object.recieveShadow = true;

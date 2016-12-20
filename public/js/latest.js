@@ -97,7 +97,7 @@ module.exports.label = load.label;
 module.exports.ball = load.ball;
 module.exports.plane = load.plane;
 
-},{"./load":9}],3:[function(require,module,exports){
+},{"./load":8}],3:[function(require,module,exports){
 'use strict';
 
 /* global $ */
@@ -119,7 +119,7 @@ module.exports.quests = function () {
         $('#quest-alert').animate({
             'right': '-280px'
         }, 1000);
-    }, 5000);
+    }, 10000);
 };
 
 // quests, inv, map, player
@@ -272,7 +272,7 @@ module.exports = function (globals, player) {
     globals.BODIES['player'].mesh.add(sky);
 
     var loader = new THREE.ObjectLoader();
-    loader.load('/models/map/skjar-isles.json', function (object) {
+    loader.load('/models/' + player.serverdata.acc.map + '/' + player.serverdata.acc.map + '.json', function (object) {
         globals.scene.add(object);
         object.castShadow = true;
         object.recieveShadow = true;
@@ -300,106 +300,6 @@ module.exports = function (globals, player) {
 },{}],5:[function(require,module,exports){
 'use strict';
 
-/* global $ */
-
-module.exports = function () {
-    $(document).ready(function () {
-        $('#splash-title').text('In the beginning, a Grove Tree was planted...');
-        setTimeout(function () {
-
-            $('#splash-title').fadeOut(950);
-            setTimeout(function () {
-                $('#splash-title').text('It spread to make multiple trees, eventually becoming The Grove...');
-            }, 950);
-            $('#splash-title').fadeIn(950);
-
-            setTimeout(function () {
-
-                $('#splash-title').fadeOut(950);
-                setTimeout(function () {
-                    $('#splash-title').text('However, §ome were jealous of this extreme power...');
-                }, 950);
-                $('#splash-title').fadeIn(950);
-
-                setTimeout(function () {
-
-                    $('#splash-title').fadeOut(950);
-                    setTimeout(function () {
-                        $('#splash-title').text('12 Alchemists, of heightened skill...');
-                    }, 950);
-                    $('#splash-title').fadeIn(950);
-
-                    setTimeout(function () {
-
-                        $('#splash-title').fadeOut(950);
-                        setTimeout(function () {
-                            $('#splash-title').text('They attempted to create a power of their own, to combat those who had power...');
-                        }, 950);
-                        $('#splash-title').fadeIn(950);
-
-                        setTimeout(function () {
-
-                            $('#splash-title').fadeOut(950);
-                            setTimeout(function () {
-                                $('#splash-title').text('Eventually, they succeeded, but...');
-                            }, 950);
-                            $('#splash-title').fadeIn(950);
-
-                            setTimeout(function () {
-
-                                $('#splash-title').fadeOut(950);
-                                setTimeout(function () {
-                                    $('#splash-title').text('Their creation consumed them, turning them into unimaginable demons...');
-                                }, 950);
-                                $('#splash-title').fadeIn(950);
-
-                                setTimeout(function () {
-
-                                    $('#splash-title').fadeOut(950);
-                                    setTimeout(function () {
-                                        $('#splash-title').text('Finally, put to rest by The Developer, they were banished from these lands...');
-                                    }, 950);
-                                    $('#splash-title').fadeIn(950);
-
-                                    setTimeout(function () {
-
-                                        $('#splash-title').fadeOut(950);
-                                        setTimeout(function () {
-                                            $('#splash-title').text('Now, they are back, attacking the original Tree and its power...');
-                                        }, 950);
-                                        $('#splash-title').fadeIn(950);
-
-                                        setTimeout(function () {
-
-                                            $('#splash-title').fadeOut(950);
-                                            setTimeout(function () {
-                                                $('#splash-title').text('And it is up to you to stop them.');
-                                            }, 950);
-                                            $('#splash-title').fadeIn(950);
-
-                                            setTimeout(function () {
-
-                                                $('#splash-title').fadeOut(950);
-                                                setTimeout(function () {
-                                                    $('#splash-title').text('BLARG');
-                                                }, 950);
-                                                $('#splash-title').fadeIn(950);
-                                            }, 5000);
-                                        }, 5000);
-                                    }, 5000);
-                                }, 5000);
-                            }, 5000);
-                        }, 5000);
-                    }, 5000);
-                }, 5000);
-            }, 5000);
-        }, 5000);
-    });
-};
-
-},{}],6:[function(require,module,exports){
-'use strict';
-
 function init(globals, player) {
 
     if (window.location.protocol == 'http:') window.location.protocol = 'https:';
@@ -407,7 +307,6 @@ function init(globals, player) {
     require('./world')(globals);
     require('./player')(globals);
     require('./bodies')(globals, player);
-    require('./dom')(globals);
 
     globals.renderer.shadowMapEnabled = true;
     globals.renderer.shadowMapSoft = true;
@@ -428,7 +327,7 @@ function init(globals, player) {
 
 module.exports = init;
 
-},{"./bodies":4,"./dom":5,"./player":7,"./world":8}],7:[function(require,module,exports){
+},{"./bodies":4,"./player":6,"./world":7}],6:[function(require,module,exports){
 'use strict';
 
 /* global THREE, CANNON, PointerLockControls */
@@ -462,7 +361,7 @@ module.exports = function (globals) {
     window.controls = globals.controls;
 };
 
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
 /* global CANNON */
@@ -484,7 +383,7 @@ module.exports = function (globals) {
     globals.world.broadphase = new CANNON.NaiveBroadphase();
 };
 
-},{}],9:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 /* global CANNON, THREE */
@@ -697,7 +596,7 @@ module.exports.label = label;
 module.exports.ball = ball;
 module.exports.plane = plane;
 
-},{"./globals":2}],10:[function(require,module,exports){
+},{"./globals":2}],9:[function(require,module,exports){
 'use strict';
 
 /* global $, THREE */
@@ -791,10 +690,17 @@ function onWindowResize() {
     globals.renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-},{"./globals":2,"./gui":3,"./multiplayer":11,"./player":12,"./shooting":13}],11:[function(require,module,exports){
-'use strict';
+},{"./globals":2,"./gui":3,"./multiplayer":10,"./player":11,"./shooting":12}],10:[function(require,module,exports){
+"use strict";
 
 module.exports = function (globals, player) {
+
+    $(window).bind("online", function () {
+        return alert('Back online now.');
+    });
+    $(window).bind("offline", function () {
+        return alert('You are offline!');
+    });
 
     globals.socket.emit('client-credentials', {
         username: window.__D.username,
@@ -870,14 +776,16 @@ module.exports = function (globals, player) {
         ball.mesh.position.set(pos.x, pos.y, pos.z);
 
         ball.body.addEventListener("collide", function (event) {
-            globals.remove.bodies.push(ball.body);
-            globals.remove.meshes.push(ball.mesh);
+            setTimeout(function () {
+                globals.remove.bodies.push(ball.body);
+                globals.remove.meshes.push(ball.mesh);
+            }, 1500);
         });
     });
 
     globals.socket.on('hit', function (data) {
-        if (data.id == player.id) player.hp -= data.dmg;
-        if (player.hp <= 0) {
+        if (data.id == player.id) player.hp.val--;
+        if (player.hp.val <= 0) {
             alert('Why excuse me fine sir, but it appears that you are dead!');
             globals.socket.disconnect();
         }
@@ -910,14 +818,14 @@ module.exports = function (globals, player) {
     });
 
     globals.socket.on('reload', function () {
-        window.location.reload();
+        return window.location.reload();
     });
 
     globals.updatePlayerData = updatePlayerData;
     globals.playerForId = playerForId;
 };
 
-},{"./init/manager":6}],12:[function(require,module,exports){
+},{"./init/manager":5}],11:[function(require,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -956,7 +864,7 @@ window.addEventListener('keydown', function (e) {
 
 module.exports = player;
 
-},{"./gui":3}],13:[function(require,module,exports){
+},{"./gui":3}],12:[function(require,module,exports){
 'use strict';
 
 /* global THREE, CANNON */
@@ -1026,7 +934,21 @@ module.exports = function (globals, player) {
         }
     }
 
-    window.addEventListener('click', shoot);
+    $(document).on('click', shoot);
+    $(document).on('keydown', function (event) {
+        if (event.keyCode == 69) {
+            var raycaster = new THREE.Raycaster();
+            raycaster.set(globals.camera.getWorldPosition(), globals.camera.getWorldDirection());
+            var intersects = raycaster.intersectObjects(globals.scene.children, true);
+            if (intersects.length > 0) {
+                if (/door/gi.test(intersects[0].object.name)) globals.socket.emit('map-update', {
+                    username: player.serverdata.acc.username,
+                    password: player.serverdata.acc.password,
+                    map: 'skjar-isles'
+                });
+            }
+        }
+    });
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12]);

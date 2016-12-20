@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Play | The Grove</title>
+    <title>The Grove</title>
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
@@ -19,7 +19,7 @@
             <div id="load">
                 <img src='//samherbert.net/svg-loaders/svg-loaders/tail-spin.svg'>
             </div>
-            <button id='load-play-btn' class='play-btn'>Play</button>
+            <button id='load-play-btn' class='play-btn btn waves-effect waves-light light-green z-depth-3'>Play</button>
         </center>
     </div>
 
@@ -63,6 +63,8 @@
         <span id='gui-content'></span>
         <div id='gui-exit' class='play-btn btn waves-effect waves-light light-green z-depth-3'>Resume</div>
     </div>
+  
+</div>
 
     <%- partial('play/shaders') %>
     <%- partial('play/libs') %>

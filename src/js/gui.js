@@ -17,7 +17,7 @@ module.exports.quests = () => {
         $('#quest-alert').animate({
             'right': '-280px'
         }, 1000);
-    }, 5000);
+    }, 10000);
 };
 
 // quests, inv, map, player
