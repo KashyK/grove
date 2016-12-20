@@ -1,5 +1,4 @@
 var blocker = document.getElementById('blocker');
-var instructions = document.getElementById('instructions');
 var hud = document.getElementById('hud');
 
 var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
@@ -8,7 +7,7 @@ if (havePointerLock) {
 
     var element = document.body;
 
-    var pointerlockchange = function (event) {
+    var pointerlockchange = function(event) {
 
         if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
 
@@ -39,9 +38,7 @@ if (havePointerLock) {
 
     }
 
-    var pointerlockerror = function (event) {
-        instructions.style.display = '';
-    }
+    var pointerlockerror = function(event) {}
 
     // Hook pointer lock state change events
     document.addEventListener('pointerlockchange', pointerlockchange, false);
@@ -56,14 +53,12 @@ if (havePointerLock) {
 
         toggleFullScreen();
 
-        instructions.style.display = 'none';
-
         // Ask the browser to lock the pointer
         element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
 
         if (/Firefox/i.test(navigator.userAgent)) {
 
-            var fullscreenchange = function (event) {
+            var fullscreenchange = function(event) {
 
                 if (document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element) {
 
@@ -86,7 +81,7 @@ if (havePointerLock) {
         else {
 
             element.requestPointerLock();
-            
+
             element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
 
             element.requestFullscreen();
@@ -99,9 +94,7 @@ if (havePointerLock) {
 
 }
 else {
-
-    instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API. Please open in chrome';
-
+    alert('Your browser doesn\'t support the HTML5 PointerLock API!')
 }
 
 function toggleFullScreen() {

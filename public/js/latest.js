@@ -102,10 +102,21 @@ module.exports.plane = load.plane;
 
 /* global $ */
 
+module.exports = function (title, content) {
+    $('#quest-alert').css('right', '0px');
+    $('#quest-alert > p').text(title);
+    $('#quest-alert > small').text(content);
+    setTimeout(function () {
+        $('#quest-alert').animate({
+            'right': '-280px'
+        }, 1000);
+    }, 5000);
+};
+
 module.exports.init = function () {
     $('#gui').toggle();
     $('#underlay').toggle();
-    $('.play-btn').hide();
+    $('#load-play-btn').hide();
     $('#gui-exit').click(function () {
         $('#gui').toggle();
         $('#underlay').toggle();
@@ -613,16 +624,14 @@ require('./multiplayer')(globals, player);
 THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
     console.log(loaded + ' out of ' + total);
     if (loaded == total) {
-        $('#load').hide();
-        $('.play-btn').show();
+        $('#spinner').hide();
+        $('#load-play-btn, .play-btn').show();
         animate();
         require('./gui').quests();
     }
 };
 
 function animate(delta) {
-
-    requestAnimationFrame(animate);
 
     if (controls.enabled) {
 
@@ -659,12 +668,15 @@ function animate(delta) {
         }
 
         globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
+        if (globals.BODIES['player'].body.position.y < -400) player.hp.val--;
 
         $('#health-bar').val(player.hp.val / player.hp.max * 100 > 0 ? player.hp.val / player.hp.max * 100 : 0);
         $('#health').text((player.hp.val > 0 ? player.hp.val : 0) + ' HP');
         if (player.hp.val <= 0) {
             globals.socket.disconnect();
-            alert('You have died.');
+            $('#blocker').fadeIn(5000);
+            $('#load').show().html('<h1>YOU HAVE PERISHED</h1>');
+            return;
         }
 
         globals.world.step(dt);
@@ -678,6 +690,8 @@ function animate(delta) {
             globals.socket.emit('updatePosition', player.serverdata);
         }
     }
+
+    requestAnimationFrame(animate);
 }
 
 window.addEventListener('resize', onWindowResize, false);
@@ -691,15 +705,15 @@ function onWindowResize() {
 }
 
 },{"./globals":2,"./gui":3,"./multiplayer":10,"./player":11,"./shooting":12}],10:[function(require,module,exports){
-"use strict";
+'use strict';
 
 module.exports = function (globals, player) {
 
     $(window).bind("online", function () {
-        return alert('Back online now.');
+        return require('./gui')('Online', 'Connection restored');
     });
     $(window).bind("offline", function () {
-        return alert('You are offline!');
+        return require('./gui')('Offline', 'Connection lost');
     });
 
     globals.socket.emit('client-credentials', {
@@ -825,7 +839,7 @@ module.exports = function (globals, player) {
     globals.playerForId = playerForId;
 };
 
-},{"./init/manager":5}],11:[function(require,module,exports){
+},{"./gui":3,"./init/manager":5}],11:[function(require,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }

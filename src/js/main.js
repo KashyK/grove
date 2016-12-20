@@ -12,16 +12,14 @@ require('./multiplayer')(globals, player);
 THREE.DefaultLoadingManager.onProgress = (item, loaded, total) => {
     console.log(`${loaded} out of ${total}`);
     if (loaded == total) {
-        $('#load').hide();
-        $('.play-btn').show();
+        $('#spinner').hide();
+        $('#load-play-btn, .play-btn').show();
         animate();
         require('./gui').quests();
     }
 };
 
 function animate(delta) {
-
-    requestAnimationFrame(animate);
 
     if (controls.enabled) {
 
@@ -58,13 +56,16 @@ function animate(delta) {
         }
 
         globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
+        if(globals.BODIES['player'].body.position.y < -400) player.hp.val--;
 
         $('#health-bar')
             .val(player.hp.val / player.hp.max * 100 > 0 ? player.hp.val / player.hp.max * 100 : 0);
         $('#health').text(`${player.hp.val > 0 ? player.hp.val : 0} HP`);
         if (player.hp.val <= 0) {
             globals.socket.disconnect();
-            alert('You have died.');
+            $('#blocker').fadeIn(5000);
+            $('#load').show().html('<h1>YOU HAVE PERISHED</h1>');
+            return;
         }
 
         globals.world.step(dt);
@@ -78,6 +79,8 @@ function animate(delta) {
             globals.socket.emit('updatePosition', player.serverdata);
         }
     }
+    
+    requestAnimationFrame(animate);
 
 }
 

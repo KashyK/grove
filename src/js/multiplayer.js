@@ -1,7 +1,7 @@
 module.exports = (globals, player) => {
     
-    $(window).bind("online", () => alert('Back online now.')); 
-    $(window).bind("offline", () => alert('You are offline!'));
+    $(window).bind("online", () => require('./gui')('Online', 'Connection restored')); 
+    $(window).bind("offline", () => require('./gui')('Offline', 'Connection lost'));
 
     globals.socket.emit('client-credentials', {
         username: window.__D.username,

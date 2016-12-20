@@ -1,9 +1,20 @@
 /* global $ */
 
+module.exports = (title, content) => {
+    $('#quest-alert').css('right', '0px');
+    $('#quest-alert > p').text(title);
+    $('#quest-alert > small').text(content);
+    setTimeout(function() {
+        $('#quest-alert').animate({
+            'right': '-280px'
+        }, 1000);
+    }, 5000);
+};
+
 module.exports.init = () => {
     $('#gui').toggle();
     $('#underlay').toggle();
-    $('.play-btn').hide();
+    $('#load-play-btn').hide();
     $('#gui-exit').click(() => {
         $('#gui').toggle();
         $('#underlay').toggle();
