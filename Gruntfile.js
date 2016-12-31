@@ -58,6 +58,7 @@ module.exports = function (grunt) {
 
     // Runnable tasks.
     grunt.registerTask('build', ['browserify', 'uglify', 'sass']);
+    grunt.registerTask('js', ['browserify', 'uglify', 'watch']);
     grunt.registerTask('default', ['browserify', 'uglify', 'sass', 'watch']);
 
 };

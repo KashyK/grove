@@ -1,10 +1,12 @@
 'use strict';
 
-let app, compression, http, io;
+let app, compression, helmet, http, io;
 
 app = require('express')();
 
 http = require('http').Server(app);
+
+helmet = require('helmet');
 
 io = require('socket.io')(http);
 
@@ -22,9 +24,12 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(session({
-  secret: 'keyboard cat'
+  secret: 'ziggity zaggity',
+  name: 'A Pretty Cool Session',
+  secure: true
 }));
 app.use(compression());
+app.use(helmet());
 
 app.use(require('express')['static']('public'));
 

@@ -1,4 +1,4 @@
-/* global THREE, CANNON */
+/* global THREE, CANNON, io */
 
 module.exports = {
     scene: new THREE.Scene(),
@@ -20,9 +20,11 @@ module.exports = {
     LABELS: [],
     PLAYERS: [],
     EMITTERS: [],
+    TWEENS: [],
     remove: {
         bodies: [],
-        meshes: []
+        meshes: [],
+        tweens: []
     },
 
     delta: Date.now(),

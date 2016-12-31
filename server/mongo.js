@@ -1,6 +1,5 @@
 'use strict';
 module.exports = (app, events) => {
-    const items = require(__dirname + '/items');
     let mongoose = require('mongoose');
     let db = mongoose.connection;
     let User = mongoose.model('User', {
@@ -83,7 +82,7 @@ module.exports = (app, events) => {
             password: require('md5')(req.body.password),
             class: req.body.class,
             race: req.body.race,
-            inventory: [items.weapons['rock']],
+            inventory: [],
             map: 'tutorial',
             level: 1,
             status: 'u.' + Date.now()

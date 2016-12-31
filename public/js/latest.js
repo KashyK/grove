@@ -45,7 +45,7 @@ var dave = new AI();
 },{}],2:[function(require,module,exports){
 "use strict";
 
-/* global THREE, CANNON */
+/* global THREE, CANNON, io */
 
 module.exports = {
     scene: new THREE.Scene(),
@@ -67,9 +67,11 @@ module.exports = {
     LABELS: [],
     PLAYERS: [],
     EMITTERS: [],
+    TWEENS: [],
     remove: {
         bodies: [],
-        meshes: []
+        meshes: [],
+        tweens: []
     },
 
     delta: Date.now(),
@@ -97,7 +99,7 @@ module.exports.label = load.label;
 module.exports.ball = load.ball;
 module.exports.plane = load.plane;
 
-},{"./load":8}],3:[function(require,module,exports){
+},{"./load":9}],3:[function(require,module,exports){
 'use strict';
 
 /* global $ */
@@ -146,7 +148,14 @@ module.exports.stats = function (player) {
     });
     $('#gui-i').click(function () {
         $('#gui-title').html('Inventory');
-        $('#gui-content').html('Inventory items');
+        var txt = void 0;
+        for (var key in player.inventory) {
+            txt += '<span class=inv-item data-item=' + player.inventory[key] + '>' + player.inventory[key].name + '</span>';
+        }$('#gui-content').html(txt);
+        $('.inv-item').click(function () {
+            return alert(JSON.stringify($(undefined).data('item')));
+        });
+        txt = null;
     });
     $('#gui-m').click(function () {
         $('#gui-title').html('Map');
@@ -177,9 +186,9 @@ module.exports = function (globals, player) {
     light.shadowCameraNear = globals.camera.near;
     light.shadowCameraFar = globals.camera.far;
     light.shadowCameraFov = 70;
-    light.shadowCameraLeft = -800;
-    light.shadowCameraRight = 800;
-    light.shadowCameraTop = 300;
+    light.shadowCameraLeft = -400;
+    light.shadowCameraRight = 400;
+    light.shadowCameraTop = 100;
     light.shadowCameraBottom = -300;
 
     light.shadowMapBias = 0.0039;
@@ -306,6 +315,12 @@ module.exports = function (globals, player) {
             }
         });
     });
+
+    var tween = new TWEEN.Tween(globals.camera.position).to({
+        y: [-0.1, 0]
+    }, 2000).repeat(Infinity).yoyo().start();
+
+    globals.TWEENS.push(tween);
 };
 
 },{}],5:[function(require,module,exports){
@@ -395,6 +410,50 @@ module.exports = function (globals) {
 };
 
 },{}],8:[function(require,module,exports){
+'use strict';
+
+/* global $ */
+
+var ProtoTree = require('rpg-tools/lib/ProtoTree'),
+    pt = null;
+
+$.getJSON('https://grove.nanoscaleapi.io/base.json', function (base) {
+    $.getJSON('https://grove.nanoscaleapi.io/weapons.json', function (weapons) {
+        $.getJSON('https://grove.nanoscaleapi.io/materials.json', function (materials) {
+            Object.assign(base, weapons, materials);
+            pt = new ProtoTree(base);
+            module.exports = pt;
+
+            // let s = setUpSword(0, 'ebony', 'steel');
+            // alert(`You equipped an ${s.name}, dealing ${s.dmg} damage with ${s.spd} speed!`);
+        });
+    });
+});
+
+function setUpComponent(comp, mat) {
+    var c = pt.get(comp),
+        m = pt.get(mat);
+    c.mat = m;
+    c.dmg = m.dmg;
+    c.spd = m.spd;
+    c.dur = m.dur;
+    c.name = m.name + c.name;
+    return c;
+}
+
+function setUpSword(type, mat1, mat2) {
+    var sword = pt.get(type ? 'longsword' : 'shortsword'),
+        blade = setUpComponent('@blade', mat1),
+        handle = setUpComponent('@handle', mat2);
+    sword.blade = blade;
+    sword.handle = handle;
+    sword.name = blade.mat.name + ' ' + sword.name;
+    sword.dmg = (blade.dmg + handle.dmg) / 2;
+    sword.spd = (blade.spd + handle.spd) / 2;
+    return sword;
+}
+
+},{"rpg-tools/lib/ProtoTree":14}],9:[function(require,module,exports){
 'use strict';
 
 /* global CANNON, THREE */
@@ -607,7 +666,7 @@ module.exports.label = label;
 module.exports.ball = ball;
 module.exports.plane = plane;
 
-},{"./globals":2}],9:[function(require,module,exports){
+},{"./globals":2}],10:[function(require,module,exports){
 'use strict';
 
 /* global $, THREE */
@@ -617,6 +676,7 @@ var player = require('./player');
 
 var dt = 1 / 60;
 
+require('./items');
 require('./gui').init();
 require('./shooting')(globals, player);
 require('./multiplayer')(globals, player);
@@ -633,12 +693,12 @@ THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
 
 function animate(delta) {
 
-    if (controls.enabled) {
+    if (window.controls && window.controls.enabled) {
 
-        globals.camera.updateMatrixWorld(); // make sure the camera matrix is updated
-        globals.camera.matrixWorldInverse.getInverse(globals.camera.matrixWorld);
-        globals.cameraViewProjectionMatrix.multiplyMatrices(globals.camera.projectionMatrix, globals.camera.matrixWorldInverse);
-        globals.frustum.setFromMatrix(globals.cameraViewProjectionMatrix);
+        // globals.camera.updateMatrixWorld(); // make sure the camera matrix is updated
+        // globals.camera.matrixWorldInverse.getInverse(globals.camera.matrixWorld);
+        // globals.cameraViewProjectionMatrix.multiplyMatrices(globals.camera.projectionMatrix, globals.camera.matrixWorldInverse);
+        // globals.frustum.setFromMatrix(globals.cameraViewProjectionMatrix);
 
         if (globals.remove.bodies.length && globals.remove.meshes.length) {
             for (var key in globals.remove.bodies) {
@@ -648,6 +708,11 @@ function animate(delta) {
             for (var _key in globals.remove.meshes) {
                 globals.scene.remove(globals.remove.meshes[_key]);
                 delete globals.remove.meshes[_key];
+            }
+        } else if (globals.remove.tweens.length) {
+            for (var _key2 in globals.remove.tweens) {
+                globals.TWEENS[globals.remove.bodies[_key2]].stop();
+                delete globals.remove.tweens[_key2];
             }
         }
 
@@ -663,8 +728,8 @@ function animate(delta) {
             globals.BODIES['items'][_i].mesh.quaternion.copy(globals.BODIES['items'][_i].body.quaternion);
         }
 
-        for (var _key2 in globals.EMITTERS) {
-            globals.EMITTERS[_key2].tick(globals.clock.getDelta());
+        for (var _key3 in globals.TWEENS) {
+            globals.TWEENS[_key3].update(delta);
         }
 
         globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
@@ -700,14 +765,13 @@ function onWindowResize() {
 
     globals.camera.aspect = window.innerWidth / window.innerHeight;
     globals.camera.updateProjectionMatrix();
-
     globals.renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-},{"./globals":2,"./gui":3,"./multiplayer":10,"./player":11,"./shooting":12}],10:[function(require,module,exports){
+},{"./globals":2,"./gui":3,"./items":8,"./multiplayer":11,"./player":12,"./shooting":13}],11:[function(require,module,exports){
 "use strict";
 
-/* global $, Materialize */
+/* global $, THREE, Materialize */
 
 module.exports = function (globals, player) {
 
@@ -742,20 +806,31 @@ module.exports = function (globals, player) {
 
     globals.socket.on('addOtherPlayer', function (data) {
         if (data.id !== player.id) {
-            var cube = globals.box({
-                l: 1,
-                w: 1,
-                h: 2,
-                mass: 0
-            });
-            globals.PLAYERS.push({
-                body: cube.body,
-                mesh: cube.mesh,
-                id: data.id,
-                data: data
-            });
-            globals.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
-            Materialize.toast(data.acc.username + " joined", 4000);
+            (function () {
+                var cube = globals.box({
+                    l: 1,
+                    w: 1,
+                    h: 2,
+                    mass: 0
+                });
+                var loader = new THREE.ObjectLoader();
+                loader.load('/models/sword/sword.json', function (sword) {
+                    sword.scale.set(0.2, 0.2, 0.2);
+                    sword.castShadow = true;
+                    cube.mesh.add(sword);
+                    sword.position.x += 0.7;
+                    sword.position.y -= 0.375;
+                    sword.position.z -= 1.25;
+                });
+                globals.PLAYERS.push({
+                    body: cube.body,
+                    mesh: cube.mesh,
+                    id: data.id,
+                    data: data
+                });
+                globals.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
+                Materialize.toast(data.acc.username + " joined", 4000);
+            })();
         }
     });
 
@@ -839,7 +914,7 @@ module.exports = function (globals, player) {
     globals.playerForId = playerForId;
 };
 
-},{"./init/manager":5}],11:[function(require,module,exports){
+},{"./init/manager":5}],12:[function(require,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -857,7 +932,7 @@ var Player = function Player() {
         val: 5,
         max: 5
     };
-    this.equipped = 'rock';
+    this.equipped = null;
 };
 
 var player = new Player();
@@ -867,21 +942,21 @@ window.addEventListener('keydown', function (e) {
         if ($('#hb-' + String.fromCharCode(e.keyCode)).length) {
             $('.hotbar').removeClass('active');
             $('#hb-' + String.fromCharCode(e.keyCode)).addClass('active');
-            if ($('#hb-' + String.fromCharCode(e.keyCode)).text() !== '-') {
-                player.equipped = $('#hb-' + String.fromCharCode(e.keyCode)).text().toLowerCase();
-            } else player.equipped = null;
+            if ($('#hb-' + String.fromCharCode(e.keyCode)).text() !== '-') player.equipped = $('#hb-' + String.fromCharCode(e.keyCode)).text().toLowerCase();else player.equipped = null;
         } else if (String.fromCharCode(e.keyCode) == 'Q') {
             require('./gui').stats(player);
         }
     } catch (err) {}
 });
 
+if ($('#hb-1').text() !== '-') player.equipped = $('#hb-1').text().toLowerCase();else player.equipped = null;
+
 module.exports = player;
 
-},{"./gui":3}],12:[function(require,module,exports){
+},{"./gui":3}],13:[function(require,module,exports){
 'use strict';
 
-/* global THREE, CANNON */
+/* global THREE, CANNON, TWEEN, $ */
 
 module.exports = function (globals, player) {
 
@@ -948,7 +1023,31 @@ module.exports = function (globals, player) {
         }
     }
 
-    $(document).on('click', shoot);
+    function attack() {
+        var loader = new THREE.ObjectLoader();
+        loader.load('/models/sword/sword.json', function (sword) {
+            sword.scale.set(0.1, 0.1, 0.1);
+            sword.castShadow = true;
+            globals.camera.add(sword);
+            sword.position.x += 0.7;
+            sword.position.y -= 0.375;
+            sword.position.z -= 1.25;
+            window.addEventListener('mousedown', function () {
+                var tween = new TWEEN.Tween(sword.rotation).to({
+                    x: [-Math.PI / 2, 0]
+                }, 500).onStart(function () {
+                    var a = new Audio('/audio/sword.mp3');
+                    a.play();
+                }).start();
+
+                globals.TWEENS.push(tween);
+            });
+        });
+    }
+
+    attack();
+
+    // $(document).on('mousedown', shoot);
     $(document).on('keydown', function (event) {
         if (event.keyCode == 69) {
             var raycaster = new THREE.Raycaster();
@@ -965,4 +1064,181 @@ module.exports = function (globals, player) {
     });
 };
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12]);
+},{}],14:[function(require,module,exports){
+(function (root, factory) {
+    'use strict';
+    /* global define, module, require */
+    if (typeof define === 'function' && define.amd) { // AMD
+        define(['./utils'], factory);
+    } else if (typeof exports === 'object') { // Node, browserify and alike
+        module.exports = factory(require('./utils'));
+    } else { // Browser globals (root is window)
+        root.rpgTools = (root.rpgTools || {});
+        root.rpgTools.ProtoTree = factory(root.rpgTools.utils);
+    }
+}(this, function (utils) {
+    'use strict';
+
+    function ProtoTree (tree) {
+        this._tree = tree;
+        this._processed = Object.create(null);
+    }
+
+    ProtoTree.prototype = {
+        constructor: ProtoTree,
+
+        derive: function (obj) {
+            var proto = this._processed[obj.proto];
+
+            if (proto) {
+                return this.deepDefaults(obj, proto);
+            } else {
+                proto = this._tree[obj.proto];
+            }
+
+            if (!proto) {
+                throw new TypeError('Invalid proto specified for ' + obj.name);
+            }
+            obj.proto = proto.proto;
+
+            return this.deepDefaults(obj, proto);
+        },
+
+        get: function (name) {
+            var item = this._processed[name];
+
+            if (item) {
+                return item;
+            } else {
+                item = this._tree[name];
+            }
+
+            if (!item) {
+                throw new RangeError('No such object in given tree as ' + name);
+            }
+
+            while (('proto' in item) && item.proto) {
+                item = this.derive(item);
+            }
+
+            // should be undefined or otherwise falsy, so we don't need it anyway
+            delete item.proto;
+
+            this._processed[name] = item;
+
+            return item;
+        },
+
+        deepDefaults: function (obj, defaults) {
+            Object.keys(defaults).forEach(function (key) {
+                if (utils.isObject(defaults[key])) {
+                    if (obj[key] === undefined) {
+                        obj[key] = {};
+                    }
+
+                    obj[key] = this.deepDefaults(obj[key], defaults[key]);
+                } else if (Array.isArray(defaults[key])) {
+                    if (obj[key] === undefined) {
+                        obj[key] = [];
+                    }
+
+                    obj[key] = this.deepDefaults(obj[key], defaults[key]);
+                } else if (obj[key] === undefined) {
+                    obj[key] = defaults[key];
+                }
+            }, this);
+
+            return obj;
+        }
+    };
+
+    return ProtoTree;
+}));
+},{"./utils":15}],15:[function(require,module,exports){
+(function (root, factory) {
+    'use strict';
+    /* global define, module, require */
+    if (typeof define === 'function' && define.amd) { // AMD
+        define([], factory);
+    } else if (typeof exports === 'object') { // Node, browserify and alike
+        module.exports = factory();
+    } else { // Browser globals (root is window)
+        root.rpgTools = (root.rpgTools || {});
+        root.rpgTools.utils = factory();
+    }
+}(this, function () {
+    'use strict';
+
+    var toString = Object.prototype.toString;
+
+    function isString (value) {
+        return toString.call(value) === '[object String]';
+    }
+
+    function isNumber (value) {
+        return toString.call(value) === '[object Number]';
+    }
+
+    function isObject (value) {
+        var type = typeof value;
+        return !Array.isArray(value) && (type === 'object' && !!value);
+    }
+
+    function keyPath (target, path, value) {
+        var chunks = path.split('.');
+
+        if (chunks.length === 1) {
+            if (arguments.length === 2) {
+                return target[path];
+            } else {
+                target[path] = value;
+                return value;
+            }
+        }
+
+        var i = 1;
+        var len = chunks.length;
+        var chunk = chunks[0];
+        var current = target[chunk];
+
+        if (arguments.length === 2) {
+            while (i < len) {
+                chunk = chunks[i];
+                current = current[chunk];
+                i++;
+            }
+
+            return current;
+        } else {
+            while (i < len - 1) {
+                chunk = chunks[i];
+                current = current[chunk];
+                i++;
+            }
+
+            current[chunks[i]] = value;
+
+            return value;
+        }
+    }
+
+    function clone (value) {
+        if (isObject(value)) {
+            return JSON.parse(JSON.stringify(value));
+        } else {
+            return value;
+        }
+    }
+
+    var exports = {
+        isString: isString,
+        isNumber: isNumber,
+        isObject: isObject,
+        keyPath: keyPath,
+        clone: clone
+    };
+
+    return exports;
+}));
+
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13]);

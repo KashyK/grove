@@ -1,4 +1,4 @@
-/* global $, Materialize */
+/* global $, THREE, Materialize */
 
 module.exports = (globals, player) => {
 
@@ -35,6 +35,15 @@ module.exports = (globals, player) => {
                 w: 1,
                 h: 2,
                 mass: 0
+            });
+            let loader = new THREE.ObjectLoader();
+            loader.load('/models/sword/sword.json', sword => {
+                sword.scale.set(0.2, 0.2, 0.2);
+                sword.castShadow = true;
+                cube.mesh.add(sword);
+                sword.position.x += 0.7;
+                sword.position.y -= 0.375;
+                sword.position.z -= 1.25;
             });
             globals.PLAYERS.push({
                 body: cube.body,

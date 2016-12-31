@@ -4,7 +4,7 @@ module.exports = (title, content) => {
     $('#quest-alert').css('right', '0px');
     $('#quest-alert > p').text(title);
     $('#quest-alert > small').text(content);
-    setTimeout(function() {
+    setTimeout(() => {
         $('#quest-alert').animate({
             'right': '-280px'
         }, 1000);
@@ -24,7 +24,7 @@ module.exports.init = () => {
 module.exports.quests = () => {
     $('#quest-alert > p').text('Getting Skills');
     $('#quest-alert > small').text('Use the Alchemy Table to make a health potion.');
-    setTimeout(function() {
+    setTimeout(() => {
         $('#quest-alert').animate({
             'right': '-280px'
         }, 1000);
@@ -46,7 +46,12 @@ module.exports.stats = player => {
     });
     $('#gui-i').click(() => {
         $('#gui-title').html('Inventory');
-        $('#gui-content').html('Inventory items');
+        let txt;
+        for (let key in player.inventory)
+            txt += `<span class=inv-item data-item=${player.inventory[key]}>${player.inventory[key].name}</span>`;
+        $('#gui-content').html(txt);
+        $('.inv-item').click(() => alert(JSON.stringify($(this).data('item'))));
+        txt = null;
     });
     $('#gui-m').click(() => {
         $('#gui-title').html('Map');

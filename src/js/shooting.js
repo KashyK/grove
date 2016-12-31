@@ -1,4 +1,4 @@
-/* global THREE, CANNON */
+/* global THREE, CANNON, TWEEN, $ */
 
 module.exports = (globals, player) => {
 
@@ -69,7 +69,34 @@ module.exports = (globals, player) => {
         }
     }
 
-    $(document).on('click', shoot);
+    function attack() {
+        let loader = new THREE.ObjectLoader();
+        loader.load('/models/sword/sword.json', sword => {
+            sword.scale.set(0.1, 0.1, 0.1);
+            sword.castShadow = true;
+            globals.camera.add(sword);
+            sword.position.x += 0.7;
+            sword.position.y -= 0.375;
+            sword.position.z -= 1.25;
+            window.addEventListener('mousedown', () => {
+                let tween = new TWEEN.Tween(sword.rotation)
+                    .to({
+                        x: [-Math.PI / 2, 0]
+                    }, 500)
+                    .onStart(() => {
+                        let a = new Audio('/audio/sword.mp3');
+                        a.play();
+                    })
+                    .start();
+
+                globals.TWEENS.push(tween);
+            });
+        });
+    }
+
+    attack();
+
+    // $(document).on('mousedown', shoot);
     $(document).on('keydown', event => {
         if (event.keyCode == 69) {
             let raycaster = new THREE.Raycaster();

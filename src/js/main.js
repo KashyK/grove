@@ -5,6 +5,7 @@ let player = require('./player');
 
 const dt = 1 / 60;
 
+require('./items');
 require('./gui').init();
 require('./shooting')(globals, player);
 require('./multiplayer')(globals, player);
@@ -21,12 +22,12 @@ THREE.DefaultLoadingManager.onProgress = (item, loaded, total) => {
 
 function animate(delta) {
 
-    if (controls.enabled) {
+    if (window.controls && window.controls.enabled) {
 
-        globals.camera.updateMatrixWorld(); // make sure the camera matrix is updated
-        globals.camera.matrixWorldInverse.getInverse(globals.camera.matrixWorld);
-        globals.cameraViewProjectionMatrix.multiplyMatrices(globals.camera.projectionMatrix, globals.camera.matrixWorldInverse);
-        globals.frustum.setFromMatrix(globals.cameraViewProjectionMatrix);
+        // globals.camera.updateMatrixWorld(); // make sure the camera matrix is updated
+        // globals.camera.matrixWorldInverse.getInverse(globals.camera.matrixWorld);
+        // globals.cameraViewProjectionMatrix.multiplyMatrices(globals.camera.projectionMatrix, globals.camera.matrixWorldInverse);
+        // globals.frustum.setFromMatrix(globals.cameraViewProjectionMatrix);
 
         if (globals.remove.bodies.length && globals.remove.meshes.length) {
             for (let key in globals.remove.bodies) {
@@ -38,9 +39,15 @@ function animate(delta) {
                 delete globals.remove.meshes[key];
             }
         }
+        else if (globals.remove.tweens.length) {
+            for (let key in globals.remove.tweens) {
+                globals.TWEENS[globals.remove.bodies[key]].stop();
+                delete globals.remove.tweens[key];
+            }
+        }
 
         // Update bullets, etc.
-        for (let i = 0; i < globals.BODIES['projectiles'].length; i++) {
+            for (let i = 0; i < globals.BODIES['projectiles'].length; i++) {
             globals.BODIES['projectiles'][i].mesh.position.copy(globals.BODIES['projectiles'][i].body.position);
             globals.BODIES['projectiles'][i].mesh.quaternion.copy(globals.BODIES['projectiles'][i].body.quaternion);
         }
@@ -51,12 +58,12 @@ function animate(delta) {
             globals.BODIES['items'][i].mesh.quaternion.copy(globals.BODIES['items'][i].body.quaternion);
         }
 
-        for (let key in globals.EMITTERS) {
-            globals.EMITTERS[key].tick(globals.clock.getDelta());
+        for (let key in globals.TWEENS) {
+            globals.TWEENS[key].update(delta);
         }
 
         globals.BODIES['player'].mesh.position.copy(globals.BODIES['player'].body.position);
-        if(globals.BODIES['player'].body.position.y < -400) player.hp.val--;
+        if (globals.BODIES['player'].body.position.y < -400) player.hp.val--;
 
         $('#health-bar')
             .val(player.hp.val / player.hp.max * 100 > 0 ? player.hp.val / player.hp.max * 100 : 0);
@@ -79,7 +86,7 @@ function animate(delta) {
             globals.socket.emit('updatePosition', player.serverdata);
         }
     }
-    
+
     requestAnimationFrame(animate);
 
 }
@@ -90,7 +97,6 @@ function onWindowResize() {
 
     globals.camera.aspect = window.innerWidth / window.innerHeight;
     globals.camera.updateProjectionMatrix();
-
     globals.renderer.setSize(window.innerWidth, window.innerHeight);
 
 }

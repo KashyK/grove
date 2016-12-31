@@ -11,9 +11,9 @@ module.exports = (globals, player) => {
     light.shadowCameraNear = globals.camera.near;
     light.shadowCameraFar = globals.camera.far;
     light.shadowCameraFov = 70;
-    light.shadowCameraLeft = -800;
-    light.shadowCameraRight = 800;
-    light.shadowCameraTop = 300;
+    light.shadowCameraLeft = -400;
+    light.shadowCameraRight = 400;
+    light.shadowCameraTop = 100;
     light.shadowCameraBottom = -300;
 
     light.shadowMapBias = 0.0039;
@@ -143,5 +143,15 @@ module.exports = (globals, player) => {
             }
         });
     });
+
+    let tween = new TWEEN.Tween(globals.camera.position)
+        .to({
+            y: [-0.1, 0]
+        }, 2000)
+        .repeat(Infinity)
+        .yoyo()
+        .start();
+
+    globals.TWEENS.push(tween);
 
 };
