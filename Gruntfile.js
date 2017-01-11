@@ -27,7 +27,7 @@ module.exports = function (grunt) {
         },
 
         uglify: {
-            my_target: {
+            grove: {
                 files: {
                     'public/js/latest.min.js': ['public/js/latest.js']
                 }
@@ -59,6 +59,7 @@ module.exports = function (grunt) {
     // Runnable tasks.
     grunt.registerTask('build', ['browserify', 'uglify', 'sass']);
     grunt.registerTask('js', ['browserify', 'uglify', 'watch']);
+    grunt.registerTask('css', ['sass', 'watch']);
     grunt.registerTask('default', ['browserify', 'uglify', 'sass', 'watch']);
 
 };

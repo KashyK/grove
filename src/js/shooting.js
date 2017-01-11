@@ -2,6 +2,48 @@
 
 module.exports = (globals, player) => {
 
+    let sword;
+    let weapon;
+
+    let loader = new THREE.ObjectLoader();
+    loader.load('/models/sword/sword.json', s => {
+        sword = s;
+        sword.scale.set(0.1, 0.1, 0.1);
+        sword.castShadow = true;
+        sword.position.x++;
+        sword.position.y -= 1.2;
+        sword.position.z -= 1.25;
+    });
+
+    if ($('#hb-1').data('item') !== undefined)
+        player.equipped.weapon = $('#hb-1').data('item');
+
+    function addWeapon() {
+        if (player.equipped.weapon && /sword/gi.test(player.equipped.weapon.name) && !weapon) {
+            weapon = sword.clone();
+            globals.camera.add(weapon);
+            window.addEventListener('mousedown', () => {
+                if (weapon) {
+                    let tween = new TWEEN.Tween(weapon.rotation)
+                        .to({
+                            x: [-Math.PI / 2, 0]
+                        }, 1 / player.equipped.weapon.spd * 2000)
+                        .onStart(() => {
+                            let a = new Audio('/audio/sword.mp3');
+                            a.play();
+                        })
+                        .start();
+
+                    globals.TWEENS.push(tween);
+                }
+            });
+        }
+        else if (!player.equipped.weapon) {
+            globals.camera.remove(weapon);
+            weapon = null;
+        }
+    }
+
     function getShootDir(targetVec) {
         let projector = new THREE.Projector();
         let vector = targetVec;
@@ -69,36 +111,11 @@ module.exports = (globals, player) => {
         }
     }
 
-    function attack() {
-        let loader = new THREE.ObjectLoader();
-        loader.load('/models/sword/sword.json', sword => {
-            sword.scale.set(0.1, 0.1, 0.1);
-            sword.castShadow = true;
-            globals.camera.add(sword);
-            sword.position.x += 0.7;
-            sword.position.y -= 0.375;
-            sword.position.z -= 1.25;
-            window.addEventListener('mousedown', () => {
-                let tween = new TWEEN.Tween(sword.rotation)
-                    .to({
-                        x: [-Math.PI / 2, 0]
-                    }, 500)
-                    .onStart(() => {
-                        let a = new Audio('/audio/sword.mp3');
-                        a.play();
-                    })
-                    .start();
-
-                globals.TWEENS.push(tween);
-            });
-        });
-    }
-
-    attack();
+    setInterval(addWeapon, 500);
 
     // $(document).on('mousedown', shoot);
     $(document).on('keydown', event => {
-        if (event.keyCode == 69) {
+        if (String.fromCharCode(event.keyCode) == 'E') {
             let raycaster = new THREE.Raycaster();
             raycaster.set(globals.camera.getWorldPosition(), globals.camera.getWorldDirection());
             let intersects = raycaster.intersectObjects(globals.scene.children, true);
@@ -110,5 +127,17 @@ module.exports = (globals, player) => {
                 });
             }
         }
+        if (String.fromCharCode(event.keyCode) == 'Q')
+            require('./gui').stats(player);
+        try {
+            if ($(`#hb-${String.fromCharCode(event.keyCode)}`).length) {
+                $('.hotbar').removeClass('active');
+                $(`#hb-${String.fromCharCode(event.keyCode)}`).addClass('active');
+                if ($(`#hb-${String.fromCharCode(event.keyCode)}`).text() !== '-')
+                    player.equipped.weapon = $(`#hb-${String.fromCharCode(event.keyCode)}`).data('item');
+                else player.equipped.weapon = null;
+            }
+        }
+        catch (err) {}
     });
 };

@@ -31,27 +31,51 @@ module.exports.quests = () => {
     }, 10000);
 };
 
-// quests, inv, map, player
+module.exports.hotbar = player => {
+    for (let i = 0; i < 8; i++) $(`#hb-${i}`).html('-');
+    for (let i = 0; i < player.hotbar.length; i++) {
+        $(`#hb-${i+1}`)
+            .text(player.hotbar[i].name)
+            .data('item', player.hotbar[i]);
+    }
+};
 
 module.exports.stats = player => {
+
     $('#gui').show();
     $('#underlay').show();
     $('#gui-title').text('');
     $('#gui-content').html(`<h1 style=margin-top:21.5%;text-align:center;width:90%;color:white>
     <span id=gui-q>quests</span> | <span id=gui-i>inventory</span> | <span id=gui-m>map</span> | <span id=gui-p>player</span>
     </h1>`);
+
+    //
+
     $('#gui-q').click(() => {
         $('#gui-title').html('Quests');
         $('#gui-content').html('questy stuff');
     });
     $('#gui-i').click(() => {
         $('#gui-title').html('Inventory');
-        let txt;
-        for (let key in player.inventory)
-            txt += `<span class=inv-item data-item=${player.inventory[key]}>${player.inventory[key].name}</span>`;
-        $('#gui-content').html(txt);
-        $('.inv-item').click(() => alert(JSON.stringify($(this).data('item'))));
-        txt = null;
+        $('#gui-content').html('');
+        for (let key in player.inventory) {
+            $(document.createElement('span'))
+                .html(player.inventory[key].name)
+                .click((e) => {
+                    if (player.hotbar.indexOf(player.inventory[key]) == -1) {
+                        player.hotbar.push(player.inventory[key]);
+                        module.exports.hotbar(player);
+                        $(e.target).css('background-color', 'blue');
+                    }
+                    else {
+                        player.hotbar.splice(player.hotbar.indexOf(player.inventory[key]), 1);
+                        module.exports.hotbar(player);
+                        $(e.target).css('background-color', 'transparent');
+                    }
+                })
+                .css('background-color', player.hotbar.indexOf(player.inventory[key]) == 0 ? 'blue' : 'transparent')
+                .appendTo($('#gui-content'));
+        }
     });
     $('#gui-m').click(() => {
         $('#gui-title').html('Map');
@@ -64,4 +88,5 @@ module.exports.stats = player => {
         $('#gui-content').html('ur stats');
     });
     if ($('#gui-content').is(':visible')) document.exitPointerLock();
+
 };

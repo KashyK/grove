@@ -16,10 +16,10 @@ module.exports = (globals, player) => {
     light.shadowCameraTop = 100;
     light.shadowCameraBottom = -300;
 
-    light.shadowMapBias = 0.0039;
+    light.shadowMapBias = 0.0036;
     light.shadowMapDarkness = 0.5;
-    light.shadowMapWidth = 3072;
-    light.shadowMapHeight = 3072;
+    light.shadowMapWidth = 4096;
+    light.shadowMapHeight = 4096;
 
     light.shadowCameraVisible = true;
     globals.scene.add(light);
@@ -120,7 +120,7 @@ module.exports = (globals, player) => {
     globals.BODIES['player'].mesh.add(sky);
 
     let loader = new THREE.ObjectLoader();
-    loader.load(`/models/${player.serverdata.acc.map}/${player.serverdata.acc.map}.json`, object => {
+    loader.load(`/models/sand/sand.json`, object => {
         globals.scene.add(object);
         object.castShadow = true;
         object.recieveShadow = true;
@@ -128,11 +128,22 @@ module.exports = (globals, player) => {
             if (child instanceof THREE.Mesh) {
                 child.castShadow = true;
                 child.recieveShadow = true;
-                if (!/NP/gi.test(child.name)) globals.load(child, {
+                let body;
+                if (!/NP/gi.test(child.name)) body = globals.load(child, {
                     mass: 0,
                     material: globals.groundMaterial
                 });
-                if (child.name == 'B_Portal') {
+                if (/portal/gi.test(child.name)) {
+                    let sound = new THREE.PositionalAudio(globals.listener);
+                    let oscillator = globals.listener.context.createOscillator();
+                    oscillator.type = 'sine';
+                    oscillator.frequency.value = 200;
+                    oscillator.start();
+                    sound.setNodeSource(oscillator);
+                    sound.setRefDistance(20);
+                    sound.setVolume(1);
+                    child.add(sound);
+
                     child.material = new THREE.ShaderMaterial({
                         uniforms: uni,
                         vertexShader: document.getElementById('V_PortalShader').textContent,
@@ -140,18 +151,37 @@ module.exports = (globals, player) => {
                     });
                     child.add(new THREE.PointLight(0xFFFFFF, 1, 25, 2));
                 }
+                if (/bridge/gi.test(child.name)) {
+                    let audioLoader = new THREE.AudioLoader();
+                    let sound = new THREE.PositionalAudio(globals.listener);
+                    let sound2 = new THREE.PositionalAudio(globals.listener);
+                    audioLoader.load('/audio/creak.wav', (buffer) => {
+                        sound.setBuffer(buffer);
+                        sound.setRefDistance(5);
+                        sound.setLoop(true);
+                        sound.play();
+                    });
+                    audioLoader.load('/audio/creak2.wav', (buffer) => {
+                        sound2.setBuffer(buffer);
+                        sound2.setRefDistance(5);
+                        sound2.setLoop(true);
+                        sound2.play();
+                    });
+                    child.add(sound);
+                    child.add(sound2);
+
+                    let tween = new TWEEN.Tween(child.rotation)
+                        .to({
+                            y: -Math.PI / 8
+                        }, 4000)
+                        .repeat(Infinity)
+                        .yoyo(true)
+                        .start();
+
+                    globals.TWEENS.push(tween);
+                }
             }
         });
     });
-
-    let tween = new TWEEN.Tween(globals.camera.position)
-        .to({
-            y: [-0.1, 0]
-        }, 2000)
-        .repeat(Infinity)
-        .yoyo()
-        .start();
-
-    globals.TWEENS.push(tween);
 
 };

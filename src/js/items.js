@@ -4,19 +4,16 @@
 let ProtoTree = require('rpg-tools/lib/ProtoTree'),
     pt = null;
 
-$.getJSON('https://grove.nanoscaleapi.io/base.json', base => {
-    $.getJSON('https://grove.nanoscaleapi.io/weapons.json', weapons => {
-        $.getJSON('https://grove.nanoscaleapi.io/materials.json', materials => {
-            Object.assign(base, weapons, materials);
-            pt = new ProtoTree(base);
-            module.exports = pt;
+const base = require('./json/base'),
+    weapons = require('./json/weapons'),
+    materials = require('./json/mats');
 
-            // let s = setUpSword(0, 'ebony', 'steel');
-            // alert(`You equipped an ${s.name}, dealing ${s.dmg} damage with ${s.spd} speed!`);
+Object.assign(base, weapons, materials);
+pt = new ProtoTree(base);
 
-        });
-    });
-});
+module.exports = callback => {
+    callback(pt, setUpComponent, setUpSword);
+};
 
 function setUpComponent(comp, mat) {
     let c = pt.get(comp),

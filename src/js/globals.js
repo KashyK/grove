@@ -1,5 +1,7 @@
 /* global THREE, CANNON, io */
 
+require('./items');
+
 module.exports = {
     scene: new THREE.Scene(),
     renderer: new THREE.WebGLRenderer({
@@ -7,7 +9,7 @@ module.exports = {
         preserveDrawingBuffer: true,
         alpha: true
     }),
-    camera: new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 20000),
+    camera: new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 20000),
 
     world: new CANNON.World(),
 
@@ -26,6 +28,8 @@ module.exports = {
         meshes: [],
         tweens: []
     },
+    
+    listener: new THREE.AudioListener(),
 
     delta: Date.now(),
     clock: new THREE.Clock(),
@@ -34,6 +38,7 @@ module.exports = {
 
     groundMaterial: new CANNON.Material("groundMaterial")
 };
+
 
 // module.exports.rendererDEBUG = new THREE.CannonDebugRenderer(module.exports.scene, module.exports.world);
 // Adjust constraint equation parameters for ground/ground contact

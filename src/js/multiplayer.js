@@ -21,7 +21,7 @@ module.exports = (globals, player) => {
             player.serverdata = data;
             player.id = data.id;
 
-            player.inventory = player.serverdata.acc.inventory;
+            Object.assign(player.inventory, player.serverdata.acc.inventory);
 
             require('./init/manager')(globals, player);
 

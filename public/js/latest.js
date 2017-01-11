@@ -43,9 +43,11 @@ module.exports.ai = AI;
 var dave = new AI();
 
 },{}],2:[function(require,module,exports){
-"use strict";
+'use strict';
 
 /* global THREE, CANNON, io */
+
+require('./items');
 
 module.exports = {
     scene: new THREE.Scene(),
@@ -54,7 +56,7 @@ module.exports = {
         preserveDrawingBuffer: true,
         alpha: true
     }),
-    camera: new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 20000),
+    camera: new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 20000),
 
     world: new CANNON.World(),
 
@@ -73,6 +75,8 @@ module.exports = {
         meshes: [],
         tweens: []
     },
+
+    listener: new THREE.AudioListener(),
 
     delta: Date.now(),
     clock: new THREE.Clock(),
@@ -99,7 +103,7 @@ module.exports.label = load.label;
 module.exports.ball = load.ball;
 module.exports.plane = load.plane;
 
-},{"./load":9}],3:[function(require,module,exports){
+},{"./items":8,"./load":12}],3:[function(require,module,exports){
 'use strict';
 
 /* global $ */
@@ -135,27 +139,48 @@ module.exports.quests = function () {
     }, 10000);
 };
 
-// quests, inv, map, player
+module.exports.hotbar = function (player) {
+    for (var i = 0; i < 8; i++) {
+        $('#hb-' + i).html('-');
+    }for (var _i = 0; _i < player.hotbar.length; _i++) {
+        $('#hb-' + (_i + 1)).text(player.hotbar[_i].name).data('item', player.hotbar[_i]);
+    }
+};
 
 module.exports.stats = function (player) {
+
     $('#gui').show();
     $('#underlay').show();
     $('#gui-title').text('');
     $('#gui-content').html('<h1 style=margin-top:21.5%;text-align:center;width:90%;color:white>\n    <span id=gui-q>quests</span> | <span id=gui-i>inventory</span> | <span id=gui-m>map</span> | <span id=gui-p>player</span>\n    </h1>');
+
+    //
+
     $('#gui-q').click(function () {
         $('#gui-title').html('Quests');
         $('#gui-content').html('questy stuff');
     });
     $('#gui-i').click(function () {
         $('#gui-title').html('Inventory');
-        var txt = void 0;
+        $('#gui-content').html('');
+
+        var _loop = function _loop(key) {
+            $(document.createElement('span')).html(player.inventory[key].name).click(function (e) {
+                if (player.hotbar.indexOf(player.inventory[key]) == -1) {
+                    player.hotbar.push(player.inventory[key]);
+                    module.exports.hotbar(player);
+                    $(e.target).css('background-color', 'blue');
+                } else {
+                    player.hotbar.splice(player.hotbar.indexOf(player.inventory[key]), 1);
+                    module.exports.hotbar(player);
+                    $(e.target).css('background-color', 'transparent');
+                }
+            }).css('background-color', player.hotbar.indexOf(player.inventory[key]) == 0 ? 'blue' : 'transparent').appendTo($('#gui-content'));
+        };
+
         for (var key in player.inventory) {
-            txt += '<span class=inv-item data-item=' + player.inventory[key] + '>' + player.inventory[key].name + '</span>';
-        }$('#gui-content').html(txt);
-        $('.inv-item').click(function () {
-            return alert(JSON.stringify($(undefined).data('item')));
-        });
-        txt = null;
+            _loop(key);
+        }
     });
     $('#gui-m').click(function () {
         $('#gui-title').html('Map');
@@ -191,10 +216,10 @@ module.exports = function (globals, player) {
     light.shadowCameraTop = 100;
     light.shadowCameraBottom = -300;
 
-    light.shadowMapBias = 0.0039;
+    light.shadowMapBias = 0.0036;
     light.shadowMapDarkness = 0.5;
-    light.shadowMapWidth = 3072;
-    light.shadowMapHeight = 3072;
+    light.shadowMapWidth = 4096;
+    light.shadowMapHeight = 4096;
 
     light.shadowCameraVisible = true;
     globals.scene.add(light);
@@ -292,7 +317,7 @@ module.exports = function (globals, player) {
     globals.BODIES['player'].mesh.add(sky);
 
     var loader = new THREE.ObjectLoader();
-    loader.load('/models/' + player.serverdata.acc.map + '/' + player.serverdata.acc.map + '.json', function (object) {
+    loader.load('/models/sand/sand.json', function (object) {
         globals.scene.add(object);
         object.castShadow = true;
         object.recieveShadow = true;
@@ -300,11 +325,22 @@ module.exports = function (globals, player) {
             if (child instanceof THREE.Mesh) {
                 child.castShadow = true;
                 child.recieveShadow = true;
-                if (!/NP/gi.test(child.name)) globals.load(child, {
+                var body = void 0;
+                if (!/NP/gi.test(child.name)) body = globals.load(child, {
                     mass: 0,
                     material: globals.groundMaterial
                 });
-                if (child.name == 'B_Portal') {
+                if (/portal/gi.test(child.name)) {
+                    var sound = new THREE.PositionalAudio(globals.listener);
+                    var oscillator = globals.listener.context.createOscillator();
+                    oscillator.type = 'sine';
+                    oscillator.frequency.value = 200;
+                    oscillator.start();
+                    sound.setNodeSource(oscillator);
+                    sound.setRefDistance(20);
+                    sound.setVolume(1);
+                    child.add(sound);
+
                     child.material = new THREE.ShaderMaterial({
                         uniforms: uni,
                         vertexShader: document.getElementById('V_PortalShader').textContent,
@@ -312,41 +348,65 @@ module.exports = function (globals, player) {
                     });
                     child.add(new THREE.PointLight(0xFFFFFF, 1, 25, 2));
                 }
+                if (/bridge/gi.test(child.name)) {
+                    (function () {
+                        var audioLoader = new THREE.AudioLoader();
+                        var sound = new THREE.PositionalAudio(globals.listener);
+                        var sound2 = new THREE.PositionalAudio(globals.listener);
+                        audioLoader.load('/audio/creak.wav', function (buffer) {
+                            sound.setBuffer(buffer);
+                            sound.setRefDistance(5);
+                            sound.setLoop(true);
+                            sound.play();
+                        });
+                        audioLoader.load('/audio/creak2.wav', function (buffer) {
+                            sound2.setBuffer(buffer);
+                            sound2.setRefDistance(5);
+                            sound2.setLoop(true);
+                            sound2.play();
+                        });
+                        child.add(sound);
+                        child.add(sound2);
+
+                        var tween = new TWEEN.Tween(child.rotation).to({
+                            y: -Math.PI / 8
+                        }, 4000).repeat(Infinity).yoyo(true).start();
+
+                        globals.TWEENS.push(tween);
+                    })();
+                }
             }
         });
     });
-
-    var tween = new TWEEN.Tween(globals.camera.position).to({
-        y: [-0.1, 0]
-    }, 2000).repeat(Infinity).yoyo().start();
-
-    globals.TWEENS.push(tween);
 };
 
 },{}],5:[function(require,module,exports){
 'use strict';
 
+/* global THREE */
+
 function init(globals, player) {
 
-    if (window.location.protocol == 'http:') window.location.protocol = 'https:';
-
     require('./world')(globals);
-    require('./player')(globals);
+    require('./player')(globals, player);
     require('./bodies')(globals, player);
 
     globals.renderer.shadowMapEnabled = true;
     globals.renderer.shadowMapSoft = true;
+    globals.renderer.shadowMapType = THREE.PCFShadowMap;
 
     globals.renderer.shadowCameraNear = 3;
     globals.renderer.shadowCameraFar = globals.camera.far;
     globals.renderer.shadowCameraFov = 50;
 
-    globals.renderer.shadowMapBias = 0.0039;
+    globals.renderer.shadowMapBias = 0.0001;
     globals.renderer.shadowMapDarkness = 0.5;
     globals.renderer.shadowMapWidth = 1024;
     globals.renderer.shadowMapHeight = 1024;
     globals.renderer.setClearColor(globals.scene.fog.color, 1);
     globals.renderer.setSize(window.innerWidth, window.innerHeight);
+
+    globals.camera.add(globals.listener);
 
     document.body.appendChild(globals.renderer.domElement);
 }
@@ -358,20 +418,28 @@ module.exports = init;
 
 /* global THREE, CANNON, PointerLockControls */
 
-module.exports = function (globals) {
+module.exports = function (globals, player) {
 
     var mass = 10,
-        radius = 1.3;
+        radius = 1.7;
     var sphereShape = new CANNON.Sphere(radius);
     var sphereBody = new CANNON.Body({
         mass: mass,
         material: globals.groundMaterial
     });
     sphereBody.addShape(sphereShape);
-    sphereBody.position.set(0, 50, 0);
+    sphereBody.position.set(0, 30, 0);
     // sphereBody.linearDamping = 0.9;
     sphereBody.angularDamping = 0.9;
     globals.world.add(sphereBody);
+    sphereBody.addEventListener('collide', function (event) {
+
+        var contact = event.contact;
+        var upAxis = new CANNON.Vec3(0, 1, 0);
+        var contactNormal = new CANNON.Vec3();
+        if (contact.bi.id == sphereBody.id) contact.ni.negate(contactNormal);else contactNormal.copy(contact.ni); // bi is something else. Keep the normal as it is
+        if (contactNormal.dot(upAxis) > 0.5 && sphereBody.velocity.y <= -60) player.hp.val += Math.floor(sphereBody.velocity.y / 10);
+    });
     var mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 2, 1), new THREE.MeshLambertMaterial());
     mesh.castShadow = true;
     globals.scene.add(mesh);
@@ -417,18 +485,16 @@ module.exports = function (globals) {
 var ProtoTree = require('rpg-tools/lib/ProtoTree'),
     pt = null;
 
-$.getJSON('https://grove.nanoscaleapi.io/base.json', function (base) {
-    $.getJSON('https://grove.nanoscaleapi.io/weapons.json', function (weapons) {
-        $.getJSON('https://grove.nanoscaleapi.io/materials.json', function (materials) {
-            Object.assign(base, weapons, materials);
-            pt = new ProtoTree(base);
-            module.exports = pt;
+var base = require('./json/base'),
+    weapons = require('./json/weapons'),
+    materials = require('./json/mats');
 
-            // let s = setUpSword(0, 'ebony', 'steel');
-            // alert(`You equipped an ${s.name}, dealing ${s.dmg} damage with ${s.spd} speed!`);
-        });
-    });
-});
+Object.assign(base, weapons, materials);
+pt = new ProtoTree(base);
+
+module.exports = function (callback) {
+    callback(pt, setUpComponent, setUpSword);
+};
 
 function setUpComponent(comp, mat) {
     var c = pt.get(comp),
@@ -453,7 +519,140 @@ function setUpSword(type, mat1, mat2) {
     return sword;
 }
 
-},{"rpg-tools/lib/ProtoTree":14}],9:[function(require,module,exports){
+},{"./json/base":9,"./json/mats":10,"./json/weapons":11,"rpg-tools/lib/ProtoTree":17}],9:[function(require,module,exports){
+module.exports={
+    "@item": {
+        name: "-- Item --",
+        desc: "If you see this, please contact developers",
+        weight: 0,
+        ench: {}
+    },
+    "@weapon": {
+        proto: "@item", 
+        name: "-- Weapon --",
+        dmg: 0,
+        spd: 0,
+        knbk: 0,
+        slot: 0,
+        cost: {}
+    },
+    "@sword": {
+        proto: "@weapon",
+        name: "-- Sword --",
+        blade: {},
+        handle: {}
+    },
+    "@blade": {
+        proto: "@weapon",
+        name: "-- Blade --",
+        mat: {}
+    },
+    "@handle": {
+        proto: "@weapon",
+        name: "-- Handle --",
+        mat: {}
+    },
+    "@bow": {
+        proto: "@weapon",
+        name: "-- Bow --",
+        body: {},
+        string: {}
+    },
+    "@body": {
+        proto: "@weapon",
+        name: "-- Bow Body --",
+        mat: {}
+    },
+    "@string": {
+        proto: "@weapon",
+        name: "-- Bowstring --",
+        mat: {}
+    },
+    "@spell": {
+        proto: "@weapon",
+        name: "-- Spell --",
+        weight: 0
+    },
+    "@material": {
+        proto: "@item",
+        dur: 0,
+        spd: 0,
+        dmg: 0
+    }
+}
+
+},{}],10:[function(require,module,exports){
+module.exports={
+    "wood": {
+        proto: "@material",
+        name: "Wood",
+        desc: "A block of wood.  Interesting.",
+        weight: 2,
+        dmg: 3,
+        dur: 1,
+        spd: 4
+    },
+    "iron": {
+        proto: "@material",
+        name: "Iron",
+        desc: "A bar of iron for all of your irony needs",
+        weight: 5,
+        dmg: 7,
+        dur: 3,
+        spd: 3
+    },
+    "steel": {
+        proto: "@material",
+        name: "Steel",
+        desc: "A rod of steel, a steel rod",
+        weight: 6,
+        dmg: 12,
+        dur: 5,
+        spd: 3
+    },
+    "ebony": {
+        proto: "@material",
+        name: "Ebony",
+        desc: "Like ebay, but ebony",
+        weight: 10,
+        dmg: 16,
+        dur: 8,
+        spd: 2
+    },
+    "ivory": {
+        proto: "@material",
+        name: "Ivory",
+        desc: "A fine, delicate material",
+        weight: 0.5,
+        dmg: 2,
+        dur: 1,
+        spd: 15
+    },
+    "dragonivory": {
+        proto: "ivory",
+        name: "Dragon Ivory",
+        desc: "Carved from the scales of the finest dragons in The Grove",
+        dmg: 4,
+        dur: 2
+    }
+}
+
+},{}],11:[function(require,module,exports){
+module.exports={
+  "shortsword": {
+    proto: "@sword",
+    name: "Shortsword",
+    desc: "A shortened sword",
+    slot: 1
+  },
+  "longsword": {
+    proto: "@sword",
+    name: "Longsword",
+    desc: "Slonglord!  Wait a sec...",
+    slot: 2
+  }
+}
+},{}],12:[function(require,module,exports){
 'use strict';
 
 /* global CANNON, THREE */
@@ -666,7 +865,7 @@ module.exports.label = label;
 module.exports.ball = ball;
 module.exports.plane = plane;
 
-},{"./globals":2}],10:[function(require,module,exports){
+},{"./globals":2}],13:[function(require,module,exports){
 'use strict';
 
 /* global $, THREE */
@@ -768,7 +967,7 @@ function onWindowResize() {
     globals.renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-},{"./globals":2,"./gui":3,"./items":8,"./multiplayer":11,"./player":12,"./shooting":13}],11:[function(require,module,exports){
+},{"./globals":2,"./gui":3,"./items":8,"./multiplayer":14,"./player":15,"./shooting":16}],14:[function(require,module,exports){
 "use strict";
 
 /* global $, THREE, Materialize */
@@ -798,7 +997,7 @@ module.exports = function (globals, player) {
             player.serverdata = data;
             player.id = data.id;
 
-            player.inventory = player.serverdata.acc.inventory;
+            Object.assign(player.inventory, player.serverdata.acc.inventory);
 
             require('./init/manager')(globals, player);
         }
@@ -914,7 +1113,7 @@ module.exports = function (globals, player) {
     globals.playerForId = playerForId;
 };
 
-},{"./init/manager":5}],12:[function(require,module,exports){
+},{"./init/manager":5}],15:[function(require,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -922,6 +1121,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /* global $ */
 
 var Player = function Player() {
+    var _this = this;
+
     _classCallCheck(this, Player);
 
     this.hp = {
@@ -932,33 +1133,66 @@ var Player = function Player() {
         val: 5,
         max: 5
     };
-    this.equipped = null;
+    this.equipped = {
+        weapon: null
+    };
+    this.inventory = [];
+    this.hotbar = [];
+
+    require('./items')(function (pt, comp, sword) {
+        var s = sword(0, 'iron', 'wood');
+        s.slot = 'weapon';
+        _this.inventory.push(s);
+    });
 };
 
 var player = new Player();
 
-window.addEventListener('keydown', function (e) {
-    try {
-        if ($('#hb-' + String.fromCharCode(e.keyCode)).length) {
-            $('.hotbar').removeClass('active');
-            $('#hb-' + String.fromCharCode(e.keyCode)).addClass('active');
-            if ($('#hb-' + String.fromCharCode(e.keyCode)).text() !== '-') player.equipped = $('#hb-' + String.fromCharCode(e.keyCode)).text().toLowerCase();else player.equipped = null;
-        } else if (String.fromCharCode(e.keyCode) == 'Q') {
-            require('./gui').stats(player);
-        }
-    } catch (err) {}
-});
-
-if ($('#hb-1').text() !== '-') player.equipped = $('#hb-1').text().toLowerCase();else player.equipped = null;
-
 module.exports = player;
 
-},{"./gui":3}],13:[function(require,module,exports){
+},{"./items":8}],16:[function(require,module,exports){
 'use strict';
 
 /* global THREE, CANNON, TWEEN, $ */
 
 module.exports = function (globals, player) {
+
+    var sword = void 0;
+    var weapon = void 0;
+
+    var loader = new THREE.ObjectLoader();
+    loader.load('/models/sword/sword.json', function (s) {
+        sword = s;
+        sword.scale.set(0.1, 0.1, 0.1);
+        sword.castShadow = true;
+        sword.position.x++;
+        sword.position.y -= 1.2;
+        sword.position.z -= 1.25;
+    });
+
+    if ($('#hb-1').data('item') !== undefined) player.equipped.weapon = $('#hb-1').data('item');
+
+    function addWeapon() {
+        if (player.equipped.weapon && /sword/gi.test(player.equipped.weapon.name) && !weapon) {
+            weapon = sword.clone();
+            globals.camera.add(weapon);
+            window.addEventListener('mousedown', function () {
+                if (weapon) {
+                    var tween = new TWEEN.Tween(weapon.rotation).to({
+                        x: [-Math.PI / 2, 0]
+                    }, 1 / player.equipped.weapon.spd * 2000).onStart(function () {
+                        var a = new Audio('/audio/sword.mp3');
+                        a.play();
+                    }).start();
+
+                    globals.TWEENS.push(tween);
+                }
+            });
+        } else if (!player.equipped.weapon) {
+            globals.camera.remove(weapon);
+            weapon = null;
+        }
+    }
 
     function getShootDir(targetVec) {
         var projector = new THREE.Projector();
@@ -1023,33 +1257,11 @@ module.exports = function (globals, player) {
         }
     }
 
-    function attack() {
-        var loader = new THREE.ObjectLoader();
-        loader.load('/models/sword/sword.json', function (sword) {
-            sword.scale.set(0.1, 0.1, 0.1);
-            sword.castShadow = true;
-            globals.camera.add(sword);
-            sword.position.x += 0.7;
-            sword.position.y -= 0.375;
-            sword.position.z -= 1.25;
-            window.addEventListener('mousedown', function () {
-                var tween = new TWEEN.Tween(sword.rotation).to({
-                    x: [-Math.PI / 2, 0]
-                }, 500).onStart(function () {
-                    var a = new Audio('/audio/sword.mp3');
-                    a.play();
-                }).start();
-
-                globals.TWEENS.push(tween);
-            });
-        });
-    }
-
-    attack();
+    setInterval(addWeapon, 500);
 
     // $(document).on('mousedown', shoot);
     $(document).on('keydown', function (event) {
-        if (event.keyCode == 69) {
+        if (String.fromCharCode(event.keyCode) == 'E') {
             var raycaster = new THREE.Raycaster();
             raycaster.set(globals.camera.getWorldPosition(), globals.camera.getWorldDirection());
             var intersects = raycaster.intersectObjects(globals.scene.children, true);
@@ -1061,10 +1273,18 @@ module.exports = function (globals, player) {
                 });
             }
         }
+        if (String.fromCharCode(event.keyCode) == 'Q') require('./gui').stats(player);
+        try {
+            if ($('#hb-' + String.fromCharCode(event.keyCode)).length) {
+                $('.hotbar').removeClass('active');
+                $('#hb-' + String.fromCharCode(event.keyCode)).addClass('active');
+                if ($('#hb-' + String.fromCharCode(event.keyCode)).text() !== '-') player.equipped.weapon = $('#hb-' + String.fromCharCode(event.keyCode)).data('item');else player.equipped.weapon = null;
+            }
+        } catch (err) {}
     });
 };
 
-},{}],14:[function(require,module,exports){
+},{"./gui":3}],17:[function(require,module,exports){
 (function (root, factory) {
     'use strict';
     /* global define, module, require */
@@ -1154,7 +1374,7 @@ module.exports = function (globals, player) {
 
     return ProtoTree;
 }));
-},{"./utils":15}],15:[function(require,module,exports){
+},{"./utils":18}],18:[function(require,module,exports){
 (function (root, factory) {
     'use strict';
     /* global define, module, require */
@@ -1241,4 +1461,4 @@ module.exports = function (globals, player) {
     return exports;
 }));
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
