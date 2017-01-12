@@ -4,7 +4,7 @@ let app, compression, helmet, http, io;
 
 app = require('express')();
 
-http = require('http').Server(app);
+http = require('https').Server(app);
 
 helmet = require('helmet');
 
@@ -99,6 +99,7 @@ console.log('Admin Initializing.');
 console.log('Siracha Initializing.');
 console.log('Robots Initializing.');
 console.log('License Initializing.');
+console.log('Multiplayer server Initilizing.');
 console.log('App Initializing.');
 console.log('Login Started');
 console.log('Register Started.');
@@ -109,4 +110,5 @@ console.log('Admin Started.');
 console.log('Siracha Started.');
 console.log('Robots Started.');
 console.log('License Started.');
+console.log('Multiplayer server Started.');
 console.log('App Started.');

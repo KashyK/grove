@@ -63,7 +63,7 @@ module.exports = (app, events) => {
         }, (err, obj) => {
             if (err) console.error(err);
             else if (obj) {
-                console.log(obj.username + ' logged in.');
+                console.log(obj.username + ' has logged in.');
                 req.session.user = obj;
                 res.redirect('/');
                 events.publish('pageview', {
@@ -90,7 +90,7 @@ module.exports = (app, events) => {
         u.save((err, obj) => {
             if (err) console.error(err);
             else if (obj) {
-                console.log(obj.username + ' created an account.');
+                console.log(obj.username + ' has created an account.');
                 req.session.user = obj;
                 res.redirect('/');
             }
