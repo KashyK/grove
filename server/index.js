@@ -4,7 +4,7 @@ let app, compression, helmet, http, io;
 
 app = require('express')();
 
-http = require('https').Server(app);
+http = require('http').Server(app);
 
 helmet = require('helmet');
 
@@ -79,7 +79,7 @@ app.use('/robots.txt', (req, res) => {
   console.log('Robots Activated.');
 });
 app.get('/license', (req, res) => {
-  res.sendFile(require('path').resolve('views/LICENSE.txt'));
+  res.sendFile(require('path').resolve('views/LICENSE.html'));
   console.log('License Activated.');
 });
 

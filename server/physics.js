@@ -9,3 +9,4 @@ module.exports = (socket, io) => {
         });
     });
 };
+console.log("Physics Started.");
