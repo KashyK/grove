@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>The Grove</title>
+    <title>The Grove | Register</title>
     <link rel='icon' href='/img/favicon.ico'>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
     <style>
@@ -52,18 +52,12 @@
             <br>
             <input name='type' type='hidden' value='register'>
             <input type='submit' class='btn btn-primary'>
+            <br><br><p> Already have an account? <a href='/login'>Login</a> here!</p>
+            <a href='/'>Home</a>
         </div>
     </form>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
-    <script>
-        $(document).mousemove(function(event) {
-            var Xdeg = 0;
-            var Ydeg = 0;
-            Ydeg = 90 - (event.pageX * 90) / ($(document).width() / 2);
-            Xdeg = -90 + (event.pageY * 90) / ($(document).height() / 2);
-            $('form').css('transform', 'translateZ( -200px ) perspective( 600px ) rotateY( ' + Ydeg / 16 + 'deg ) rotateX( ' + Xdeg / 16 + 'deg )');
-        });
-        </script>
+    
     <script>
         function getParameterByName(name, url) {
             if (!url) url = window.location.href;
@@ -77,6 +71,7 @@
         if (getParameterByName('err') == 'not_found') document.getElementById('error').innerHTML = '<h3>Error: User not found!</h3>';
         console.log('StatCounter Activated.')
     </script>
+
 </body>
 
 </html>
