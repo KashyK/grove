@@ -50,6 +50,7 @@ app.get('/', (req, res) => {
   });
   else res.render('../views/index.ejs');
   console.log('Home Activated.');
+  console.log('StatCounter Activated.');
 });
 app.get('/logout', (req, res) => {
   if (req.session.user) {
@@ -61,13 +62,17 @@ app.get('/logout', (req, res) => {
 app.get('/login', (req, res) => {
   res.render('../views/login.ejs');
   console.log('Login Activated.');
+  console.log('StatCounter Activated.');
+  
 });
 app.get('/register', (req, res) => {
   res.render('../views/register.ejs');
   console.log('Register Activated.');
+  console.log('StatCounter Activated.');
 });
 app.get('/play', (req, res) => {
   console.log('Play Activated.');
+  console.log('StatCounter Activated.');
 
   if (req.session.user && req.session.user.username) res.render('../views/play.ejs', {
     user: req.session.user
@@ -77,10 +82,12 @@ app.get('/play', (req, res) => {
 app.use('/robots.txt', (req, res) => {
   res.sendFile(require('path').resolve('views/robots.txt'));
   console.log('Robots Activated.');
+  console.log('StatCounter Activated.');
 });
 app.get('/license', (req, res) => {
   res.sendFile(require('path').resolve('views/LICENSE.html'));
   console.log('License Activated.');
+  console.log('StatCounter Activated.');
 });
 
 http.listen(process.env.PORT || 8080, (listening) => {
@@ -91,24 +98,35 @@ http.listen(process.env.PORT || 8080, (listening) => {
 });
 
 console.log('Login Initializing');
+console.log('StatCounter Initializing.');
 console.log('Register Initializing.');
+console.log('StatCounter Initializing.');
 console.log('Play Initializing.');
+console.log('StatCounter Initializing.');
 console.log('Dashboard Initializing.');
+console.log('StatCounter Initializing.');
 console.log('Siracha Initializing.');
 console.log('Admin Initializing.');
+console.log('StatCounter Initializing.');
 console.log('Siracha Initializing.');
 console.log('Robots Initializing.');
 console.log('License Initializing.');
+console.log('StatCounter Initializing.');
 console.log('Multiplayer server Initilizing.');
+console.log('StatCounter Started.');
 console.log('App Initializing.');
 console.log('Login Started');
+console.log('StatCounter Started.');
 console.log('Register Started.');
+console.log('StatCounter Started.');
 console.log('Play Started.');
+console.log('StatCounter Started.');
 console.log('Dashboard Started.');
+console.log('StatCounter Started.');
 console.log('Siracha Started.');
 console.log('Admin Started.');
-console.log('Siracha Started.');
 console.log('Robots Started.');
 console.log('License Started.');
 console.log('Multiplayer server Started.');
+console.log('StatCounter Started.');
 console.log('App Started.');
