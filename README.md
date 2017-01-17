@@ -27,13 +27,16 @@ The Grove is officialy hosted on Heroku servers
 
 The Grove officialy uses MongoDB databases
 
-www.mlab.com
+- www.mlab.com
 
 Liscense:
 
 
 - The Grove is copyright 2016 by Hybrid Alpaca Game Studios. All images, story, and game are copyright of Hybrid Alapca Game Studios.
 Copying or redistributing this game or content without the consent of Hybrid Alpaca Game Studios is illegal and unlawful.
+
+ -  Images are not owned by Hybrid Alpaca Game Studios.
+ 
 
 All people that have contributed to this game include:
 
