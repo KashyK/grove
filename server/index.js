@@ -50,7 +50,6 @@ app.get('/', (req, res) => {
   });
   else res.render('../views/index.ejs');
   console.log('Home Activated.');
-  console.log('StatCounter Activated.');
 });
 app.get('/logout', (req, res) => {
   if (req.session.user) {
@@ -62,17 +61,14 @@ app.get('/logout', (req, res) => {
 app.get('/login', (req, res) => {
   res.render('../views/login.ejs');
   console.log('Login Activated.');
-  console.log('StatCounter Activated.');
   
 });
 app.get('/register', (req, res) => {
   res.render('../views/register.ejs');
   console.log('Register Activated.');
-  console.log('StatCounter Activated.');
 });
 app.get('/play', (req, res) => {
   console.log('Play Activated.');
-  console.log('StatCounter Activated.');
 
   if (req.session.user && req.session.user.username) res.render('../views/play.ejs', {
     user: req.session.user
@@ -82,12 +78,10 @@ app.get('/play', (req, res) => {
 app.use('/robots.txt', (req, res) => {
   res.sendFile(require('path').resolve('views/robots.txt'));
   console.log('Robots Activated.');
-  console.log('StatCounter Activated.');
 });
 app.get('/license', (req, res) => {
   res.sendFile(require('path').resolve('views/LICENSE.html'));
   console.log('License Activated.');
-  console.log('StatCounter Activated.');
 });
 
 http.listen(process.env.PORT || 8080, (listening) => {
