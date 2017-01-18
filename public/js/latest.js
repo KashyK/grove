@@ -318,8 +318,15 @@ module.exports = function (globals, player) {
     var sky = new THREE.Mesh(skyGeo, skyMat);
     globals.BODIES['player'].mesh.add(sky);
 
-    var loader = new THREE.ObjectLoader();
-    loader.load('/models/sand/sand.json', function (object) {
+    // let loader = new THREE.ObjectLoader();
+    // loader.load('/models/herbert/super-magic-dude.json', object => {
+    //     globals.scene.add(object);
+    //     // object.position.set(0, 0, 0);
+    //     // object.scale.set(0.1, 0.1, 0.1);
+    // });
+
+    var loader2 = new THREE.ObjectLoader();
+    loader2.load('/models/sand/sand.json', function (object) {
         globals.scene.add(object);
         object.castShadow = true;
         object.recieveShadow = true;
