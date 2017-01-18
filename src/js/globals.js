@@ -14,6 +14,8 @@ module.exports = {
     world: new CANNON.World(),
 
     socket: io(),
+    
+    composers: [],
 
     BODIES: {
         items: [],

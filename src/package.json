@@ -3,5 +3,9 @@
   "version": "1.0.0",
   "description": "node_modules used for building the grove game itself",
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "postprocessing": "^1.1.6",
+    "rpg-tools": "^0.1.4"
+  }
 }

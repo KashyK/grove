@@ -1,5 +1,7 @@
 /* global THREE, CANNON, $, SPE */
 
+const post = require('postprocessing');
+
 module.exports = (globals, player) => {
 
     globals.scene.fog = new THREE.Fog(0xFFFFFF, 2);
@@ -32,6 +34,26 @@ module.exports = (globals, player) => {
     var sprite = new THREE.Sprite(spriteMaterial);
     sprite.scale.set(100, 100, 1.0);
     light.add(sprite);
+
+    const composer = new post.EffectComposer(globals.renderer);
+    composer.addPass(new post.RenderPass(globals.scene, globals.camera));
+
+    const pass = new post.GodRaysPass(globals.scene, globals.camera, light, {
+        resolutionScale: 0.6,
+        blurriness: 0.1,
+        intensity: 1.0,
+        density: 0.96,
+        decay: 0.93,
+        weight: 0.4,
+        exposure: 0.6,
+        samples: 60,
+        clampMax: 1.0
+    });
+
+    pass.renderToScreen = true;
+    composer.addPass(pass);
+    
+    globals.composers.push(composer);
 
     let uni = {
         time: {
@@ -119,15 +141,15 @@ module.exports = (globals, player) => {
     var sky = new THREE.Mesh(skyGeo, skyMat);
     globals.BODIES['player'].mesh.add(sky);
 
-    let loader = new THREE.ObjectLoader();
-    loader.load('/models/herbert/super-magic-dude.  json', object => {
-        globals.scene.add(object);
-        object.position.set(0, 0, 0);
-        object.scale.set(0.1, 0.1, 0.1);
-    });
+    // let loader = new THREE.ObjectLoader();
+    // loader.load('/models/herbert/super-magic-dude.json', object => {
+    //     globals.scene.add(object);
+    //     // object.position.set(0, 0, 0);
+    //     // object.scale.set(0.1, 0.1, 0.1);
+    // });
 
-    let loader = new THREE.ObjectLoader();
-    loader.load(`/models/sand/sand.json`, object => {
+    let loader2 = new THREE.ObjectLoader();
+    loader2.load(`/models/sand/sand.json`, object => {
         globals.scene.add(object);
         object.castShadow = true;
         object.recieveShadow = true;

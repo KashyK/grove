@@ -47,7 +47,7 @@ function animate(delta) {
         }
 
         // Update bullets, etc.
-            for (let i = 0; i < globals.BODIES['projectiles'].length; i++) {
+        for (let i = 0; i < globals.BODIES['projectiles'].length; i++) {
             globals.BODIES['projectiles'][i].mesh.position.copy(globals.BODIES['projectiles'][i].body.position);
             globals.BODIES['projectiles'][i].mesh.quaternion.copy(globals.BODIES['projectiles'][i].body.quaternion);
         }
@@ -74,6 +74,8 @@ function animate(delta) {
             $('#load').show().html('<h1>YOU HAVE PERISHED</h1>');
             return;
         }
+
+        for (let key in globals.composers) globals.composers[key].render(delta);
 
         globals.world.step(dt);
         globals.controls.update(Date.now() - globals.delta);
