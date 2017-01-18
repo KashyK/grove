@@ -72,9 +72,10 @@ function animate(delta) {
             globals.socket.disconnect();
             $('#blocker').fadeIn(5000);
             $('#load').show().html('<h1>YOU HAVE PERISHED</h1>');
+            
             return;
         }
-
+      
         for (let key in globals.composers) globals.composers[key].render(delta);
 
         globals.world.step(dt);

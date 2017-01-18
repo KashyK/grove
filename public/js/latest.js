@@ -949,6 +949,7 @@ function animate(delta) {
             globals.socket.disconnect();
             $('#blocker').fadeIn(5000);
             $('#load').show().html('<h1>YOU HAVE PERISHED</h1>');
+
             return;
         }
 
