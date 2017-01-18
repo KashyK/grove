@@ -1,4 +1,4 @@
 #!/bin/bash
 git add .
-git commit -m "Pushed from C9"
+git commit -m "Pushed From c9.io/tramans/grove"
 git push origin master
