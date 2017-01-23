@@ -25,7 +25,7 @@ module.exports = (io, User, conf_url) => {
         let player = players.playerForId(socket.id);
 
         // when client asks for players that were there before they joined
-        socket.on('requestOldPlayers', function () {
+        socket.on('requestOldPlayers', function() {
           for (let i = 0; i < players.players.length; i++) {
             if (players.players[i].id != socket.id)
               socket.emit('addOtherPlayer', players.players[i]);
@@ -84,13 +84,13 @@ module.exports = (io, User, conf_url) => {
         //////////////////////////////////////////////////
 
         // chat handler
-        socket.on('chat message', msg => {
-          console.log('message: ' + msg);
-          io.emit('chat message', msg);
+        socket.on('chat-msg', (player, msg) => {
+          console.log('message: ' + player + ', ' + msg);
+          io.emit('chat-msg', player, msg);
         });
 
         // client left :(
-        socket.on('disconnect', function () {
+        socket.on('disconnect', function() {
           console.log(player.acc.username + ' has exited game play.    ');
           io.emit('removeOtherPlayer', player);
           players.removePlayer(player);

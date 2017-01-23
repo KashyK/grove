@@ -198,7 +198,7 @@ module.exports.stats = function (player) {
 };
 
 },{"./globals":2}],4:[function(require,module,exports){
-'use strict';
+"use strict";
 
 /* global THREE, CANNON, $, SPE */
 
@@ -252,32 +252,6 @@ module.exports = function (globals, player) {
         var ncos = Math.cos(time);
         // set the sun
         light.position.set(450 * nsin, 600 * nsin, 600 * ncos);
-
-        if (nsin > 0.2) // day
-            {
-                sky.material.uniforms.topColor.value.setRGB(0.25, 0.55, 1);
-                sky.material.uniforms.bottomColor.value.setRGB(1, 1, 1);
-                var f = 1;
-                light.intensity = f;
-                light.shadowDarkness = f * 0.7;
-                globals.scene.fog.color.set(0xCCCCCC);
-            } else if (nsin < 0.2 && nsin > 0.0) {
-            // twilight
-            var f = nsin / 0.2;
-            light.intensity = f;
-            light.shadowDarkness = f * 0.7;
-            sky.material.uniforms.topColor.value.setRGB(0.25 * f, 0.55 * f, 1 * f);
-            sky.material.uniforms.bottomColor.value.setRGB(1 * f, 1 * f, 1 * f);
-            globals.scene.fog.color.set(0xCCCCCC);
-        } else // night
-            {
-                var f = 0;
-                light.intensity = f;
-                light.shadowDarkness = f * 0.7;
-                sky.material.uniforms.topColor.value.setRGB(0, 0, 0);
-                sky.material.uniforms.bottomColor.value.setRGB(0, 0, 0);
-                globals.scene.fog.color.copy(uniforms.bottomColor.value);
-            }
     }, 40);
 
     var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.2);
@@ -286,37 +260,21 @@ module.exports = function (globals, player) {
     hemiLight.position.set(0, 500, 0);
     globals.scene.add(hemiLight);
 
-    var vertexShader = document.getElementById('V_SkyShader').textContent;
-    var fragmentShader = document.getElementById('F_SkyShader').textContent;
-    var uniforms = {
-        topColor: {
-            type: "c",
-            value: new THREE.Color(0x0077ff)
-        },
-        bottomColor: {
-            type: "c",
-            value: new THREE.Color(0xffffff)
-        },
-        offset: {
-            type: "f",
-            value: 33
-        },
-        exponent: {
-            type: "f",
-            value: 0.6
-        }
-    };
-    uniforms.topColor.value.copy(hemiLight.color);
-    globals.scene.fog.color.copy(uniforms.bottomColor.value);
-    var skyGeo = new THREE.SphereGeometry(4000, 32, 15);
-    var skyMat = new THREE.ShaderMaterial({
-        vertexShader: vertexShader,
-        fragmentShader: fragmentShader,
-        uniforms: uniforms,
-        side: THREE.BackSide
-    });
-    var sky = new THREE.Mesh(skyGeo, skyMat);
-    globals.BODIES['player'].mesh.add(sky);
+    var imagePrefix = "/img/skybox/";
+    var directions = ["px", "nx", "py", "ny", "pz", "nz"];
+    var imageSuffix = ".jpg";
+    var skyGeometry = new THREE.CubeGeometry(2000, 2000, 2000);
+
+    var materialArray = [];
+    for (var i = 0; i < 6; i++) {
+        materialArray.push(new THREE.MeshBasicMaterial({
+            map: THREE.ImageUtils.loadTexture(imagePrefix + directions[i] + imageSuffix),
+            side: THREE.BackSide,
+            fog: false
+        }));
+    }var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
+    var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+    globals.BODIES['player'].mesh.add(skyBox);
 
     // let loader = new THREE.ObjectLoader();
     // loader.load('/models/herbert/super-magic-dude.json', object => {
@@ -326,7 +284,7 @@ module.exports = function (globals, player) {
     // });
 
     var loader2 = new THREE.ObjectLoader();
-    loader2.load('/models/sand/sand.json', function (object) {
+    loader2.load("/models/skjar-isles/skjar-isles.json", function (object) {
         globals.scene.add(object);
         object.castShadow = true;
         object.recieveShadow = true;
@@ -340,15 +298,15 @@ module.exports = function (globals, player) {
                     material: globals.groundMaterial
                 });
                 if (/portal/gi.test(child.name)) {
-                    var sound = new THREE.PositionalAudio(globals.listener);
-                    var oscillator = globals.listener.context.createOscillator();
-                    oscillator.type = 'sine';
-                    oscillator.frequency.value = 200;
-                    oscillator.start();
-                    sound.setNodeSource(oscillator);
-                    sound.setRefDistance(20);
-                    sound.setVolume(1);
-                    child.add(sound);
+                    // let sound = new THREE.PositionalAudio(globals.listener);
+                    // let oscillator = globals.listener.context.createOscillator();
+                    // oscillator.type = 'sine';
+                    // oscillator.frequency.value = 200;
+                    // oscillator.start();
+                    // sound.setNodeSource(oscillator);
+                    // sound.setRefDistance(20);
+                    // sound.setVolume(1);
+                    // child.add(sound);
 
                     child.material = new THREE.ShaderMaterial({
                         uniforms: uni,
@@ -358,31 +316,29 @@ module.exports = function (globals, player) {
                     child.add(new THREE.PointLight(0xFFFFFF, 1, 25, 2));
                 }
                 if (/bridge/gi.test(child.name)) {
-                    (function () {
-                        var audioLoader = new THREE.AudioLoader();
-                        var sound = new THREE.PositionalAudio(globals.listener);
-                        var sound2 = new THREE.PositionalAudio(globals.listener);
-                        audioLoader.load('/audio/creak.wav', function (buffer) {
-                            sound.setBuffer(buffer);
-                            sound.setRefDistance(5);
-                            sound.setLoop(true);
-                            sound.play();
-                        });
-                        audioLoader.load('/audio/creak2.wav', function (buffer) {
-                            sound2.setBuffer(buffer);
-                            sound2.setRefDistance(5);
-                            sound2.setLoop(true);
-                            sound2.play();
-                        });
-                        child.add(sound);
-                        child.add(sound2);
+                    // let audioLoader = new THREE.AudioLoader();
+                    // let sound = new THREE.PositionalAudio(globals.listener);
+                    // let sound2 = new THREE.PositionalAudio(globals.listener);
+                    // audioLoader.load('/audio/creak.wav', (buffer) => {
+                    //     sound.setBuffer(buffer);
+                    //     sound.setRefDistance(5);
+                    //     sound.setLoop(true);
+                    //     sound.play();
+                    // });
+                    // audioLoader.load('/audio/creak2.wav', (buffer) => {
+                    //     sound2.setBuffer(buffer);
+                    //     sound2.setRefDistance(5);
+                    //     sound2.setLoop(true);
+                    //     sound2.play();
+                    // });
+                    // child.add(sound);
+                    // child.add(sound2);
 
-                        var tween = new TWEEN.Tween(child.rotation).to({
-                            y: -Math.PI / 8
-                        }, 4000).repeat(Infinity).yoyo(true).start();
+                    var tween = new TWEEN.Tween(child.rotation).to({
+                        y: -Math.PI / 8
+                    }, 4000).repeat(Infinity).yoyo(true).start();
 
-                        globals.TWEENS.push(tween);
-                    })();
+                    globals.TWEENS.push(tween);
                 }
             }
         });
@@ -948,8 +904,7 @@ function animate(delta) {
         if (player.hp.val <= 0) {
             globals.socket.disconnect();
             $('#blocker').fadeIn(5000);
-            $('#load').show().html('<h1>YOU HAVE PERISHED</h1>');
-
+            $('#load').show().html('<a style="font-size:32pt;" href="/play">You Have Perished</a>');
             return;
         }
 
@@ -1017,31 +972,29 @@ module.exports = function (globals, player) {
 
     globals.socket.on('addOtherPlayer', function (data) {
         if (data.id !== player.id) {
-            (function () {
-                var cube = globals.box({
-                    l: 1,
-                    w: 1,
-                    h: 2,
-                    mass: 0
-                });
-                var loader = new THREE.ObjectLoader();
-                loader.load('/models/sword/sword.json', function (sword) {
-                    sword.scale.set(0.2, 0.2, 0.2);
-                    sword.castShadow = true;
-                    cube.mesh.add(sword);
-                    sword.position.x += 0.7;
-                    sword.position.y -= 0.375;
-                    sword.position.z -= 1.25;
-                });
-                globals.PLAYERS.push({
-                    body: cube.body,
-                    mesh: cube.mesh,
-                    id: data.id,
-                    data: data
-                });
-                globals.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
-                Materialize.toast(data.acc.username + " joined", 4000);
-            })();
+            var cube = globals.box({
+                l: 1,
+                w: 1,
+                h: 2,
+                mass: 0
+            });
+            var loader = new THREE.ObjectLoader();
+            // loader.load('/models/sword/sword.json', sword => {
+            //     sword.scale.set(0.2, 0.2, 0.2);
+            //     sword.castShadow = true;
+            //     cube.mesh.add(sword);
+            //     sword.position.x += 0.7;
+            //     sword.position.y -= 0.375;
+            //     sword.position.z -= 1.25;
+            // });
+            globals.PLAYERS.push({
+                body: cube.body,
+                mesh: cube.mesh,
+                id: data.id,
+                data: data
+            });
+            globals.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
+            Materialize.toast("<span style='color:lightblue'>" + data.acc.username + " joined</span>", 4000);
         }
     });
 
@@ -1110,7 +1063,32 @@ module.exports = function (globals, player) {
         }
         return globals.PLAYERS[index];
     };
+    // CHAT STARTS HERE
+    globals.socket.on('chat-msg', function (player, msg) {
+        Materialize.toast(player + ": " + msg, 10000);
+    });
 
+    var msgs = 0;
+
+    $(window).on('keydown', function (e) {
+        if (e.keyCode == 13 && $('#chat-input').is(':focus') && msgs < 5) {
+            globals.socket.emit('chat-msg', player.serverdata.acc.username, $('#chat-input').val());
+            $('#chat-input').val('');
+            $('#chat-input').blur();
+            msgs++;
+            setTimeout(function () {
+                msgs--;
+            }, 5000);
+        } else if (e.keyCode == 84 && !$('#chat-input').is(':focus')) {
+            setTimeout(function () {
+                $('#chat-input').focus();
+                $('#chat-input').val(' ');
+            }, 100);
+        }
+    });
+    // Button for chat is (Insert chat-button here)
+    // Button to send chat is (Insert send-button here)
+    // CHAT ENDS HERE
     globals.socket.on('clear', function () {
         for (var i = globals.scene.children.length - 1; i >= 0; i--) {
             globals.scene.remove(globals.scene.children[i]);

@@ -37,14 +37,14 @@ module.exports = (globals, player) => {
                 mass: 0
             });
             let loader = new THREE.ObjectLoader();
-            loader.load('/models/sword/sword.json', sword => {
-                sword.scale.set(0.2, 0.2, 0.2);
-                sword.castShadow = true;
-                cube.mesh.add(sword);
-                sword.position.x += 0.7;
-                sword.position.y -= 0.375;
-                sword.position.z -= 1.25;
-            });
+            // loader.load('/models/sword/sword.json', sword => {
+            //     sword.scale.set(0.2, 0.2, 0.2);
+            //     sword.castShadow = true;
+            //     cube.mesh.add(sword);
+            //     sword.position.x += 0.7;
+            //     sword.position.y -= 0.375;
+            //     sword.position.z -= 1.25;
+            // });
             globals.PLAYERS.push({
                 body: cube.body,
                 mesh: cube.mesh,
@@ -52,7 +52,7 @@ module.exports = (globals, player) => {
                 data
             });
             globals.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
-            Materialize.toast(`${data.acc.username} joined`, 4000);
+            Materialize.toast(`<span style='color:lightblue'>${data.acc.username} joined</span>`, 4000);
         }
     });
 
@@ -125,7 +125,31 @@ module.exports = (globals, player) => {
         }
         return globals.PLAYERS[index];
     };
+    // CHAT STARTS HERE
+    globals.socket.on('chat-msg', (player, msg) => {
+        Materialize.toast(`${player}: ${msg}`, 10000);
+    });
 
+    let msgs = 0;
+
+    $(window).on('keydown', e => {
+        if (e.keyCode == 13 && $('#chat-input').is(':focus') && msgs < 5) {
+            globals.socket.emit('chat-msg', player.serverdata.acc.username, $('#chat-input').val());
+            $('#chat-input').val('');
+            $('#chat-input').blur();
+            msgs++;
+            setTimeout(() => {msgs--}, 5000);
+        }
+        else if (e.keyCode == 84 && !$('#chat-input').is(':focus')) {
+            setTimeout(() => {
+                $('#chat-input').focus();
+                $('#chat-input').val(' ');
+            }, 100);
+        }
+    });
+    // Button for chat is (Insert chat-button here)
+    // Button to send chat is (Insert send-button here)
+    // CHAT ENDS HERE
     globals.socket.on('clear', () => {
         for (var i = globals.scene.children.length - 1; i >= 0; i--) {
             globals.scene.remove(globals.scene.children[i]);

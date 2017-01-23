@@ -75,13 +75,21 @@ app.get('/play', (req, res) => {
   });
   else res.redirect('/login');
 });
-app.use('/robots.txt', (req, res) => {
-  res.sendFile(require('path').resolve('views/robots.txt'));
+app.use('/robots', (req, res) => {
+  res.sendFile(require('path').resolve('/views/robots.txt'));
   console.log('Robots Activated.');
 });
 app.get('/license', (req, res) => {
   res.sendFile(require('path').resolve('views/LICENSE.html'));
   console.log('License Activated.');
+});
+app.get('/settings', (req, res) => {
+  res.render(require('path').resolve('views/settings.ejs'));
+  console.log('Settings Activated.');
+});
+app.get('/pwreset', (req, res) => {
+  res.render(require('path').resolve('views/pwreset.ejs'));
+  console.log('Password Reset Activated.');
 });
 
 http.listen(process.env.PORT || 8080, (listening) => {

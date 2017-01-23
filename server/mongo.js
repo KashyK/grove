@@ -97,5 +97,16 @@ module.exports = (app, events) => {
             else throw new Error('Something happened!');
         });
     });
+    app.post('/pwreset', (req, res) => {
+        User.findOne({
+            username: req.body.username,
+            password: require('md5')(req.body.password)
+        }, (err, doc) => {
+            if (err) res.redirect('/');
+            doc.password = require('md5')(req.body.new);
+            doc.save();
+            res.redirect('/');
+        });
+    });
     return User;
 };

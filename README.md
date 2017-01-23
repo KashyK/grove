@@ -40,13 +40,13 @@ Copying or redistributing this game or content without the consent of Hybrid Alp
 
 All people that have contributed to this game include:
 
-- Seth Traman               Lead Developer
-- Nate Goldsborough         Developer, Copyright Manager, General Maintenance, Logos
-- Casimir Kash              Developer, Graphics, Beta Testing
-- KJ Avakian                Developer
-- Gavin Montheye            PR
-- Hunter Sokolis            Graphics
-- Michael Rimmele           Graphics
-- Brendan O'Rourke          Graphics
-- Jasper Burns              Storyline
-- William VanDerLaan        Beta Testing, Logos
+- Seth Traman:              Lead Developer, CEO Hybrid Alapca Game Studios
+- Nate Goldsborough:        Developer, Copyright Manager, General Maintenance, CEO Artifex Inc.
+- Casimir Kash:             Developer, Graphics, Beta Testing
+- KJ Avakian:               Developer
+- Gavin Montheye:           PR
+- Hunter Sokolis:           Graphics
+- Michael Rimmele:          Graphics
+- Brendan O'Rourke:         Graphics
+- Jasper Burns:             Storyline
+- William VanDerLaan:       Beta Testing, Logos

@@ -51,33 +51,6 @@ module.exports = (globals, player) => {
         // set the sun
         light.position.set(450 * nsin, 600 * nsin, 600 * ncos);
 
-        if (nsin > 0.2) // day
-        {
-            sky.material.uniforms.topColor.value.setRGB(0.25, 0.55, 1);
-            sky.material.uniforms.bottomColor.value.setRGB(1, 1, 1);
-            var f = 1;
-            light.intensity = f;
-            light.shadowDarkness = f * 0.7;
-            globals.scene.fog.color.set(0xCCCCCC);
-        }
-        else if (nsin < 0.2 && nsin > 0.0) { // twilight
-            var f = nsin / 0.2;
-            light.intensity = f;
-            light.shadowDarkness = f * 0.7;
-            sky.material.uniforms.topColor.value.setRGB(0.25 * f, 0.55 * f, 1 * f);
-            sky.material.uniforms.bottomColor.value.setRGB(1 * f, 1 * f, 1 * f);
-            globals.scene.fog.color.set(0xCCCCCC);
-        }
-        else // night
-        {
-            var f = 0;
-            light.intensity = f;
-            light.shadowDarkness = f * 0.7;
-            sky.material.uniforms.topColor.value.setRGB(0, 0, 0);
-            sky.material.uniforms.bottomColor.value.setRGB(0, 0, 0);
-            globals.scene.fog.color.copy(uniforms.bottomColor.value);
-        }
-
     }, 40);
 
     var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.2);
@@ -86,38 +59,22 @@ module.exports = (globals, player) => {
     hemiLight.position.set(0, 500, 0);
     globals.scene.add(hemiLight);
 
+    var imagePrefix = "/img/skybox/";
+    var directions = ["px", "nx", "py", "ny", "pz", "nz"];
+    var imageSuffix = ".jpg";
+    var skyGeometry = new THREE.CubeGeometry(2000, 2000, 2000);
 
-    var vertexShader = document.getElementById('V_SkyShader').textContent;
-    var fragmentShader = document.getElementById('F_SkyShader').textContent;
-    var uniforms = {
-        topColor: {
-            type: "c",
-            value: new THREE.Color(0x0077ff)
-        },
-        bottomColor: {
-            type: "c",
-            value: new THREE.Color(0xffffff)
-        },
-        offset: {
-            type: "f",
-            value: 33
-        },
-        exponent: {
-            type: "f",
-            value: 0.6
-        }
-    };
-    uniforms.topColor.value.copy(hemiLight.color);
-    globals.scene.fog.color.copy(uniforms.bottomColor.value);
-    var skyGeo = new THREE.SphereGeometry(4000, 32, 15);
-    var skyMat = new THREE.ShaderMaterial({
-        vertexShader: vertexShader,
-        fragmentShader: fragmentShader,
-        uniforms: uniforms,
-        side: THREE.BackSide
-    });
-    var sky = new THREE.Mesh(skyGeo, skyMat);
-    globals.BODIES['player'].mesh.add(sky);
+    var materialArray = [];
+    for (var i = 0; i < 6; i++)
+        materialArray.push(new THREE.MeshBasicMaterial({
+            map: THREE.ImageUtils.loadTexture(imagePrefix + directions[i] + imageSuffix),
+            side: THREE.BackSide,
+            fog: false
+        }));
+    var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
+    var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+    globals.BODIES['player'].mesh.add(skyBox);
+
 
     // let loader = new THREE.ObjectLoader();
     // loader.load('/models/herbert/super-magic-dude.json', object => {
@@ -127,7 +84,7 @@ module.exports = (globals, player) => {
     // });
 
     let loader2 = new THREE.ObjectLoader();
-    loader2.load(`/models/sand/sand.json`, object => {
+    loader2.load(`/models/skjar-isles/skjar-isles.json`, object => {
         globals.scene.add(object);
         object.castShadow = true;
         object.recieveShadow = true;
@@ -141,15 +98,15 @@ module.exports = (globals, player) => {
                     material: globals.groundMaterial
                 });
                 if (/portal/gi.test(child.name)) {
-                    let sound = new THREE.PositionalAudio(globals.listener);
-                    let oscillator = globals.listener.context.createOscillator();
-                    oscillator.type = 'sine';
-                    oscillator.frequency.value = 200;
-                    oscillator.start();
-                    sound.setNodeSource(oscillator);
-                    sound.setRefDistance(20);
-                    sound.setVolume(1);
-                    child.add(sound);
+                    // let sound = new THREE.PositionalAudio(globals.listener);
+                    // let oscillator = globals.listener.context.createOscillator();
+                    // oscillator.type = 'sine';
+                    // oscillator.frequency.value = 200;
+                    // oscillator.start();
+                    // sound.setNodeSource(oscillator);
+                    // sound.setRefDistance(20);
+                    // sound.setVolume(1);
+                    // child.add(sound);
 
                     child.material = new THREE.ShaderMaterial({
                         uniforms: uni,
@@ -159,23 +116,23 @@ module.exports = (globals, player) => {
                     child.add(new THREE.PointLight(0xFFFFFF, 1, 25, 2));
                 }
                 if (/bridge/gi.test(child.name)) {
-                    let audioLoader = new THREE.AudioLoader();
-                    let sound = new THREE.PositionalAudio(globals.listener);
-                    let sound2 = new THREE.PositionalAudio(globals.listener);
-                    audioLoader.load('/audio/creak.wav', (buffer) => {
-                        sound.setBuffer(buffer);
-                        sound.setRefDistance(5);
-                        sound.setLoop(true);
-                        sound.play();
-                    });
-                    audioLoader.load('/audio/creak2.wav', (buffer) => {
-                        sound2.setBuffer(buffer);
-                        sound2.setRefDistance(5);
-                        sound2.setLoop(true);
-                        sound2.play();
-                    });
-                    child.add(sound);
-                    child.add(sound2);
+                    // let audioLoader = new THREE.AudioLoader();
+                    // let sound = new THREE.PositionalAudio(globals.listener);
+                    // let sound2 = new THREE.PositionalAudio(globals.listener);
+                    // audioLoader.load('/audio/creak.wav', (buffer) => {
+                    //     sound.setBuffer(buffer);
+                    //     sound.setRefDistance(5);
+                    //     sound.setLoop(true);
+                    //     sound.play();
+                    // });
+                    // audioLoader.load('/audio/creak2.wav', (buffer) => {
+                    //     sound2.setBuffer(buffer);
+                    //     sound2.setRefDistance(5);
+                    //     sound2.setLoop(true);
+                    //     sound2.play();
+                    // });
+                    // child.add(sound);
+                    // child.add(sound2);
 
                     let tween = new TWEEN.Tween(child.rotation)
                         .to({

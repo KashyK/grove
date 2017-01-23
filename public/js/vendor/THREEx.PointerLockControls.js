@@ -2,7 +2,7 @@
  * @author mrdoob / http://mrdoob.com/
  * @author schteppe / https://github.com/schteppe
  */
-var PointerLockControls = function (camera, cannonBody) {
+var PointerLockControls = function(camera, cannonBody) {
 
     var eyeYPos = 2; // eyes are 2 meters above the ground
     var velocityFactor = 0.3;
@@ -27,7 +27,7 @@ var PointerLockControls = function (camera, cannonBody) {
 
     var contactNormal = new CANNON.Vec3(); // Normal in the contact, pointing *out* of whatever the player touched
     var upAxis = new CANNON.Vec3(0, 1, 0);
-    cannonBody.addEventListener("collide", function (e) {
+    cannonBody.addEventListener("collide", function(e) {
         var contact = e.contact;
 
         // contact.bi and contact.bj are the colliding bodies, and contact.ni is the collision normal.
@@ -46,7 +46,7 @@ var PointerLockControls = function (camera, cannonBody) {
 
     var PI_2 = Math.PI / 2;
 
-    var onMouseMove = function (event) {
+    var onMouseMove = function(event) {
 
         if (scope.enabled === false) return;
 
@@ -59,66 +59,66 @@ var PointerLockControls = function (camera, cannonBody) {
         pitchObject.rotation.x = Math.max(-PI_2, Math.min(PI_2, pitchObject.rotation.x));
     };
 
-    var onKeyDown = function (event) {
+    var onKeyDown = function(event) {
+        if (!$('#chat-input').is(':focus')) {
+            switch (event.keyCode) {
 
-        switch (event.keyCode) {
+                case 38: // up
+                case 87: // w
+                    moveForward = true;
+                    break;
 
-        case 38: // up
-        case 87: // w
-            moveForward = true;
-            break;
+                case 37: // left
+                case 65: // a
+                    moveLeft = true;
+                    break;
 
-        case 37: // left
-        case 65: // a
-            moveLeft = true;
-            break;
+                case 40: // down
+                case 83: // s
+                    moveBackward = true;
+                    break;
 
-        case 40: // down
-        case 83: // s
-            moveBackward = true;
-            break;
+                case 39: // right
+                case 68: // d
+                    moveRight = true;
+                    break;
 
-        case 39: // right
-        case 68: // d
-            moveRight = true;
-            break;
-
-        case 32: // space
-            if (canJump === true) {
-                velocity.y = jumpVelocity;
+                case 32: // space
+                    if (canJump === true) {
+                        velocity.y = jumpVelocity;
+                    }
+                    canJump = false;
+                    break;
             }
-            canJump = false;
-            break;
         }
-
     };
 
-    var onKeyUp = function (event) {
+    var onKeyUp = function(event) {
+        if (!$('#chat-input').is(':focus')) {
+            switch (event.keyCode) {
 
-        switch (event.keyCode) {
+                case 38: // up
+                case 87: // w
+                    moveForward = false;
+                    break;
 
-        case 38: // up
-        case 87: // w
-            moveForward = false;
-            break;
+                case 37: // left
+                case 65: // a
+                    moveLeft = false;
+                    break;
 
-        case 37: // left
-        case 65: // a
-            moveLeft = false;
-            break;
+                case 40: // down
+                case 83: // a
+                    moveBackward = false;
+                    break;
 
-        case 40: // down
-        case 83: // a
-            moveBackward = false;
-            break;
+                case 39: // right
+                case 68: // d
+                    moveRight = false;
+                    break;
 
-        case 39: // right
-        case 68: // d
-            moveRight = false;
-            break;
-
+            }
         }
-
     };
 
     document.addEventListener('mousemove', onMouseMove, false);
@@ -127,11 +127,11 @@ var PointerLockControls = function (camera, cannonBody) {
 
     this.enabled = false;
 
-    this.getObject = function () {
+    this.getObject = function() {
         return yawObject;
     };
 
-    this.getDirection = function (targetVec) {
+    this.getDirection = function(targetVec) {
         targetVec.set(0, 0, -1);
         quat.multiplyVector3(targetVec);
     }
@@ -139,7 +139,7 @@ var PointerLockControls = function (camera, cannonBody) {
     // Moves the camera to the Cannon.js object position and adds velocity to the object if the run key is down
     var inputVelocity = new THREE.Vector3();
     var euler = new THREE.Euler();
-    this.update = function (delta) {
+    this.update = function(delta) {
 
         if (scope.enabled === true) {
 
