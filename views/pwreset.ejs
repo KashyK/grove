@@ -7,41 +7,30 @@
         <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
         <link rel='icon' href='/img/favicon.ico'>
-        <link href="https://fonts.googleapis.com/css?family=Aldrich" rel="stylesheet">
-        <style>
+    </head>
+    <style>
         
         body {
             background-color: #81c784;
-            overflow: hidden;
         }
         h1 {
-            color: #666666;
+            color: white;
             margin: 150px;
             font-size: 60px;
-            font-family: 'Aldrich', sans-serif;
         }
         
         h3 {
             color: white;
             margin: 130px;
             font-size: 30px;
-            font-family: 'Aldrich', sans-serif;
         }
         h2 {
             color: white;
-            font-family: 'Aldrich', sans-serif;
-        }
-        .standard-txt {
-            color: #666666;
         }
         button {
             margin-left: 150px;
             margin-top: -100px;
             padding: 15px 30px !important;
-        }
-        form {
-            overflow: hidden;
-            margin-top: -100px;
         }
         .back-btn {
             color: white;
@@ -50,29 +39,20 @@
             padding: 20px;
             border-radius: 7.5px;
             font-size: 17px;
-            font-family: 'Aldrich', sans-serif;
         }
     </style>
-    </head>
     <body>
-  <h2>&nbsp;&nbsp;Password Reset</h2>
-  <div class='row'>
-  <div class='col s10'>
-  <form action='/pwreset' method='POST'>
-        <input placeholder='Username' name='username' class='validate'>
-        <input placeholder='Password' name='password' class='validate'>
-        <input placeholder='New Password' name='new' class='validate'>
-        <input type='submit' value='Submit' class='waves-effect waves-light btn-small light-green z-depth-3'>
-  </form>
-  </div>
-  </div>
-        <a href='/settings' class='waves-effect waves-light btn-large red z-depth-3''>Back</a>
-        </pre>
-        <script>
-            $('input[type=submit]').click(function(e) {
-                var h = confirm('In Development.');
-                if(!h) e.preventDefault()
-            });
-        </script>
+        <h2>&nbsp;&nbsp;Password Reset</h2>
+        <br>
+        <form class='container' action='/pwreset' method='POST'>
+            <input placeholder='Username' name='username' class='validate'>
+            <input placeholder='Password' name='password' class='validate'>
+            <input placeholder='New Password' name='new' class='validate'>
+            <input type='submit' value='Submit' class='back-btn'>
+        </form>
+        <br>
+        <h3>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='/settings' class='back-btn'> Back to the Settings! </a>
+        </h3>
     </body>
 </html>

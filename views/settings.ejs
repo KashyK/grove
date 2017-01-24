@@ -7,10 +7,6 @@
     <meta name='description' content='Welcome to The Grove, a browser-based MMORPG!'>
     <link rel='author' href='https://c9.io/tramans'>
     <script src='js/vendor/dat.gui.min.js'></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Aldrich" rel="stylesheet">
 
 </head>
 
@@ -21,15 +17,9 @@
             background-color: #81c784;
         }
         h2 {
-            font-family: 'Aldrich', sans-serif;
+            font-family: Serif;
             font-size: 30pt;
             color: #37474f;
-        }
-        h3 {
-            font-family: 'Aldrich', sans-serif;
-            font-size: 30pt;
-            color: #37474f;
-             top: 50%;
         }
         .back-btn {
             color: white;
@@ -38,11 +28,10 @@
             padding: 20px;
             border-radius: 7.5px;
             font-size: 17px;
-            font-family: 'Aldrich', sans-serif;
         }
         p {
-            font-family: 'Aldrich', sans-serif;
-            font-size: 12pt;
+            font-family: Serif;
+            font-size: 15pt;
             color: #37474f;
         }
     </style>
@@ -50,8 +39,10 @@
         <h2 class='h2'> &nbsp;Settings</h2>
         <p>&nbsp;&nbsp;&nbsp;Use the box at the top right corner and the options below to customize the settings!</p>
         <h3>Changing your Password</h3>
-        <p>&nbsp;&nbsp;&nbsp;<a href='/pwreset' class='waves-effect waves-light btn-large light-green z-depth-3'>Reset your password</a></p>
-        <p>&nbsp;&nbsp;&nbsp;<a href='/' class='waves-effect waves-light btn-large red z-depth-3'>Back</a></p>
+                          <p>&nbsp;&nbsp;&nbsp;<a href='pwreset'>Click this link to start resetting your password.</a></p>
+        <br>
+        &nbsp;&nbsp;&nbsp;<a href='/' class='back-btn'>Back to the Dashboard! </a>
+    </div>
     <script>
         window.onload = function() {
             var controls = new function() {
