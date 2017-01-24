@@ -904,7 +904,7 @@ function animate(delta) {
         if (player.hp.val <= 0) {
             globals.socket.disconnect();
             $('#blocker').fadeIn(5000);
-            $('#load').show().html('<a style="font-size:32pt;" href="/play">You Have Perished</a>');
+            $('#load').show().html('<h1><a href=' / '>You Have Perished. Game Over...</a></h1>');
             return;
         }
 
