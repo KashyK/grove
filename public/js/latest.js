@@ -845,6 +845,20 @@ require('./gui').init();
 require('./shooting')(globals, player);
 require('./multiplayer')(globals, player);
 
+var w = void 0,
+    dat = [];
+
+if (typeof Worker !== "undefined") {
+    if (typeof w == "undefined") {
+        w = new Worker("/js/workers/update.js");
+    }
+    w.onmessage = function (event) {
+        dat.push(event.data);
+    };
+} else {
+    alert("Sorry! No Web Worker support.");
+}
+
 THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
     console.log(loaded + ' out of ' + total);
     if (loaded == total) {
@@ -856,6 +870,11 @@ THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
 };
 
 function animate(delta) {
+
+    for (var i = 0; i < dat.length; i++) {
+        alert(dat[i]);
+        dat.splice(i, 1);
+    }
 
     if (window.controls && window.controls.enabled) {
 
@@ -881,15 +900,15 @@ function animate(delta) {
         }
 
         // Update bullets, etc.
-        for (var i = 0; i < globals.BODIES['projectiles'].length; i++) {
-            globals.BODIES['projectiles'][i].mesh.position.copy(globals.BODIES['projectiles'][i].body.position);
-            globals.BODIES['projectiles'][i].mesh.quaternion.copy(globals.BODIES['projectiles'][i].body.quaternion);
+        for (var _i = 0; _i < globals.BODIES['projectiles'].length; _i++) {
+            globals.BODIES['projectiles'][_i].mesh.position.copy(globals.BODIES['projectiles'][_i].body.position);
+            globals.BODIES['projectiles'][_i].mesh.quaternion.copy(globals.BODIES['projectiles'][_i].body.quaternion);
         }
 
         // Update items
-        for (var _i = 0; _i < globals.BODIES['items'].length; _i++) {
-            globals.BODIES['items'][_i].mesh.position.copy(globals.BODIES['items'][_i].body.position);
-            globals.BODIES['items'][_i].mesh.quaternion.copy(globals.BODIES['items'][_i].body.quaternion);
+        for (var _i2 = 0; _i2 < globals.BODIES['items'].length; _i2++) {
+            globals.BODIES['items'][_i2].mesh.position.copy(globals.BODIES['items'][_i2].body.position);
+            globals.BODIES['items'][_i2].mesh.quaternion.copy(globals.BODIES['items'][_i2].body.quaternion);
         }
 
         for (var _key3 in globals.TWEENS) {
@@ -904,7 +923,7 @@ function animate(delta) {
         if (player.hp.val <= 0) {
             globals.socket.disconnect();
             $('#blocker').fadeIn(5000);
-            $('#load').show().html('<h1><a href=' / '>You Have Perished. Game Over...</a></h1>');
+            $('#load').show().html('<h1>You Have Perished. Game Over...</h1>');
             return;
         }
 

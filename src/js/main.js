@@ -10,6 +10,21 @@ require('./gui').init();
 require('./shooting')(globals, player);
 require('./multiplayer')(globals, player);
 
+let w, dat = [];
+
+if (typeof(Worker) !== "undefined") {
+    if (typeof(w) == "undefined") {
+        w = new Worker("/js/workers/update.js");
+    }
+    w.onmessage = event => {
+        dat.push(event.data);
+    };
+}
+else {
+    alert("Sorry! No Web Worker support.");
+}
+
+
 THREE.DefaultLoadingManager.onProgress = (item, loaded, total) => {
     console.log(`${loaded} out of ${total}`);
     if (loaded == total) {
@@ -21,6 +36,11 @@ THREE.DefaultLoadingManager.onProgress = (item, loaded, total) => {
 };
 
 function animate(delta) {
+    
+    for(let i = 0; i < dat.length; i++) {
+        alert(dat[i]);
+        dat.splice(i, 1);
+    }
 
     if (window.controls && window.controls.enabled) {
 
