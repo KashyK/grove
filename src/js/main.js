@@ -71,7 +71,7 @@ function animate(delta) {
         if (player.hp.val <= 0) {
             globals.socket.disconnect();
             $('#blocker').fadeIn(5000);
-            $('#load').show().html('<h1><a href='/'>You Have Perished. Game Over...</a></h1>');
+            $('#load').show().html('<h1>You Have Perished. Game Over...</h1>');
             return;
         }
 
