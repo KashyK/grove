@@ -64,6 +64,16 @@ module.exports = (globals, player) => {
     var imageSuffix = ".jpg";
     var skyGeometry = new THREE.CubeGeometry(2000, 2000, 2000);
 
+    globals.ball({
+        mass: 1,
+        radius: 5,
+        pos: {
+            x: 10,
+            y: 7.5,
+            z: 10
+        }
+    });
+
     var materialArray = [];
     for (var i = 0; i < 6; i++)
         materialArray.push(new THREE.MeshBasicMaterial({
@@ -76,15 +86,8 @@ module.exports = (globals, player) => {
     globals.BODIES['player'].mesh.add(skyBox);
 
 
-    // let loader = new THREE.ObjectLoader();
-    // loader.load('/models/herbert/super-magic-dude.json', object => {
-    //     globals.scene.add(object);
-    //     // object.position.set(0, 0, 0);
-    //     // object.scale.set(0.1, 0.1, 0.1);
-    // });
-
-    let loader2 = new THREE.ObjectLoader();
-    loader2.load(`/models/skjar-isles/skjar-isles.json`, object => {
+    let loader = new THREE.ObjectLoader();
+    loader.load(`/models/skjar-isles/skjar-isles.json`, object => {
         globals.scene.add(object);
         object.castShadow = true;
         object.recieveShadow = true;

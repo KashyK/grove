@@ -2,7 +2,7 @@
 
 module.exports = (globals, player) => {
 
-    var mass = 10,
+    var mass = 100,
         radius = 1.7;
     var sphereShape = new CANNON.Sphere(radius);
     var sphereBody = new CANNON.Body({

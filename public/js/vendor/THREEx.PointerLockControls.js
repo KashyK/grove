@@ -170,14 +170,14 @@ var PointerLockControls = function(camera, cannonBody) {
 
         if (canJump && !moveForward && !moveBackward && !moveLeft && !moveRight) {
             if (cannonBody.velocity.x < 0)
-                cannonBody.velocity.x = 0;
+                cannonBody.velocity.x += 0.45;
             else
-                cannonBody.velocity.x = 0;
+                cannonBody.velocity.x -= 0.46;
 
             if (cannonBody.velocity.z < 0)
-                cannonBody.velocity.z = 0;
+                cannonBody.velocity.z += 0.45;
             else
-                cannonBody.velocity.z = 0;
+                cannonBody.velocity.z -= 0.46;
         }
 
         // Convert velocity to world coordinates

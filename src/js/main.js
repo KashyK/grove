@@ -10,21 +10,6 @@ require('./gui').init();
 require('./shooting')(globals, player);
 require('./multiplayer')(globals, player);
 
-let w, dat = [];
-
-if (typeof(Worker) !== "undefined") {
-    if (typeof(w) == "undefined") {
-        w = new Worker("/js/workers/update.js");
-    }
-    w.onmessage = event => {
-        dat.push(event.data);
-    };
-}
-else {
-    alert("Sorry! No Web Worker support.");
-}
-
-
 THREE.DefaultLoadingManager.onProgress = (item, loaded, total) => {
     console.log(`${loaded} out of ${total}`);
     if (loaded == total) {
@@ -36,18 +21,8 @@ THREE.DefaultLoadingManager.onProgress = (item, loaded, total) => {
 };
 
 function animate(delta) {
-    
-    for(let i = 0; i < dat.length; i++) {
-        alert(dat[i]);
-        dat.splice(i, 1);
-    }
 
     if (window.controls && window.controls.enabled) {
-
-        // globals.camera.updateMatrixWorld(); // make sure the camera matrix is updated
-        // globals.camera.matrixWorldInverse.getInverse(globals.camera.matrixWorld);
-        // globals.cameraViewProjectionMatrix.multiplyMatrices(globals.camera.projectionMatrix, globals.camera.matrixWorldInverse);
-        // globals.frustum.setFromMatrix(globals.cameraViewProjectionMatrix);
 
         if (globals.remove.bodies.length && globals.remove.meshes.length) {
             for (let key in globals.remove.bodies) {
@@ -95,7 +70,7 @@ function animate(delta) {
             return;
         }
 
-        for (let key in globals.composers) globals.composers[key].render(delta);
+        // for (let key in globals.composers) globals.composers[key].render(delta);
 
         globals.world.step(dt);
         globals.controls.update(Date.now() - globals.delta);

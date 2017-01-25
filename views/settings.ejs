@@ -7,6 +7,9 @@
     <meta name='description' content='Welcome to The Grove, a browser-based MMORPG!'>
     <link rel='author' href='https://c9.io/tramans'>
     <script src='js/vendor/dat.gui.min.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
 
 </head>
 
@@ -21,6 +24,11 @@
             font-size: 30pt;
             color: #37474f;
         }
+        h3 {
+            font-family: Serif;
+            font-size: 20pt;
+            color: #37474f;
+        }
         .back-btn {
             color: white;
             text-decoration: none;
@@ -31,7 +39,7 @@
         }
         p {
             font-family: Serif;
-            font-size: 15pt;
+            font-size: 13pt;
             color: #37474f;
         }
     </style>
@@ -39,9 +47,8 @@
         <h2 class='h2'> &nbsp;Settings</h2>
         <p>&nbsp;&nbsp;&nbsp;Use the box at the top right corner and the options below to customize the settings!</p>
         <h3>Changing your Password</h3>
-                          <p>&nbsp;&nbsp;&nbsp;<a href='pwreset'>Click this link to start resetting your password.</a></p>
-        <br>
-        &nbsp;&nbsp;&nbsp;<a href='/' class='back-btn'>Back to the Dashboard! </a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='pwreset' class='waves-effect waves-light btn-large light-green z-depth-3'>Reset your password.</a>
+        <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='/' class='waves-effect waves-light btn-large red z-depth-3'>Back</a>
     </div>
     <script>
         window.onload = function() {

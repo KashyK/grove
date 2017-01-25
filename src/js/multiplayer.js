@@ -37,14 +37,14 @@ module.exports = (globals, player) => {
                 mass: 0
             });
             let loader = new THREE.ObjectLoader();
-            // loader.load('/models/sword/sword.json', sword => {
-            //     sword.scale.set(0.2, 0.2, 0.2);
-            //     sword.castShadow = true;
-            //     cube.mesh.add(sword);
-            //     sword.position.x += 0.7;
-            //     sword.position.y -= 0.375;
-            //     sword.position.z -= 1.25;
-            // });
+            loader.load('/models/sword/sword.json', sword => {
+                sword.scale.set(0.2, 0.2, 0.2);
+                sword.castShadow = true;
+                cube.mesh.add(sword);
+                sword.position.x += 0.7;
+                sword.position.y -= 0.375;
+                sword.position.z -= 1.25;
+            });
             globals.PLAYERS.push({
                 body: cube.body,
                 mesh: cube.mesh,
@@ -130,7 +130,7 @@ module.exports = (globals, player) => {
         Materialize.toast(`${player}: ${msg}`, 10000);
     });
 
-    let msgs = 0;
+    let msgs = 0; // prevents spam
 
     $(window).on('keydown', e => {
         if (e.keyCode == 13 && $('#chat-input').is(':focus') && msgs < 5) {
@@ -147,8 +147,8 @@ module.exports = (globals, player) => {
             }, 100);
         }
     });
-    // Button for chat is (Insert chat-button here)
-    // Button to send chat is (Insert send-button here)
+    // Button for chat is [t]
+    // Button to send chat is [enter]
     // CHAT ENDS HERE
     globals.socket.on('clear', () => {
         for (var i = globals.scene.children.length - 1; i >= 0; i--) {

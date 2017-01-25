@@ -11,7 +11,7 @@
     <style>
         
         body {
-            background-color: #81c784;
+            background-color: #888d99  ;
         }
         h1 {
             color: white;
@@ -42,17 +42,14 @@
         }
     </style>
     <body>
-        <h2>&nbsp;&nbsp;Password Reset</h2>
+        <h2>&nbsp;Password Reset</h2>
         <br>
         <form class='container' action='/pwreset' method='POST'>
             <input placeholder='Username' name='username' class='validate'>
             <input placeholder='Password' name='password' class='validate'>
             <input placeholder='New Password' name='new' class='validate'>
-            <input type='submit' value='Submit' class='back-btn'>
+            <input type='submit' value='Submit' class='btn btn-lg btn-success'>
+            <br><br><a href='/settings' class='waves-effect waves-light btn-large red z-depth-3'>Back</a>
         </form>
-        <br>
-        <h3>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='/settings' class='back-btn'> Back to the Settings! </a>
-        </h3>
     </body>
 </html>

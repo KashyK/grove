@@ -54,6 +54,7 @@ function box(opts) {
     globals.scene.add(boxMesh);
     boxMesh.castShadow = true;
     boxMesh.receiveShadow = true;
+    opts.pos ? boxBody.position.set(opts.pos.x, opts.pos.y, opts.pos.z) : null;
     globals.BODIES['items'].push({
         body: boxBody,
         shape: boxShape,
@@ -88,6 +89,8 @@ function ball(opts) {
         shape: ballShape,
         mesh: ballMesh
     });
+    opts.pos ? ballBody.position.set(opts.pos.x, opts.pos.y, opts.pos.z) : null;
+    
 
     return {
         body: ballBody,

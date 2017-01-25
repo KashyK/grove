@@ -265,6 +265,16 @@ module.exports = function (globals, player) {
     var imageSuffix = ".jpg";
     var skyGeometry = new THREE.CubeGeometry(2000, 2000, 2000);
 
+    globals.ball({
+        mass: 1,
+        radius: 5,
+        pos: {
+            x: 10,
+            y: 7.5,
+            z: 10
+        }
+    });
+
     var materialArray = [];
     for (var i = 0; i < 6; i++) {
         materialArray.push(new THREE.MeshBasicMaterial({
@@ -276,15 +286,8 @@ module.exports = function (globals, player) {
     var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
     globals.BODIES['player'].mesh.add(skyBox);
 
-    // let loader = new THREE.ObjectLoader();
-    // loader.load('/models/herbert/super-magic-dude.json', object => {
-    //     globals.scene.add(object);
-    //     // object.position.set(0, 0, 0);
-    //     // object.scale.set(0.1, 0.1, 0.1);
-    // });
-
-    var loader2 = new THREE.ObjectLoader();
-    loader2.load("/models/skjar-isles/skjar-isles.json", function (object) {
+    var loader = new THREE.ObjectLoader();
+    loader.load("/models/skjar-isles/skjar-isles.json", function (object) {
         globals.scene.add(object);
         object.castShadow = true;
         object.recieveShadow = true;
@@ -385,7 +388,7 @@ module.exports = init;
 
 module.exports = function (globals, player) {
 
-    var mass = 10,
+    var mass = 100,
         radius = 1.7;
     var sphereShape = new CANNON.Sphere(radius);
     var sphereBody = new CANNON.Body({
@@ -676,6 +679,7 @@ function box(opts) {
     globals.scene.add(boxMesh);
     boxMesh.castShadow = true;
     boxMesh.receiveShadow = true;
+    opts.pos ? boxBody.position.set(opts.pos.x, opts.pos.y, opts.pos.z) : null;
     globals.BODIES['items'].push({
         body: boxBody,
         shape: boxShape,
@@ -710,6 +714,7 @@ function ball(opts) {
         shape: ballShape,
         mesh: ballMesh
     });
+    opts.pos ? ballBody.position.set(opts.pos.x, opts.pos.y, opts.pos.z) : null;
 
     return {
         body: ballBody,
@@ -845,20 +850,6 @@ require('./gui').init();
 require('./shooting')(globals, player);
 require('./multiplayer')(globals, player);
 
-var w = void 0,
-    dat = [];
-
-if (typeof Worker !== "undefined") {
-    if (typeof w == "undefined") {
-        w = new Worker("/js/workers/update.js");
-    }
-    w.onmessage = function (event) {
-        dat.push(event.data);
-    };
-} else {
-    alert("Sorry! No Web Worker support.");
-}
-
 THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
     console.log(loaded + ' out of ' + total);
     if (loaded == total) {
@@ -871,17 +862,7 @@ THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
 
 function animate(delta) {
 
-    for (var i = 0; i < dat.length; i++) {
-        alert(dat[i]);
-        dat.splice(i, 1);
-    }
-
     if (window.controls && window.controls.enabled) {
-
-        // globals.camera.updateMatrixWorld(); // make sure the camera matrix is updated
-        // globals.camera.matrixWorldInverse.getInverse(globals.camera.matrixWorld);
-        // globals.cameraViewProjectionMatrix.multiplyMatrices(globals.camera.projectionMatrix, globals.camera.matrixWorldInverse);
-        // globals.frustum.setFromMatrix(globals.cameraViewProjectionMatrix);
 
         if (globals.remove.bodies.length && globals.remove.meshes.length) {
             for (var key in globals.remove.bodies) {
@@ -900,15 +881,15 @@ function animate(delta) {
         }
 
         // Update bullets, etc.
-        for (var _i = 0; _i < globals.BODIES['projectiles'].length; _i++) {
-            globals.BODIES['projectiles'][_i].mesh.position.copy(globals.BODIES['projectiles'][_i].body.position);
-            globals.BODIES['projectiles'][_i].mesh.quaternion.copy(globals.BODIES['projectiles'][_i].body.quaternion);
+        for (var i = 0; i < globals.BODIES['projectiles'].length; i++) {
+            globals.BODIES['projectiles'][i].mesh.position.copy(globals.BODIES['projectiles'][i].body.position);
+            globals.BODIES['projectiles'][i].mesh.quaternion.copy(globals.BODIES['projectiles'][i].body.quaternion);
         }
 
         // Update items
-        for (var _i2 = 0; _i2 < globals.BODIES['items'].length; _i2++) {
-            globals.BODIES['items'][_i2].mesh.position.copy(globals.BODIES['items'][_i2].body.position);
-            globals.BODIES['items'][_i2].mesh.quaternion.copy(globals.BODIES['items'][_i2].body.quaternion);
+        for (var _i = 0; _i < globals.BODIES['items'].length; _i++) {
+            globals.BODIES['items'][_i].mesh.position.copy(globals.BODIES['items'][_i].body.position);
+            globals.BODIES['items'][_i].mesh.quaternion.copy(globals.BODIES['items'][_i].body.quaternion);
         }
 
         for (var _key3 in globals.TWEENS) {
@@ -927,9 +908,9 @@ function animate(delta) {
             return;
         }
 
-        for (var _key4 in globals.composers) {
-            globals.composers[_key4].render(delta);
-        }globals.world.step(dt);
+        // for (let key in globals.composers) globals.composers[key].render(delta);
+
+        globals.world.step(dt);
         globals.controls.update(Date.now() - globals.delta);
         // globals.rendererDEBUG.update();
         globals.renderer.render(globals.scene, globals.camera);
@@ -991,29 +972,31 @@ module.exports = function (globals, player) {
 
     globals.socket.on('addOtherPlayer', function (data) {
         if (data.id !== player.id) {
-            var cube = globals.box({
-                l: 1,
-                w: 1,
-                h: 2,
-                mass: 0
-            });
-            var loader = new THREE.ObjectLoader();
-            // loader.load('/models/sword/sword.json', sword => {
-            //     sword.scale.set(0.2, 0.2, 0.2);
-            //     sword.castShadow = true;
-            //     cube.mesh.add(sword);
-            //     sword.position.x += 0.7;
-            //     sword.position.y -= 0.375;
-            //     sword.position.z -= 1.25;
-            // });
-            globals.PLAYERS.push({
-                body: cube.body,
-                mesh: cube.mesh,
-                id: data.id,
-                data: data
-            });
-            globals.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
-            Materialize.toast("<span style='color:lightblue'>" + data.acc.username + " joined</span>", 4000);
+            (function () {
+                var cube = globals.box({
+                    l: 1,
+                    w: 1,
+                    h: 2,
+                    mass: 0
+                });
+                var loader = new THREE.ObjectLoader();
+                loader.load('/models/sword/sword.json', function (sword) {
+                    sword.scale.set(0.2, 0.2, 0.2);
+                    sword.castShadow = true;
+                    cube.mesh.add(sword);
+                    sword.position.x += 0.7;
+                    sword.position.y -= 0.375;
+                    sword.position.z -= 1.25;
+                });
+                globals.PLAYERS.push({
+                    body: cube.body,
+                    mesh: cube.mesh,
+                    id: data.id,
+                    data: data
+                });
+                globals.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
+                Materialize.toast("<span style='color:lightblue'>" + data.acc.username + " joined</span>", 4000);
+            })();
         }
     });
 
@@ -1087,7 +1070,7 @@ module.exports = function (globals, player) {
         Materialize.toast(player + ": " + msg, 10000);
     });
 
-    var msgs = 0;
+    var msgs = 0; // prevents spam
 
     $(window).on('keydown', function (e) {
         if (e.keyCode == 13 && $('#chat-input').is(':focus') && msgs < 5) {
@@ -1105,8 +1088,8 @@ module.exports = function (globals, player) {
             }, 100);
         }
     });
-    // Button for chat is (Insert chat-button here)
-    // Button to send chat is (Insert send-button here)
+    // Button for chat is [t]
+    // Button to send chat is [enter]
     // CHAT ENDS HERE
     globals.socket.on('clear', function () {
         for (var i = globals.scene.children.length - 1; i >= 0; i--) {
