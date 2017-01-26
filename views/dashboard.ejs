@@ -21,19 +21,25 @@
             .header {
                 font-weight: 300
             }
+            
            
         </style>
     </head>
 
     <body>
         <nav>
-            <div class="nav-wrapper">
-                <a href="#" class="brand-logo">&nbsp;<%= user.username %></a>
-                <ul id="tabs" class='right hide-on-med-and-down'>
-                    <li class="tab col s3"><a class='active wave-effect waves-light' href="#home">Home</a></li>
-                    <li class="tab col s3"><a href="#stats">Stats</a></li>
-                    <li class="tab col s3"><a href="#about">About</a></li>
-                </ul>
+            <div class="nav-wrapper ">
+                <a  class="brand-logo">&nbsp;<%= user.username %></a>
+                <div class='row'>
+                    <div class='col s6'>
+                        <ul id="tabs" class='right hide-on-med-and-down'>
+                            <li class="tab"><a class='active wave-effect waves-light' href="#home">Home</a></li>
+                            <li class="tab"><a href="#stats">Stats</a></li>
+                            <li class="tab"><a href="#about">About</a></li>
+                        </ul>
+                    </div>
+                    <div class='col s6'></div>
+                </div>
             </div>
         </nav>
         <div id='home' class='row' style='height:100%;'>
@@ -41,11 +47,12 @@
                 <br>
                 <h3 class='header'>Actions</h3>
                 <br>
-                <a href='/play' class='waves-effect waves-light btn-large light-green z-depth-3'>Play</a>
+                <a href='/play' class='waves-effect waves-light btn-large light-green z-depth-3'>Enter the Grove</a>
                 <br><br>
                  <a href='/settings' class='waves-effect waves-light btn-large blue z-depth-3'>Settings</a>
+                 <br><br><a href='/store' class='waves-effect waves-light btn-large gray z-depth-3'>Store</a>
                 <br><br><a href='/logout' class='waves-effect waves-light btn-large red z-depth-3'>Logout</a>
-                <br><br><a href='/license' class='waves-effect waves-light btn-large purple z-depth-3'>License</a>
+    
             </div>
             <div class='col s8 teal lighten-2' style='height:100%;padding-left:40px;'>
                 <br>
@@ -105,7 +112,26 @@
  <pre class='green-text text-darken-4'> 1/18/17: Fixed strange mishappenings on the "Stats" page!</pre>
  <pre class='green-text text-darken-4'> 1/18/17: The Grove updated the "About" page!</pre>
  <pre class='green-text text-darken-4'> 1/18/17: The Grove updated the license! The new license is listed below! 
-<br><br><a href='/license' class='waves-effect waves-light btn-large purple z-depth-3'>License</a>
+<pre class='green-text text-darken-4'>  The Grove is copyright 2016 by Hybrid Alpaca Game Studios. All images, story, and game are copyright of Hybrid Alapca Game Studios. 
+     Copying or redistributing this game or content without the consent of Hybrid Alpaca Game Studios is illegal and unlawful.
+     
+     Most images are not owned by Hybrid Alpaca Game Studios.
+    
+     The above copyright notice and this permission notice shall be
+     included in all copies or substantial portions of the Software.
+    
+    
+     All people that have contributed to this game include:
+    - Seth Traman:              Lead Developer, CEO Hybrid Alapca Game Studios
+    - Nate Goldsborough:        Developer, Copyright Manager, General Maintenance
+    - Casimir Kash:             Developer, Graphics, Beta Testing
+    - KJ Avakian:               Developer
+    - Gavin Montheye:           PR
+    - Hunter Sokolis:           Graphics
+    - Michael Rimmele:          Graphics
+    - Brendan O'Rourke:         Graphics
+    - Jasper Burns:             Storyline
+    - William VanDerLaan:       Beta Testing, Logos</pre>
         <script>
             $(document).ready(function () {
                 $('ul#tabs').tabs();

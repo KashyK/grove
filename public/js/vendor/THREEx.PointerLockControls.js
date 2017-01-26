@@ -179,6 +179,14 @@ var PointerLockControls = function(camera, cannonBody) {
             else
                 cannonBody.velocity.z -= 0.46;
         }
+        if (cannonBody.velocity.x < -15)
+            cannonBody.velocity.x = -15;
+        else if (cannonBody.velocity.x > 15)
+            cannonBody.velocity.x = 15;
+        if (cannonBody.velocity.z < -15)
+            cannonBody.velocity.z = -15;
+        else if (cannonBody.velocity.z > 15)
+            cannonBody.velocity.z = 15;
 
         // Convert velocity to world coordinates
         // euler.x = pitchObject.rotation.x;
