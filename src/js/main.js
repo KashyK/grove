@@ -6,7 +6,7 @@ let player = require('./player');
 const dt = 1 / 60;
 
 require('./items');
-require('./gui').init();
+require('./gui').init(player);
 require('./shooting')(globals, player);
 require('./multiplayer')(globals, player);
 

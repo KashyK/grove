@@ -9,4 +9,4 @@ module.exports = (socket, io) => {
         });
     });
 };
-console.log("Physics Started.");
+console.log(new Date() + "Physics Started.");

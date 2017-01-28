@@ -14,7 +14,7 @@ module.exports = (app, events) => {
     });
     db.on('error', console.error);
     db.once('open', () => {
-        console.log(`Successfully connected to MongoDB`);
+        console.log(new Date() + `Successfully connected to MongoDB`);
     });
     mongoose.connect('mongodb://hybridalpaca:cellman123@ds139685.mlab.com:39685/grove');
 
@@ -23,7 +23,7 @@ module.exports = (app, events) => {
             username: dat.user.username,
             password: dat.user.password
         }, (err, obj) => {
-            if (err) console.log('ERROR!');
+            if (err) console.log(new Date() + 'ERROR!');
             if (obj) {
                 obj.inventory = dat.inv;
                 obj.save((err, data) => {
@@ -33,7 +33,7 @@ module.exports = (app, events) => {
                     });
                 });
             }
-            else console.log('Credentials not valid!');
+            else console.log(new Date() + 'Credentials not valid!');
         });
     });
     events.subscribe('map', dat => {
@@ -41,7 +41,7 @@ module.exports = (app, events) => {
             username: dat.user.username,
             password: dat.user.password
         }, (err, obj) => {
-            if (err) console.log('ERROR!');
+            if (err) console.log(new Date() + 'ERROR!');
             if (obj) {
                 obj.map = dat.map;
                 obj.save((err, data) => {
@@ -50,7 +50,7 @@ module.exports = (app, events) => {
                     });
                 });
             }
-            else console.log('Credentials not valid!');
+            else console.log(new Date() + 'Credentials not valid!');
         });
     });
 
@@ -63,7 +63,7 @@ module.exports = (app, events) => {
         }, (err, obj) => {
             if (err) console.error(err);
             else if (obj) {
-                console.log(obj.username + ' has logged in.');
+                console.log(new Date() + obj.username + ' has logged in.');
                 req.session.user = obj;
                 res.redirect('/');
                 events.publish('pageview', {
@@ -72,7 +72,7 @@ module.exports = (app, events) => {
                 });
             }
             else {
-                res.redirect('/login?err=not_found');
+                res.redirect('/login?err=user_not_found');
             }
         });
     });
@@ -90,11 +90,11 @@ module.exports = (app, events) => {
         u.save((err, obj) => {
             if (err) console.error(err);
             else if (obj) {
-                console.log(obj.username + ' has created an account.');
+                console.log(new Date() + obj.username + ' has created an account.');
                 req.session.user = obj;
                 res.redirect('/');
             }
-            else throw new Error('Something happened!');
+            else throw new Error(new Date() + 'Something (bad) happened!');
         });
     });
     app.post('/pwreset', (req, res) => {

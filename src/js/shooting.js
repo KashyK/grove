@@ -15,9 +15,6 @@ module.exports = (globals, player) => {
         sword.position.z -= 1.25;
     });
 
-    if ($('#hb-1').data('item') !== undefined)
-        player.equipped.weapon = $('#hb-1').data('item');
-
     function addWeapon() {
         if (player.equipped.weapon && /sword/gi.test(player.equipped.weapon.name) && !weapon) {
             weapon = sword.clone();
@@ -130,12 +127,11 @@ module.exports = (globals, player) => {
         if (String.fromCharCode(event.keyCode) == 'Q')
             require('./gui').stats(player);
         try {
-            if ($(`#hb-${String.fromCharCode(event.keyCode)}`).length) {
-                $('.hotbar').removeClass('active');
-                $(`#hb-${String.fromCharCode(event.keyCode)}`).addClass('active');
-                if ($(`#hb-${String.fromCharCode(event.keyCode)}`).text() !== '-')
-                    player.equipped.weapon = $(`#hb-${String.fromCharCode(event.keyCode)}`).data('item');
-                else player.equipped.weapon = null;
+            let n = Number(String.fromCharCode(event.keyCode));
+            if (typeof n == 'number' && !isNaN(n) && n >= 1 && n <= 8) {
+                player.hotbar.selected = n;
+                if (player.hotbar.list[n]) player.equipped.weapon = player.hotbar.list[n];
+                alert(JSON.stringify(player.equipped.weapon));
             }
         }
         catch (err) {}

@@ -11,7 +11,7 @@ module.exports = (title, content) => {
     }, 5000);
 };
 
-module.exports.init = () => {
+module.exports.init = (player) => {
     $('#gui').toggle();
     $('#underlay').toggle();
     $('#load-play-btn').hide();
@@ -19,6 +19,10 @@ module.exports.init = () => {
         $('#gui').toggle();
         $('#underlay').toggle();
     });
+
+    // draw the GUI
+    setInterval(() => draw(player), 10);
+
 };
 
 module.exports.quests = () => {
@@ -33,10 +37,10 @@ module.exports.quests = () => {
 
 module.exports.hotbar = player => {
     for (let i = 0; i < 8; i++) $(`#hb-${i}`).html('-');
-    for (let i = 0; i < player.hotbar.length; i++) {
+    for (let i = 0; i < player.hotbar.list.length; i++) {
         $(`#hb-${i+1}`)
-            .text(player.hotbar[i].name)
-            .data('item', player.hotbar[i]);
+            .text(player.hotbar.list[i].name)
+            .data('item', player.hotbar.list[i]);
     }
 };
 
@@ -62,18 +66,18 @@ module.exports.stats = player => {
             $(document.createElement('span'))
                 .html(player.inventory[key].name)
                 .click((e) => {
-                    if (player.hotbar.indexOf(player.inventory[key]) == -1) {
-                        player.hotbar.push(player.inventory[key]);
+                    if (player.hotbar.list.indexOf(player.inventory[key]) == -1) {
+                        player.hotbar.list.push(player.inventory[key]);
                         module.exports.hotbar(player);
                         $(e.target).css('background-color', 'blue');
                     }
                     else {
-                        player.hotbar.splice(player.hotbar.indexOf(player.inventory[key]), 1);
+                        player.hotbar.list.splice(player.hotbar.list.indexOf(player.inventory[key]), 1);
                         module.exports.hotbar(player);
                         $(e.target).css('background-color', 'transparent');
                     }
                 })
-                .css('background-color', player.hotbar.indexOf(player.inventory[key]) == 0 ? 'blue' : 'transparent')
+                .css('background-color', player.hotbar.list.indexOf(player.inventory[key]) == 0 ? 'blue' : 'transparent')
                 .appendTo($('#gui-content'));
         }
     });
@@ -90,3 +94,77 @@ module.exports.stats = player => {
     if ($('#gui-content').is(':visible')) document.exitPointerLock();
 
 };
+
+// HUD stuff
+
+const canvas = document.getElementById('hp-bar');
+canvas.setAttribute('width', window.innerWidth * 0.7);
+const ctx = canvas.getContext('2d');
+const centerX = canvas.width / 2;
+const centerY = canvas.height / 2;
+const radius = 40;
+
+function draw(player) {
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // XP BAR
+    let grd = ctx.createLinearGradient(0, 0, (player.xp.xp / player.xp.max) * canvas.width, 0);
+    grd.addColorStop(0, "darkgreen");
+    grd.addColorStop(0.75, "darkgreen");
+    grd.addColorStop(0.95, "lime");
+    grd.addColorStop(1, "lime");
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, canvas.height - 10, (player.xp.xp / player.xp.max) * canvas.width, 10);
+
+    // HEALTH BAR
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(centerX, canvas.height - radius, radius, 0, 2 * Math.PI, false);
+    ctx.clip(); // Make a clipping region out of this path
+    // instead of filling the arc, we fill a variable-sized rectangle
+    // that is clipped to the arc
+    ctx.fillStyle = '#cc0000';
+    // We want the rectangle to get progressively taller starting from the bottom
+    // There are two ways to do this:
+    // 1. Change the Y value and height every time
+    // 2. Using a negative height
+    // I'm lazy, so we're going with 2
+    ctx.fillRect(centerX - radius, canvas.height, radius * 2, -(player.hp.val / player.hp.max) * radius * 2);
+    ctx.restore(); // reset clipping region
+
+    // HEALTH BAR BORDER
+    ctx.beginPath();
+    ctx.arc(centerX, canvas.height - radius, radius, 0, 2 * Math.PI, false);
+    ctx.lineWidth = 6;
+    grd = ctx.createLinearGradient(0, 0, 0, radius * 2);
+    grd.addColorStop(0, "grey");
+    grd.addColorStop(1, "black");
+    ctx.strokeStyle = grd;
+    ctx.stroke();
+
+    // HEALTH TEXT
+    ctx.fillStyle = 'black';
+    ctx.textAlign = 'center';
+    ctx.fillText(`${player.hp.val > 0 ? Math.floor(player.hp.val) : 0} HP`, centerX, canvas.height - radius);
+
+    // HOTBAR ITEMS
+    let xvals = [-100, -170, -240, -310, -380, 100, 170, 240, 310, 380];
+    let alias = [5, 4, 3, 2, 1, 6, 7, 8, 9];
+    for (let i = 0; i < xvals.length; i++) {
+        ctx.strokeStyle = '#000';
+        if (alias[player.hotbar.selected] == i && Math.abs(xvals[i]) !== 100) ctx.strokeStyle = '#ddd';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(centerX + xvals[i] - 25, canvas.height - 70, 50, 50);
+        if (xvals[i] == 100) {
+            ctx.fillText('LH', centerX - 100, canvas.height - radius);
+            ctx.fillText('RH', centerX + 100, canvas.height - radius);
+        }
+    }
+    if (player.hotbar.list[0] && /sword/gi.test(player.hotbar.list[0].name)) {
+        const img = new Image();
+        img.src = '/img/icons/two-handed-sword.svg';
+        ctx.drawImage(img, centerX - 380 - 25, canvas.height - 70, 50, 50);
+    }
+
+}

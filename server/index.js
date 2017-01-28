@@ -57,26 +57,26 @@ app.get('/', (req, res) => {
     user: req.session.user
   });
   else res.render('../views/index.ejs');
-  console.log('Home Activated.');
+  console.log(new Date() + 'Home Activated.');
 });
 app.get('/logout', (req, res) => {
   if (req.session.user) {
-    console.log(req.session.user.username + ' has logged out.  ');
+    console.log(new Date() + req.session.user.username + ' has logged out. ');
     delete req.session.user;
   }
   res.redirect('/');
 });
 app.get('/login', (req, res) => {
   res.render('../views/login.ejs');
-  console.log('Login Activated.');
+  console.log(new Date() + 'Login Activated.');
   
 });
 app.get('/register', (req, res) => {
   res.render('../views/register.ejs');
-  console.log('Register Activated.');
+  console.log(new Date() + 'Register Activated.');
 });
 app.get('/play', (req, res) => {
-  console.log('Play Activated.');
+  console.log(new Date() + 'Play Activated.');
 
   if (req.session.user && req.session.user.username) res.render('../views/play.ejs', {
     user: req.session.user
@@ -85,26 +85,24 @@ app.get('/play', (req, res) => {
 });
 app.get('/robots.txt', (req, res) => {
   res.render(__dirname + '/views/robots.txt');
-  console.log('Robots Activated.');
-  
+  console.log(new Date() + 'Robots Activated.');
 });
 app.get('/license', (req, res) => {
   res.sendFile(require('path').resolve('views/LICENSE.html'));
-  console.log('License Activated.');
+  console.log(new Date() + 'License Activated.');
 });
 app.get('/settings', (req, res) => {
   res.render(require('path').resolve('views/settings.ejs'));
-  console.log('Settings Activated.');
+  console.log(new Date() + 'Settings Activated.' );
 });
 app.get('/pwreset', (req, res) => {
   res.render(require('path').resolve('views/pwreset.ejs'));
-  console.log('Password Reset Activated.');
+  console.log(new Date() + 'Password Reset Activated.');
 });
 app.get('/store', (req, res) => {
   res.render(require('path').resolve('views/store.ejs'));
-  console.log('Store Activated.');
+  console.log(new Date() + 'Store Activated.');
 });
-
 http.listen(process.env.PORT || 8080, (listening) => {
   if (!process.env.NODE_ENV) {
     console.log('Listening For conections on 0.0.0.0');
@@ -112,21 +110,21 @@ http.listen(process.env.PORT || 8080, (listening) => {
   }
 });
 
-console.log('Login Initializing');
-console.log('Register Initializing.');
-console.log('Play Initializing.');
-console.log('Dashboard Initializing.');
-console.log('Robots Initializing.');
-console.log('License Initializing.');
-console.log('Siracha-Admin Initilizing.');
-console.log('Multiplayer server Initilizing.');
-console.log('App Initializing.');
-console.log('Login Started');
-console.log('Register Started.');
-console.log('Play Started.');
-console.log('Dashboard Started.');
-console.log('Robots Started.');
-console.log('License Started.');
-console.log('Siracha-Admin Started.');
-console.log('Multiplayer server Started.');
-console.log('App Started.');
+console.log(new Date() + 'Login Initializing');
+console.log(new Date() + 'Register Initializing.');
+console.log(new Date() + 'Play Initializing.');
+console.log(new Date() + 'Dashboard Initializing.');
+console.log(new Date() + 'Robots Initializing.');
+console.log(new Date() + 'License Initializing.');
+console.log(new Date() + 'Siracha-Admin Initilizing.');
+console.log(new Date() + 'Multiplayer server Initilizing.');
+console.log(new Date() + 'App Initializing.');
+console.log(new Date() + 'Login Started');
+console.log(new Date() + 'Register Started.');
+console.log(new Date() + 'Play Started.');
+console.log(new Date() + 'Dashboard Started.');
+console.log(new Date() + 'Robots Started.');
+console.log(new Date() + 'License Started.');
+console.log(new Date() + 'Siracha-Admin Started.');
+console.log(new Date() + 'Multiplayer server Started.');
+console.log(new Date() + 'App Started.');

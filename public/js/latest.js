@@ -43,6 +43,15 @@ module.exports.ai = AI;
 var dave = new AI();
 
 },{}],2:[function(require,module,exports){
+// $('#dedicate').hide();
+//     if() {
+//     $('#dedicate').fadeIn(3000)
+//     setTimeout(2000);
+//     $('#anyKey').fadeOut(1000);
+//     }
+"use strict";
+
+},{}],3:[function(require,module,exports){
 'use strict';
 
 /* global THREE, CANNON, io */
@@ -105,7 +114,7 @@ module.exports.label = load.label;
 module.exports.ball = load.ball;
 module.exports.plane = load.plane;
 
-},{"./items":8,"./load":12}],3:[function(require,module,exports){
+},{"./items":9,"./load":13}],4:[function(require,module,exports){
 'use strict';
 
 /* global $ */
@@ -121,7 +130,7 @@ module.exports = function (title, content) {
     }, 5000);
 };
 
-module.exports.init = function () {
+module.exports.init = function (player) {
     $('#gui').toggle();
     $('#underlay').toggle();
     $('#load-play-btn').hide();
@@ -129,6 +138,11 @@ module.exports.init = function () {
         $('#gui').toggle();
         $('#underlay').toggle();
     });
+
+    // draw the GUI
+    setInterval(function () {
+        return draw(player);
+    }, 10);
 };
 
 module.exports.quests = function () {
@@ -144,8 +158,8 @@ module.exports.quests = function () {
 module.exports.hotbar = function (player) {
     for (var i = 0; i < 8; i++) {
         $('#hb-' + i).html('-');
-    }for (var _i = 0; _i < player.hotbar.length; _i++) {
-        $('#hb-' + (_i + 1)).text(player.hotbar[_i].name).data('item', player.hotbar[_i]);
+    }for (var _i = 0; _i < player.hotbar.list.length; _i++) {
+        $('#hb-' + (_i + 1)).text(player.hotbar.list[_i].name).data('item', player.hotbar.list[_i]);
     }
 };
 
@@ -168,16 +182,16 @@ module.exports.stats = function (player) {
 
         var _loop = function _loop(key) {
             $(document.createElement('span')).html(player.inventory[key].name).click(function (e) {
-                if (player.hotbar.indexOf(player.inventory[key]) == -1) {
-                    player.hotbar.push(player.inventory[key]);
+                if (player.hotbar.list.indexOf(player.inventory[key]) == -1) {
+                    player.hotbar.list.push(player.inventory[key]);
                     module.exports.hotbar(player);
                     $(e.target).css('background-color', 'blue');
                 } else {
-                    player.hotbar.splice(player.hotbar.indexOf(player.inventory[key]), 1);
+                    player.hotbar.list.splice(player.hotbar.list.indexOf(player.inventory[key]), 1);
                     module.exports.hotbar(player);
                     $(e.target).css('background-color', 'transparent');
                 }
-            }).css('background-color', player.hotbar.indexOf(player.inventory[key]) == 0 ? 'blue' : 'transparent').appendTo($('#gui-content'));
+            }).css('background-color', player.hotbar.list.indexOf(player.inventory[key]) == 0 ? 'blue' : 'transparent').appendTo($('#gui-content'));
         };
 
         for (var key in player.inventory) {
@@ -197,7 +211,80 @@ module.exports.stats = function (player) {
     if ($('#gui-content').is(':visible')) document.exitPointerLock();
 };
 
-},{"./globals":2}],4:[function(require,module,exports){
+// HUD stuff
+
+var canvas = document.getElementById('hp-bar');
+canvas.setAttribute('width', window.innerWidth * 0.7);
+var ctx = canvas.getContext('2d');
+var centerX = canvas.width / 2;
+var centerY = canvas.height / 2;
+var radius = 40;
+
+function draw(player) {
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // XP BAR
+    var grd = ctx.createLinearGradient(0, 0, player.xp.xp / player.xp.max * canvas.width, 0);
+    grd.addColorStop(0, "darkgreen");
+    grd.addColorStop(0.75, "darkgreen");
+    grd.addColorStop(0.95, "lime");
+    grd.addColorStop(1, "lime");
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, canvas.height - 10, player.xp.xp / player.xp.max * canvas.width, 10);
+
+    // HEALTH BAR
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(centerX, canvas.height - radius, radius, 0, 2 * Math.PI, false);
+    ctx.clip(); // Make a clipping region out of this path
+    // instead of filling the arc, we fill a variable-sized rectangle
+    // that is clipped to the arc
+    ctx.fillStyle = '#cc0000';
+    // We want the rectangle to get progressively taller starting from the bottom
+    // There are two ways to do this:
+    // 1. Change the Y value and height every time
+    // 2. Using a negative height
+    // I'm lazy, so we're going with 2
+    ctx.fillRect(centerX - radius, canvas.height, radius * 2, -(player.hp.val / player.hp.max) * radius * 2);
+    ctx.restore(); // reset clipping region
+
+    // HEALTH BAR BORDER
+    ctx.beginPath();
+    ctx.arc(centerX, canvas.height - radius, radius, 0, 2 * Math.PI, false);
+    ctx.lineWidth = 6;
+    grd = ctx.createLinearGradient(0, 0, 0, radius * 2);
+    grd.addColorStop(0, "grey");
+    grd.addColorStop(1, "black");
+    ctx.strokeStyle = grd;
+    ctx.stroke();
+
+    // HEALTH TEXT
+    ctx.fillStyle = 'black';
+    ctx.textAlign = 'center';
+    ctx.fillText((player.hp.val > 0 ? Math.floor(player.hp.val) : 0) + ' HP', centerX, canvas.height - radius);
+
+    // HOTBAR ITEMS
+    var xvals = [-100, -170, -240, -310, -380, 100, 170, 240, 310, 380];
+    var alias = [5, 4, 3, 2, 1, 6, 7, 8, 9];
+    for (var i = 0; i < xvals.length; i++) {
+        ctx.strokeStyle = '#000';
+        if (alias[player.hotbar.selected] == i && Math.abs(xvals[i]) !== 100) ctx.strokeStyle = '#ddd';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(centerX + xvals[i] - 25, canvas.height - 70, 50, 50);
+        if (xvals[i] == 100) {
+            ctx.fillText('LH', centerX - 100, canvas.height - radius);
+            ctx.fillText('RH', centerX + 100, canvas.height - radius);
+        }
+    }
+    if (player.hotbar.list[0] && /sword/gi.test(player.hotbar.list[0].name)) {
+        var img = new Image();
+        img.src = '/img/icons/two-handed-sword.svg';
+        ctx.drawImage(img, centerX - 380 - 25, canvas.height - 70, 50, 50);
+    }
+}
+
+},{"./globals":3}],5:[function(require,module,exports){
 "use strict";
 
 /* global THREE, CANNON, $, SPE */
@@ -348,7 +435,7 @@ module.exports = function (globals, player) {
     });
 };
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 /* global THREE */
@@ -381,7 +468,7 @@ function init(globals, player) {
 
 module.exports = init;
 
-},{"./bodies":4,"./player":6,"./world":7}],6:[function(require,module,exports){
+},{"./bodies":5,"./player":7,"./world":8}],7:[function(require,module,exports){
 'use strict';
 
 /* global THREE, CANNON, PointerLockControls */
@@ -423,7 +510,7 @@ module.exports = function (globals, player) {
     window.controls = globals.controls;
 };
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 
 /* global CANNON */
@@ -445,7 +532,7 @@ module.exports = function (globals) {
     globals.world.broadphase = new CANNON.NaiveBroadphase();
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 /* global $ */
@@ -487,7 +574,7 @@ function setUpSword(type, mat1, mat2) {
     return sword;
 }
 
-},{"./json/base":9,"./json/mats":10,"./json/weapons":11,"rpg-tools/lib/ProtoTree":17}],9:[function(require,module,exports){
+},{"./json/base":10,"./json/mats":11,"./json/weapons":12,"rpg-tools/lib/ProtoTree":18}],10:[function(require,module,exports){
 module.exports={
     "@item": {
         name: "-- Item --",
@@ -549,7 +636,7 @@ module.exports={
     }
 }
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 module.exports={
     "wood": {
         proto: "@material",
@@ -605,7 +692,7 @@ module.exports={
     }
 }
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 module.exports={
   "shortsword": {
     proto: "@sword",
@@ -620,7 +707,7 @@ module.exports={
     slot: 2
   }
 }
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 /* global CANNON, THREE */
@@ -835,7 +922,7 @@ module.exports.label = label;
 module.exports.ball = ball;
 module.exports.plane = plane;
 
-},{"./globals":2}],13:[function(require,module,exports){
+},{"./globals":3}],14:[function(require,module,exports){
 'use strict';
 
 /* global $, THREE */
@@ -846,7 +933,7 @@ var player = require('./player');
 var dt = 1 / 60;
 
 require('./items');
-require('./gui').init();
+require('./gui').init(player);
 require('./shooting')(globals, player);
 require('./multiplayer')(globals, player);
 
@@ -934,7 +1021,7 @@ function onWindowResize() {
     globals.renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-},{"./globals":2,"./gui":3,"./items":8,"./multiplayer":14,"./player":15,"./shooting":16}],14:[function(require,module,exports){
+},{"./globals":3,"./gui":4,"./items":9,"./multiplayer":15,"./player":16,"./shooting":17}],15:[function(require,module,exports){
 "use strict";
 
 /* global $, THREE, Materialize */
@@ -1105,7 +1192,7 @@ module.exports = function (globals, player) {
     globals.playerForId = playerForId;
 };
 
-},{"./init/manager":5}],15:[function(require,module,exports){
+},{"./init/manager":6}],16:[function(require,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1118,18 +1205,27 @@ var Player = function Player() {
     _classCallCheck(this, Player);
 
     this.hp = {
-        val: 10,
-        max: 10
+        val: 10, // current hp
+        max: 10 // max hp.  No min, cuz if it reaches 0, ur dead.  fun thoughts
     };
     this.mp = {
-        val: 5,
+        val: 5, // see hp
         max: 5
+    };
+    this.xp = {
+        level: 0, // level
+        xp: 3, // current xp
+        max: 10 // xp needed till lvl up
     };
     this.equipped = {
         weapon: null
     };
     this.inventory = [];
-    this.hotbar = [];
+    this.hotbar = {
+        list: [],
+        selected: 1,
+        active: null
+    };
 
     require('./items')(function (pt, comp, sword) {
         var s = sword(0, 'iron', 'wood');
@@ -1142,7 +1238,7 @@ var player = new Player();
 
 module.exports = player;
 
-},{"./items":8}],16:[function(require,module,exports){
+},{"./items":9}],17:[function(require,module,exports){
 'use strict';
 
 /* global THREE, CANNON, TWEEN, $ */
@@ -1161,8 +1257,6 @@ module.exports = function (globals, player) {
         sword.position.y -= 1.2;
         sword.position.z -= 1.25;
     });
-
-    if ($('#hb-1').data('item') !== undefined) player.equipped.weapon = $('#hb-1').data('item');
 
     function addWeapon() {
         if (player.equipped.weapon && /sword/gi.test(player.equipped.weapon.name) && !weapon) {
@@ -1267,16 +1361,17 @@ module.exports = function (globals, player) {
         }
         if (String.fromCharCode(event.keyCode) == 'Q') require('./gui').stats(player);
         try {
-            if ($('#hb-' + String.fromCharCode(event.keyCode)).length) {
-                $('.hotbar').removeClass('active');
-                $('#hb-' + String.fromCharCode(event.keyCode)).addClass('active');
-                if ($('#hb-' + String.fromCharCode(event.keyCode)).text() !== '-') player.equipped.weapon = $('#hb-' + String.fromCharCode(event.keyCode)).data('item');else player.equipped.weapon = null;
+            var n = Number(String.fromCharCode(event.keyCode));
+            if (typeof n == 'number' && !isNaN(n) && n >= 1 && n <= 8) {
+                player.hotbar.selected = n;
+                if (player.hotbar.list[n]) player.equipped.weapon = player.hotbar.list[n];
+                alert(JSON.stringify(player.equipped.weapon));
             }
         } catch (err) {}
     });
 };
 
-},{"./gui":3}],17:[function(require,module,exports){
+},{"./gui":4}],18:[function(require,module,exports){
 (function (root, factory) {
     'use strict';
     /* global define, module, require */
@@ -1366,7 +1461,7 @@ module.exports = function (globals, player) {
 
     return ProtoTree;
 }));
-},{"./utils":18}],18:[function(require,module,exports){
+},{"./utils":19}],19:[function(require,module,exports){
 (function (root, factory) {
     'use strict';
     /* global define, module, require */
@@ -1453,4 +1548,4 @@ module.exports = function (globals, player) {
     return exports;
 }));
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]);

@@ -17,7 +17,7 @@ module.exports = (io, User, conf_url) => {
         // check for potential errors
         if (err) console.err(err);
         // user not found (in case this ever happened)
-        if (!o) console.error('USER NOT FOUND FOR MULTIPLAYER');
+        if (!o) console.error(new Date() + 'USER NOT FOUND FOR MULTIPLAYER');
 
         // add the new player to list of players
         players.addPlayer(socket.id, o);
@@ -56,12 +56,12 @@ module.exports = (io, User, conf_url) => {
             username: dat.user.username,
             password: dat.user.password
           }, (err, obj) => {
-            if (err) console.log('ERROR!    ');
+            if (err) console.log(new Date() + 'ERROR!    ');
             if (obj) {
               obj.inventory = dat.inv;
               obj.save();
             }
-            else console.log('Credentials not valid!    ');
+            else console.log(new Date() + 'Credentials not valid!');
           });
         });
 
@@ -71,13 +71,13 @@ module.exports = (io, User, conf_url) => {
             username: dat.username,
             password: dat.password
           }, (err, obj) => {
-            if (err) console.log('ERROR!    ');
+            if (err) console.log(new Date() + 'ERROR!    ');
             if (obj) {
               obj.map = dat.map;
               obj.save();
               socket.emit('reload', true);
             }
-            else console.log('Credentials not valid!    ');
+            else console.log(new Date() + 'Credentials not valid!    ');
           });
         });
 
@@ -85,13 +85,13 @@ module.exports = (io, User, conf_url) => {
 
         // chat handler
         socket.on('chat-msg', (player, msg) => {
-          console.log('message: ' + player + ', ' + msg);
+          console.log(new Date() + 'Chat Message: ' + player + ' said, ' + msg);
           io.emit('chat-msg', player, msg);
         });
 
         // client left :(
         socket.on('disconnect', function() {
-          console.log(player.acc.username + ' has exited game play.    ');
+          console.log(new Date() + player.acc.username + ' has exited game play.    ');
           io.emit('removeOtherPlayer', player);
           players.removePlayer(player);
         }); //
