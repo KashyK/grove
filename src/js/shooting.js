@@ -130,7 +130,7 @@ module.exports = (globals, player) => {
             let n = Number(String.fromCharCode(event.keyCode));
             if (typeof n == 'number' && !isNaN(n) && n >= 1 && n <= 8) {
                 player.hotbar.selected = n;
-                if (player.hotbar.list[n]) player.equipped.weapon = player.hotbar.list[n];
+                if (player.hotbar.list[n - 1]) player.equipped.weapon = player.hotbar.list[n];
                 alert(JSON.stringify(player.equipped.weapon));
             }
         }
