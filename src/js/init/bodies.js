@@ -64,16 +64,6 @@ module.exports = (globals, player) => {
     var imageSuffix = ".jpg";
     var skyGeometry = new THREE.CubeGeometry(2000, 2000, 2000);
 
-    globals.ball({
-        mass: 1,
-        radius: 5,
-        pos: {
-            x: 10,
-            y: 7.5,
-            z: 10
-        }
-    });
-
     var materialArray = [];
     for (var i = 0; i < 6; i++)
         materialArray.push(new THREE.MeshBasicMaterial({

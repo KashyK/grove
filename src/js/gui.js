@@ -21,7 +21,7 @@ module.exports.init = (player) => {
     });
 
     // draw the GUI
-    setInterval(() => draw(player), 10);
+    setInterval(() => draw(player), 100);
 
 };
 
@@ -63,22 +63,23 @@ module.exports.stats = player => {
         $('#gui-title').html('Inventory');
         $('#gui-content').html('');
         for (let key in player.inventory) {
-            $(document.createElement('span'))
-                .html(player.inventory[key].name)
-                .click((e) => {
-                    if (player.hotbar.list.indexOf(player.inventory[key]) == -1) {
-                        player.hotbar.list.push(player.inventory[key]);
-                        module.exports.hotbar(player);
-                        $(e.target).css('background-color', 'blue');
-                    }
-                    else {
-                        player.hotbar.list.splice(player.hotbar.list.indexOf(player.inventory[key]), 1);
-                        module.exports.hotbar(player);
-                        $(e.target).css('background-color', 'transparent');
-                    }
-                })
-                .css('background-color', player.hotbar.list.indexOf(player.inventory[key]) == 0 ? 'blue' : 'transparent')
-                .appendTo($('#gui-content'));
+            (function(item) {
+                $(document.createElement('img'))
+                    .attr('src', '/img/icons/two-handed-sword.svg')
+                    .attr('title', item.name)
+                    .css('margin', '10px')
+                    .width(50)
+                    .height(50)
+                    .click(function(e) {
+                        alert(item.name);
+                        if (player.hotbar.list.indexOf(item) == -1) {
+                            player.hotbar.list.push(item);
+                        }
+                        else player.hotbar.list.splice(player.hotbar.list.indexOf(item), 1);
+                    })
+                    .css('background-color', player.hotbar.list.indexOf(item) !== -1 ? 'blue' : 'transparent')
+                    .appendTo($('#gui-content'));
+            })(player.inventory[key]);
         }
     });
     $('#gui-m').click(() => {
@@ -161,10 +162,18 @@ function draw(player) {
             ctx.fillText('RH', centerX + 100, canvas.height - radius);
         }
     }
-    if (player.hotbar.list[0] && /sword/gi.test(player.hotbar.list[0].name)) {
-        const img = new Image();
-        img.src = '/img/icons/two-handed-sword.svg';
-        ctx.drawImage(img, centerX - 380 - 25, canvas.height - 70, 50, 50);
+    window.lee = player.hotbar.list.length;
+    for (let i = 0; i < player.hotbar.list.length; i++) {
+        if (/sword/gi.test(player.hotbar.list[i].name)) {
+            const img = new Image();
+            img.src = '/img/icons/two-handed-sword.svg';
+            ctx.drawImage(img, centerX - xvals[i] - 25, canvas.height - 70, 50, 50);
+        }
     }
-
 }
+
+var pie = function(Flavour, Suuculence) {
+    if (Flavour == true) {
+        return "I can taste the world";
+    }
+};

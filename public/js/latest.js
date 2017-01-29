@@ -142,7 +142,7 @@ module.exports.init = function (player) {
     // draw the GUI
     setInterval(function () {
         return draw(player);
-    }, 10);
+    }, 100);
 };
 
 module.exports.quests = function () {
@@ -179,23 +179,15 @@ module.exports.stats = function (player) {
     $('#gui-i').click(function () {
         $('#gui-title').html('Inventory');
         $('#gui-content').html('');
-
-        var _loop = function _loop(key) {
-            $(document.createElement('span')).html(player.inventory[key].name).click(function (e) {
-                if (player.hotbar.list.indexOf(player.inventory[key]) == -1) {
-                    player.hotbar.list.push(player.inventory[key]);
-                    module.exports.hotbar(player);
-                    $(e.target).css('background-color', 'blue');
-                } else {
-                    player.hotbar.list.splice(player.hotbar.list.indexOf(player.inventory[key]), 1);
-                    module.exports.hotbar(player);
-                    $(e.target).css('background-color', 'transparent');
-                }
-            }).css('background-color', player.hotbar.list.indexOf(player.inventory[key]) == 0 ? 'blue' : 'transparent').appendTo($('#gui-content'));
-        };
-
         for (var key in player.inventory) {
-            _loop(key);
+            (function (item) {
+                $(document.createElement('img')).attr('src', '/img/icons/two-handed-sword.svg').attr('title', item.name).css('margin', '10px').width(50).height(50).click(function (e) {
+                    alert(item.name);
+                    if (player.hotbar.list.indexOf(item) == -1) {
+                        player.hotbar.list.push(item);
+                    } else player.hotbar.list.splice(player.hotbar.list.indexOf(item), 1);
+                }).css('background-color', player.hotbar.list.indexOf(item) !== -1 ? 'blue' : 'transparent').appendTo($('#gui-content'));
+            })(player.inventory[key]);
         }
     });
     $('#gui-m').click(function () {
@@ -277,12 +269,21 @@ function draw(player) {
             ctx.fillText('RH', centerX + 100, canvas.height - radius);
         }
     }
-    if (player.hotbar.list[0] && /sword/gi.test(player.hotbar.list[0].name)) {
-        var img = new Image();
-        img.src = '/img/icons/two-handed-sword.svg';
-        ctx.drawImage(img, centerX - 380 - 25, canvas.height - 70, 50, 50);
+    window.lee = player.hotbar.list.length;
+    for (var _i2 = 0; _i2 < player.hotbar.list.length; _i2++) {
+        if (/sword/gi.test(player.hotbar.list[_i2].name)) {
+            var img = new Image();
+            img.src = '/img/icons/two-handed-sword.svg';
+            ctx.drawImage(img, centerX - xvals[_i2] - 25, canvas.height - 70, 50, 50);
+        }
     }
 }
+
+var pie = function pie(Flavour, Suuculence) {
+    if (Flavour == true) {
+        return "I can taste the world";
+    }
+};
 
 },{"./globals":3}],5:[function(require,module,exports){
 "use strict";
@@ -351,16 +352,6 @@ module.exports = function (globals, player) {
     var directions = ["px", "nx", "py", "ny", "pz", "nz"];
     var imageSuffix = ".jpg";
     var skyGeometry = new THREE.CubeGeometry(2000, 2000, 2000);
-
-    globals.ball({
-        mass: 1,
-        radius: 5,
-        pos: {
-            x: 10,
-            y: 7.5,
-            z: 10
-        }
-    });
 
     var materialArray = [];
     for (var i = 0; i < 6; i++) {
@@ -558,7 +549,7 @@ function setUpComponent(comp, mat) {
     c.dmg = m.dmg;
     c.spd = m.spd;
     c.dur = m.dur;
-    c.name = m.name + c.name;
+    c.name = m.name;
     return c;
 }
 
@@ -568,9 +559,10 @@ function setUpSword(type, mat1, mat2) {
         handle = setUpComponent('@handle', mat2);
     sword.blade = blade;
     sword.handle = handle;
-    sword.name = blade.mat.name + ' ' + sword.name;
+    sword.name = sword.blade.mat.name + ' ' + sword.name;
     sword.dmg = (blade.dmg + handle.dmg) / 2;
     sword.spd = (blade.spd + handle.spd) / 2;
+    sword.id = Math.random(); // for debugging purposes
     return sword;
 }
 
@@ -1231,6 +1223,13 @@ var Player = function Player() {
         var s = sword(0, 'iron', 'wood');
         s.slot = 'weapon';
         _this.inventory.push(s);
+        alert(s.name);
+    });
+    require('./items')(function (pt, comp, sword) {
+        var s = sword(0, 'ebony', 'iron');
+        s.slot = 'weapon';
+        _this.inventory.push(s);
+        alert(s.name);
     });
 };
 
@@ -1364,8 +1363,7 @@ module.exports = function (globals, player) {
             var n = Number(String.fromCharCode(event.keyCode));
             if (typeof n == 'number' && !isNaN(n) && n >= 1 && n <= 8) {
                 player.hotbar.selected = n;
-                if (player.hotbar.list[n - 1]) player.equipped.weapon = player.hotbar.list[n];
-                alert(JSON.stringify(player.equipped.weapon));
+                if (player.hotbar.list[n - 1]) player.equipped.weapon = player.hotbar.list[n - 1];else player.equipped.weapon = null;
             }
         } catch (err) {}
     });

@@ -22,7 +22,7 @@ function setUpComponent(comp, mat) {
     c.dmg = m.dmg;
     c.spd = m.spd;
     c.dur = m.dur;
-    c.name = m.name + c.name;
+    c.name = m.name;
     return c;
 }
 
@@ -32,8 +32,9 @@ function setUpSword(type, mat1, mat2) {
         handle = setUpComponent('@handle', mat2);
     sword.blade = blade;
     sword.handle = handle;
-    sword.name = `${blade.mat.name} ${sword.name}`;
+    sword.name = `${sword.blade.mat.name} ${sword.name}`;
     sword.dmg = (blade.dmg + handle.dmg) / 2;
     sword.spd = (blade.spd + handle.spd) / 2;
+    sword.id = Math.random(); // for debugging purposes
     return sword;
 }
