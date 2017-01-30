@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(session({
   secret: 'ziggity zaggity',
-  name: 'A Pretty Cool Session',
+  name: 'the_grove_user_session',
   secure: true
 }));
 app.use(compression());
@@ -93,7 +93,7 @@ app.get('/license', (req, res) => {
 });
 app.get('/settings', (req, res) => {
   res.render(require('path').resolve('views/settings.ejs'));
-  console.log(new Date() + 'Settings Activated.' );
+  console.log(new Date() + 'Settings Activated.');
 });
 app.get('/pwreset', (req, res) => {
   res.render(require('path').resolve('views/pwreset.ejs'));
@@ -105,7 +105,7 @@ app.get('/store', (req, res) => {
 });
 app.get('/404', (req, res) => {
   res.render(require('path').resolve('views/404.ejs'));
-  console.log(new Date() + '404 Activated.');
+  console.log(new Date() + 'ERROR!! 404 THIS PAGE DOES NOT EXIST!');
 });
 http.listen(process.env.PORT || 8080, (listening) => {
   if (!process.env.NODE_ENV) {
