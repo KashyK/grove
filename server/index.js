@@ -103,6 +103,10 @@ app.get('/store', (req, res) => {
   res.render(require('path').resolve('views/store.ejs'));
   console.log(new Date() + 'Store Activated.');
 });
+app.get('/404', (req, res) => {
+  res.render(require('path').resolve('views/404.ejs'));
+  console.log(new Date() + '404 Activated.');
+});
 http.listen(process.env.PORT || 8080, (listening) => {
   if (!process.env.NODE_ENV) {
     console.log('Listening For conections on 0.0.0.0');
