@@ -48,7 +48,7 @@
         <p>&nbsp;&nbsp;&nbsp;Use the box at the top right corner and the options below to customize the settings!</p>
         <h3>&nbsp;Changing your Password:</h3>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='/pwreset'  class='waves-effect waves-light btn-large -light-green z-depth-3'> Reset Your Password</a>
-        <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='/admin' class='waves-effect waves-light btn-large purple z-depth-3'>Admin</a>
+        <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='/admin?redir=login' class='waves-effect waves-light btn-large purple z-depth-3'>Admin</a>
         <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='/' class='waves-effect waves-light btn-large red z-depth-3'>Back</a>
     </div>
     <script>
@@ -61,12 +61,30 @@
             function c() {
                 
             }
-            var gui = new dat.GUI(); //datGuia
+            var gui = new dat.GUI();
             gui.add(controls, 'renderer', ['webgl', 'canvas', 'svg']).onChange(c);
             gui.add(controls, 'shadow', 1024, 10240).step(1024).onChange(c);
             gui.add(controls, 'framerate', 1).onChange(c);
         }
     </script>
 </body>
+
+
+
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=11237758; 
+var sc_invisible=1; 
+var sc_security="7226e2bb"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<!-- End of StatCounter Code for Default Guide -->
+
+
 
 </html>
