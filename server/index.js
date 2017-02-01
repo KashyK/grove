@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(session({
   secret: 'ziggity zaggity',
-  name: 'the_grove_user_session',
+  name: 'TG_USR_SESSION',
   secure: true
 }));
 app.use(compression());
@@ -84,7 +84,7 @@ app.get('/play', (req, res) => {
   else res.redirect('/login');
 });
 app.get('/robots.txt', (req, res) => {
-  res.render(__dirname + '/views/robots.txt');
+  res.sendFile(require('path').resolve('views/robots.txt'));
   console.log(new Date() + 'Robots Activated.');
 });
 app.get('/license', (req, res) => {
@@ -107,8 +107,9 @@ app.get('/404', (req, res) => {
   res.render(require('path').resolve('views/404.ejs'));
   console.log(new Date() + 'ERROR!! 404 THIS PAGE DOES NOT EXIST!');
 });
-app.get('/admin?redir=login', (req, res) => {
-  res.render(require('path').resolve('views/adminredirect.ejs'));
+app.get('/analytics', (req, res) => {
+  res.render(require('path').resolve('views/analytics.ejs'));
+  console.log(new Date() + 'Analytics Activated.');
 });
 http.listen(process.env.PORT || 8080, (listening) => {
   if (!process.env.NODE_ENV) {
