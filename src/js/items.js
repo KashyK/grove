@@ -22,7 +22,7 @@ function setUpComponent(comp, mat) {
     c.dmg = m.dmg;
     c.spd = m.spd;
     c.dur = m.dur;
-    c.name = m.name;
+    c.name = 'test';
     return c;
 }
 

@@ -99,10 +99,6 @@ app.get('/pwreset', (req, res) => {
   res.render(require('path').resolve('views/pwreset.ejs'));
   console.log(new Date() + 'Password Reset Activated.');
 });
-app.get('/store', (req, res) => {
-  res.render(require('path').resolve('views/store.ejs'));
-  console.log(new Date() + 'Store Activated.');
-});
 app.get('/404', (req, res) => {
   res.render(require('path').resolve('views/404.ejs'));
   console.log(new Date() + 'ERROR!! 404 THIS PAGE DOES NOT EXIST!');

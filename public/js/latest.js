@@ -179,15 +179,38 @@ module.exports.stats = function (player) {
     $('#gui-i').click(function () {
         $('#gui-title').html('Inventory');
         $('#gui-content').html('');
-        for (var key in player.inventory) {
-            (function (item) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+            var _loop = function _loop() {
+                var item = _step.value;
+
                 $(document.createElement('img')).attr('src', '/img/icons/two-handed-sword.svg').attr('title', item.name).css('margin', '10px').width(50).height(50).click(function (e) {
-                    alert(item.name);
+                    alert(JSON.stringify(item));
                     if (player.hotbar.list.indexOf(item) == -1) {
                         player.hotbar.list.push(item);
                     } else player.hotbar.list.splice(player.hotbar.list.indexOf(item), 1);
                 }).css('background-color', player.hotbar.list.indexOf(item) !== -1 ? 'blue' : 'transparent').appendTo($('#gui-content'));
-            })(player.inventory[key]);
+            };
+
+            for (var _iterator = player.inventory[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                _loop();
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return) {
+                    _iterator.return();
+                }
+            } finally {
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
         }
     });
     $('#gui-m').click(function () {
@@ -549,7 +572,7 @@ function setUpComponent(comp, mat) {
     c.dmg = m.dmg;
     c.spd = m.spd;
     c.dur = m.dur;
-    c.name = m.name;
+    c.name = 'test';
     return c;
 }
 
@@ -1223,13 +1246,6 @@ var Player = function Player() {
         var s = sword(0, 'iron', 'wood');
         s.slot = 'weapon';
         _this.inventory.push(s);
-        alert(s.name);
-    });
-    require('./items')(function (pt, comp, sword) {
-        var s = sword(0, 'ebony', 'iron');
-        s.slot = 'weapon';
-        _this.inventory.push(s);
-        alert(s.name);
     });
 };
 

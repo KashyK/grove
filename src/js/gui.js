@@ -62,24 +62,22 @@ module.exports.stats = player => {
     $('#gui-i').click(() => {
         $('#gui-title').html('Inventory');
         $('#gui-content').html('');
-        for (let key in player.inventory) {
-            (function(item) {
-                $(document.createElement('img'))
-                    .attr('src', '/img/icons/two-handed-sword.svg')
-                    .attr('title', item.name)
-                    .css('margin', '10px')
-                    .width(50)
-                    .height(50)
-                    .click(function(e) {
-                        alert(item.name);
-                        if (player.hotbar.list.indexOf(item) == -1) {
-                            player.hotbar.list.push(item);
-                        }
-                        else player.hotbar.list.splice(player.hotbar.list.indexOf(item), 1);
-                    })
-                    .css('background-color', player.hotbar.list.indexOf(item) !== -1 ? 'blue' : 'transparent')
-                    .appendTo($('#gui-content'));
-            })(player.inventory[key]);
+        for (let item of player.inventory) {
+            $(document.createElement('img'))
+                .attr('src', '/img/icons/two-handed-sword.svg')
+                .attr('title', item.name)
+                .css('margin', '10px')
+                .width(50)
+                .height(50)
+                .click(function(e) {
+                    alert(JSON.stringify(item));
+                    if (player.hotbar.list.indexOf(item) == -1) {
+                        player.hotbar.list.push(item);
+                    }
+                    else player.hotbar.list.splice(player.hotbar.list.indexOf(item), 1);
+                })
+                .css('background-color', player.hotbar.list.indexOf(item) !== -1 ? 'blue' : 'transparent')
+                .appendTo($('#gui-content'));
         }
     });
     $('#gui-m').click(() => {
