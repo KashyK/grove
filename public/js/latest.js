@@ -187,6 +187,7 @@ module.exports.stats = function (player) {
             var _loop = function _loop() {
                 var item = _step.value;
 
+                alert(JSON.stringify(item));
                 $(document.createElement('img')).attr('src', '/img/icons/two-handed-sword.svg').attr('title', item.name).css('margin', '10px').width(50).height(50).click(function (e) {
                     alert(JSON.stringify(item));
                     if (player.hotbar.list.indexOf(item) == -1) {
