@@ -29,6 +29,7 @@ class Player {
             let s = sword(0, 'iron', 'wood');
             s.slot = 'weapon';
             this.inventory.push(s);
+            alert(JSON.stringify(this.inventory[this.inventory.indexOf(s)]));
         });
 
     }

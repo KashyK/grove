@@ -161,7 +161,7 @@ function draw(player) {
             ctx.fillText('RH', centerX + 100, canvas.height - radius);
         }
     }
-    window.lee = player.hotbar.list.length;
+    window.lee = player.hotbar.list.length; // for debugging purposes
     for (let i = 0; i < player.hotbar.list.length; i++) {
         if (/sword/gi.test(player.hotbar.list[i].name)) {
             const img = new Image();
@@ -171,8 +171,8 @@ function draw(player) {
     }
 }
 
-var pie = function(Flavour, Suuculence) {
-    if (Flavour == true) {
-        return "I can taste the world";
-    }
-};
+// var pie = function(Flavour, Suuculence) {
+//     if (Flavour) {
+//         return "I can taste the world";
+//     }
+// };
