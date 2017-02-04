@@ -179,25 +179,40 @@ module.exports.stats = function (player) {
     $('#gui-i').click(function () {
         $('#gui-title').html('Inventory');
         $('#gui-content').html('');
-        alert(player.inventory[0]);
-        // for (let item of player.inventory) {
-        //     alert(JSON.stringify(item));
-        //     $(document.createElement('img'))
-        //         .attr('src', '/img/icons/two-handed-sword.svg')
-        //         .attr('title', item.name)
-        //         .css('margin', '10px')
-        //         .width(50)
-        //         .height(50)
-        //         .click(function(e) {
-        //             alert(JSON.stringify(item));
-        //             if (player.hotbar.list.indexOf(item) == -1) {
-        //                 player.hotbar.list.push(item);
-        //             }
-        //             else player.hotbar.list.splice(player.hotbar.list.indexOf(item), 1);
-        //         })
-        //         .css('background-color', player.hotbar.list.indexOf(item) !== -1 ? 'blue' : 'transparent')
-        //         .appendTo($('#gui-content'));
-        // }
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+            var _loop = function _loop() {
+                var item = _step.value;
+
+                $(document.createElement('img')).attr('title', item.name) // U PUT A W HERE!!!!!!!!!!!!!!!!!!!!!
+                .css('margin', '10px').width(50).height(50).click(function (e) {
+                    alert(JSON.stringify(item));
+                    if (player.hotbar.list.indexOf(item) == -1) {
+                        player.hotbar.list.push(item);
+                    } else player.hotbar.list.splice(player.hotbar.list.indexOf(item), 1);
+                }).css('background-color', player.hotbar.list.indexOf(item) !== -1 ? 'blue' : 'transparent').appendTo($('#gui-content'));
+            };
+
+            for (var _iterator = player.inventory[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                _loop();
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return) {
+                    _iterator.return();
+                }
+            } finally {
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
+        }
     });
     $('#gui-m').click(function () {
         $('#gui-title').html('Map');
@@ -548,7 +563,7 @@ Object.assign(base, weapons, materials);
 pt = new ProtoTree(base);
 
 module.exports = function (callback) {
-    callback(pt, setUpComponent, setUpSword);
+    callback(pt, setUpComponent, setUpSword); // thinking about removing setUpCOmponent
 };
 
 function setUpComponent(comp, mat) {
@@ -561,6 +576,8 @@ function setUpComponent(comp, mat) {
     c.name = 'test';
     return c;
 }
+
+// makes a sword and returns it; should be in JSON
 
 function setUpSword(type, mat1, mat2) {
     var sword = pt.get(type ? 'longsword' : 'shortsword'),
@@ -1232,7 +1249,6 @@ var Player = function Player() {
         var s = sword(0, 'iron', 'wood');
         s.slot = 'weapon';
         _this.inventory.push(s);
-        alert(JSON.stringify(_this.inventory[_this.inventory.indexOf(s)]));
     });
 };
 

@@ -12,7 +12,7 @@ Object.assign(base, weapons, materials);
 pt = new ProtoTree(base);
 
 module.exports = callback => {
-    callback(pt, setUpComponent, setUpSword);
+    callback(pt, setUpComponent, setUpSword); // thinking about removing setUpCOmponent
 };
 
 function setUpComponent(comp, mat) {
@@ -25,6 +25,9 @@ function setUpComponent(comp, mat) {
     c.name = 'test';
     return c;
 }
+
+
+// makes a sword and returns it; should be in JSON
 
 function setUpSword(type, mat1, mat2) {
     let sword = pt.get(type ? 'longsword' : 'shortsword'),

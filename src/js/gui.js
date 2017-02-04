@@ -63,10 +63,8 @@ module.exports.stats = player => {
         $('#gui-title').html('Inventory');
         $('#gui-content').html('');
         for (let item of player.inventory) {
-            alert(JSON.stringify(item));
             $(document.createElement('img'))
-                .attr('src', '/img/icons/two-handed-sword.svg')
-                .attr('title', item.name)
+                .attr('title', item.name) // U PUT A W HERE!!!!!!!!!!!!!!!!!!!!!
                 .css('margin', '10px')
                 .width(50)
                 .height(50)
