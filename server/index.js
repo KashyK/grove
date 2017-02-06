@@ -103,6 +103,10 @@ app.get('/404', (req, res) => {
   res.render(require('path').resolve('views/404.ejs'));
   console.log(new Date() + 'ERROR!! 404 THIS PAGE DOES NOT EXIST!');
 });
+app.get('/google0c7efa3782c237cf.html', (req, res) => {
+  res.render(require('path').resolve('/google0c7efa3782c237cf.html'));
+  console.log(new Date() + 'Google Bot');
+});
 http.listen(process.env.PORT || 8080, (listening) => {
   if (!process.env.NODE_ENV) {
     console.log('Listening For conections on 0.0.0.0');
