@@ -108,7 +108,7 @@ app.get('/google0c7efa3782c237cf.html', (req, res) => {
   console.log(new Date() + 'Google Bot');
 });
 app.get('/sitemap', (req, res) => {
-  res.render(require('path').resolve('/views/sitemap.txt'));
+  res.render(require('path').resolve('/sitemap.txt'));
   console.log(new Date() + 'Google Bot');
 });
 http.listen(process.env.PORT || 8080, (listening) => {
