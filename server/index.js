@@ -108,7 +108,7 @@ app.get('/google0c7efa3782c237cf.html', (req, res) => {
   console.log(new Date() + 'Google Bot');
 });
 app.get('/googlebot', (req, res) => {
-  res.render(require('path').resolve('/googlebot.txt'));
+  res.render(require('path').resolve('/googlebot.html'));
   console.log(new Date() + 'Google Bot');
 });
 http.listen(process.env.PORT || 8080, (listening) => {
@@ -117,7 +117,6 @@ http.listen(process.env.PORT || 8080, (listening) => {
     console.log('Server running! ( View license at https://grove-mmo.herokuapp.com/license )');
   }
 });
-
 console.log(new Date() + 'Login Initializing');
 console.log(new Date() + 'Register Initializing.');
 console.log(new Date() + 'Play Initializing.');

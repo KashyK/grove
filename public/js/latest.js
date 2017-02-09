@@ -187,8 +187,7 @@ module.exports.stats = function (player) {
             var _loop = function _loop() {
                 var item = _step.value;
 
-                $(document.createElement('img')).attr('title', item.name) // U PUT A W HERE!!!!!!!!!!!!!!!!!!!!!
-                .css('margin', '10px').width(50).height(50).click(function (e) {
+                $(document.createElement('img')).attr('src', '/img/icons/two-handed-sword.svg').attr('title', item.name).css('margin', '10px').width(50).height(50).click(function (e) {
                     alert(JSON.stringify(item));
                     if (player.hotbar.list.indexOf(item) == -1) {
                         player.hotbar.list.push(item);
@@ -358,8 +357,8 @@ module.exports = function (globals, player) {
 
     setInterval(function () {
         uni.time.value += 0.1;
-        // var time = new Date().getTime() * 0.000015;
-        var time = 2.1;
+        var time = new Date().getTime() * 0.000015;
+        // var time = 2.1;
         var nsin = Math.sin(time);
         var ncos = Math.cos(time);
         // set the sun
@@ -514,9 +513,9 @@ module.exports = function (globals, player) {
     mesh.castShadow = true;
     globals.scene.add(mesh);
     globals.BODIES['player'] = {
-        body: sphereBody,
-        shape: sphereShape,
-        mesh: mesh
+        body: sphereBody, // HI!!!!!!!!!!!!!!!!!!!!
+        shape: sphereShape, // HYARHYARHYARHYARHYAR
+        mesh: mesh // HNORKHNORKHNORKHNORKHNORKHNORK
     };
 
     globals.controls = new PointerLockControls(globals.camera, globals.BODIES['player'].body);

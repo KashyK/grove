@@ -42,20 +42,6 @@
 
     <div id='hud' class='center'>
         <canvas id="hp-bar" width="578" height="200">ERROR</canvas>
-        <!--<div id='health' class="text-xs-center">Loading...</div>-->
-        <!--<progress id='health-bar' class="progress progress-success" value="100" max="100"></progress>-->
-        <!--<div class='row container'>-->
-        <!--    <div class='col s1 hotbar active' id='hb-1'>-</div>-->
-        <!--    <div class='col s1 hotbar' id='hb-2'>-</div>-->
-        <!--    <div class='col s1 hotbar' id='hb-3'>-</div>-->
-        <!--    <div class='col s1 hotbar' id='hb-4'>-</div>-->
-        <!--    <div class='col s1 hotbar' id='hb-5'>-</div>-->
-        <!--    <div class='col s1 hotbar' id='hb-6'>-</div>-->
-        <!--    <div class='col s1 hotbar' id='hb-7'>-</div>-->
-        <!--    <div class='col s1 hotbar' id='hb-8'>-</div>-->
-        <!--    <div class='col s1 offset-s1 hotbar' id='hb-lh'>LH</div>-->
-        <!--    <div class='col s1 hotbar' id='hb-rh'>RH</div>-->
-        <!--</div>-->
     </div>
 
     <div id='quest-alert'>
@@ -95,20 +81,20 @@
     </script>
 
     <script src='/js/engine/pointerlock.js'></script>
-    <script src='/js/latest.js'></script>
+    <script src='/js/latest.min.js'></script>
 </body>
 
+<!--Start of Google Analytics-->
 
-<!-- Start of StatCounter Code for Default Guide -->
 <script>
-    var sc_project = 11138604;
-    var sc_invisible = 1;
-    var sc_security = "782685fb";
-    var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "http://www.");
-    document.write("<sc" + "ript type='text/javascript' src='" + scJsHost + "statcounter.com/counter/counter.js'></" + "script>");
-    console.log('StatCounter Activated.');
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-91570609-1', 'auto');
+  ga('send', 'pageview');
+
 </script>
-<!-- End of StatCounter Code for Default Guide -->
 
-
-</html>
+<!--End of Google Analytics-->

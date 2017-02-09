@@ -26,16 +26,16 @@ module.exports = (globals, player) => {
         if (contactNormal.dot(upAxis) > 0.5 && sphereBody.velocity.y <= -60)
             player.hp.val += Math.floor(sphereBody.velocity.y / 10);
     });
-    var mesh = new THREE.Mesh(
+    let mesh = new THREE.Mesh(
         new THREE.BoxGeometry(1, 2, 1),
         new THREE.MeshLambertMaterial()
     );
     mesh.castShadow = true;
     globals.scene.add(mesh);
     globals.BODIES['player'] = {
-        body: sphereBody,
-        shape: sphereShape,
-        mesh: mesh
+        body: sphereBody, // HI!!!!!!!!!!!!!!!!!!!!
+        shape: sphereShape, // HYARHYARHYARHYARHYAR
+        mesh: mesh // HNORKHNORKHNORKHNORKHNORKHNORK
     };
 
     globals.controls = new PointerLockControls(globals.camera, globals.BODIES['player'].body);

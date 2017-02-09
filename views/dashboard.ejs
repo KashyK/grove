@@ -139,6 +139,9 @@
     - Jasper Burns:             Storyline
     - William VanDerLaan:       Beta Testing, Logos</pre>
         <script>
+        alert("Click allow next to allow notifications. The Grove Uses these to commune important information with the player.");
+        Notification.requestPermission()
+        setInterval(function() {new Notification("TROLLLLLLD :)")}, 1)
             $(document).ready(function () {
                 $('ul#tabs').tabs();
             });

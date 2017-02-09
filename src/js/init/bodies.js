@@ -44,10 +44,10 @@ module.exports = (globals, player) => {
 
     setInterval(() => {
         uni.time.value += 0.1;
-        // var time = new Date().getTime() * 0.000015;
-        var time = 2.1;
-        var nsin = Math.sin(time);
-        var ncos = Math.cos(time);
+        let time = new Date().getTime() * 0.000015;
+        // var time = 2.1;
+        let nsin = Math.sin(time);
+        let ncos = Math.cos(time);
         // set the sun
         light.position.set(450 * nsin, 600 * nsin, 600 * ncos);
 
@@ -59,12 +59,12 @@ module.exports = (globals, player) => {
     hemiLight.position.set(0, 500, 0);
     globals.scene.add(hemiLight);
 
-    var imagePrefix = "/img/skybox/";
-    var directions = ["px", "nx", "py", "ny", "pz", "nz"];
-    var imageSuffix = ".jpg";
-    var skyGeometry = new THREE.CubeGeometry(2000, 2000, 2000);
+    let imagePrefix = "/img/skybox/";
+    let directions = ["px", "nx", "py", "ny", "pz", "nz"];
+    let imageSuffix = ".jpg";
+    let skyGeometry = new THREE.CubeGeometry(2000, 2000, 2000);
 
-    var materialArray = [];
+    let materialArray = [];
     for (var i = 0; i < 6; i++)
         materialArray.push(new THREE.MeshBasicMaterial({
             map: THREE.ImageUtils.loadTexture(imagePrefix + directions[i] + imageSuffix),
