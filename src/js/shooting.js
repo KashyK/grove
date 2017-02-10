@@ -4,7 +4,7 @@ module.exports = (globals, player) => {
 
     let sword;
     let weapon;
-
+    
     let loader = new THREE.ObjectLoader();
     loader.load('/models/sword/sword.json', s => {
         sword = s;
@@ -124,8 +124,9 @@ module.exports = (globals, player) => {
                 });
             }
         }
-        if (String.fromCharCode(event.keyCode) == 'Q')
+        if (String.fromCharCode(event.keyCode) == 'Q') {
             require('./gui').stats(player);
+        }
         try {
             let n = Number(String.fromCharCode(event.keyCode));
             if (typeof n == 'number' && !isNaN(n) && n >= 1 && n <= 8) {

@@ -1376,7 +1376,9 @@ module.exports = function (globals, player) {
                 });
             }
         }
-        if (String.fromCharCode(event.keyCode) == 'Q') require('./gui').stats(player);
+        if (String.fromCharCode(event.keyCode) == 'Q') {
+            require('./gui').stats(player);
+        }
         try {
             var n = Number(String.fromCharCode(event.keyCode));
             if (typeof n == 'number' && !isNaN(n) && n >= 1 && n <= 8) {

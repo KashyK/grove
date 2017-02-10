@@ -19,7 +19,7 @@ module.exports.init = (player) => {
         $('#gui').toggle();
         $('#underlay').toggle();
     });
-
+    
     // draw the GUI
     setInterval(() => draw(player), 100);
 
