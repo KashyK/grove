@@ -19,7 +19,7 @@ module.exports.init = (player) => {
         $('#gui').toggle();
         $('#underlay').toggle();
     });
-    
+
     // draw the GUI
     setInterval(() => draw(player), 100);
 
@@ -62,23 +62,26 @@ module.exports.stats = player => {
     $('#gui-i').click(() => {
         $('#gui-title').html('Inventory');
         $('#gui-content').html('');
-        for (let item of player.inventory) {
+        player.inventory.forEach(item => {
             $(document.createElement('img'))
-                .attr('src', '/img/icons/two-handed-sword.svg')
+                .attr('src', `/img/icons/${item.icon}`)
                 .attr('title', item.name)
                 .css('margin', '10px')
                 .width(50)
                 .height(50)
                 .click(function(e) {
-                    alert(JSON.stringify(item));
                     if (player.hotbar.list.indexOf(item) == -1) {
                         player.hotbar.list.push(item);
+                        $(this).css('background-color', 'lightblue');
                     }
-                    else player.hotbar.list.splice(player.hotbar.list.indexOf(item), 1);
+                    else {
+                        player.hotbar.list.splice(player.hotbar.list.indexOf(item), 1);
+                        $(this).css('background-color', 'transparent');
+                    }
                 })
-                .css('background-color', player.hotbar.list.indexOf(item) !== -1 ? 'blue' : 'transparent')
+                .css('background-color', player.hotbar.list.indexOf(item) !== -1 ? 'lightblue' : 'transparent')
                 .appendTo($('#gui-content'));
-        }
+        });
     });
     $('#gui-m').click(() => {
         $('#gui-title').html('Map');
@@ -165,7 +168,7 @@ function draw(player) {
         if (/sword/gi.test(player.hotbar.list[i].name)) {
             const img = new Image();
             img.src = '/img/icons/two-handed-sword.svg';
-            ctx.drawImage(img, centerX - xvals[i] - 25, canvas.height - 70, 50, 50);
+            ctx.drawImage(img, centerX + xvals[alias[i + 1]] - 25, canvas.height - 70, 50, 50);
         }
     }
 }

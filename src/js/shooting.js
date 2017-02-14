@@ -16,6 +16,7 @@ module.exports = (globals, player) => {
     });
 
     function addWeapon() {
+        if (player.hotbar.list[player.hotbar.selected - 1]) player.equipped.weapon = player.hotbar.list[player.hotbar.selected - 1];
         if (player.equipped.weapon && /sword/gi.test(player.equipped.weapon.name) && !weapon) {
             weapon = sword.clone();
             globals.camera.add(weapon);
@@ -111,7 +112,7 @@ module.exports = (globals, player) => {
     setInterval(addWeapon, 500);
 
     // $(document).on('mousedown', shoot);
-    $(document).on('keydown', event => {
+    $(window).on('keydown', event => {
         if (String.fromCharCode(event.keyCode) == 'E') {
             let raycaster = new THREE.Raycaster();
             raycaster.set(globals.camera.getWorldPosition(), globals.camera.getWorldDirection());

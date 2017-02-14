@@ -44,8 +44,8 @@ module.exports = (globals, player) => {
 
     setInterval(() => {
         uni.time.value += 0.1;
-        let time = new Date().getTime() * 0.000015;
-        // var time = 2.1;
+        // let time = new Date().getTime() * 0.000015;
+        let time = 2.1;
         let nsin = Math.sin(time);
         let ncos = Math.cos(time);
         // set the sun

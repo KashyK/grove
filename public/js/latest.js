@@ -179,39 +179,17 @@ module.exports.stats = function (player) {
     $('#gui-i').click(function () {
         $('#gui-title').html('Inventory');
         $('#gui-content').html('');
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-            var _loop = function _loop() {
-                var item = _step.value;
-
-                $(document.createElement('img')).attr('src', '/img/icons/two-handed-sword.svg').attr('title', item.name).css('margin', '10px').width(50).height(50).click(function (e) {
-                    alert(JSON.stringify(item));
-                    if (player.hotbar.list.indexOf(item) == -1) {
-                        player.hotbar.list.push(item);
-                    } else player.hotbar.list.splice(player.hotbar.list.indexOf(item), 1);
-                }).css('background-color', player.hotbar.list.indexOf(item) !== -1 ? 'blue' : 'transparent').appendTo($('#gui-content'));
-            };
-
-            for (var _iterator = player.inventory[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                _loop();
-            }
-        } catch (err) {
-            _didIteratorError = true;
-            _iteratorError = err;
-        } finally {
-            try {
-                if (!_iteratorNormalCompletion && _iterator.return) {
-                    _iterator.return();
+        player.inventory.forEach(function (item) {
+            $(document.createElement('img')).attr('src', '/img/icons/' + item.icon).attr('title', item.name).css('margin', '10px').width(50).height(50).click(function (e) {
+                if (player.hotbar.list.indexOf(item) == -1) {
+                    player.hotbar.list.push(item);
+                    $(this).css('background-color', 'lightblue');
+                } else {
+                    player.hotbar.list.splice(player.hotbar.list.indexOf(item), 1);
+                    $(this).css('background-color', 'transparent');
                 }
-            } finally {
-                if (_didIteratorError) {
-                    throw _iteratorError;
-                }
-            }
-        }
+            }).css('background-color', player.hotbar.list.indexOf(item) !== -1 ? 'lightblue' : 'transparent').appendTo($('#gui-content'));
+        });
     });
     $('#gui-m').click(function () {
         $('#gui-title').html('Map');
@@ -297,7 +275,7 @@ function draw(player) {
         if (/sword/gi.test(player.hotbar.list[_i2].name)) {
             var img = new Image();
             img.src = '/img/icons/two-handed-sword.svg';
-            ctx.drawImage(img, centerX - xvals[_i2] - 25, canvas.height - 70, 50, 50);
+            ctx.drawImage(img, centerX + xvals[alias[_i2 + 1]] - 25, canvas.height - 70, 50, 50);
         }
     }
 }
@@ -357,8 +335,8 @@ module.exports = function (globals, player) {
 
     setInterval(function () {
         uni.time.value += 0.1;
-        var time = new Date().getTime() * 0.000015;
-        // var time = 2.1;
+        // let time = new Date().getTime() * 0.000015;
+        var time = 2.1;
         var nsin = Math.sin(time);
         var ncos = Math.cos(time);
         // set the sun
@@ -562,7 +540,8 @@ Object.assign(base, weapons, materials);
 pt = new ProtoTree(base);
 
 module.exports = function (callback) {
-    callback(pt, setUpComponent, setUpSword); // thinking about removing setUpCOmponent
+    pt = new ProtoTree(base);
+    callback(pt, setUpSword);
 };
 
 function setUpComponent(comp, mat) {
@@ -573,7 +552,8 @@ function setUpComponent(comp, mat) {
     c.spd = m.spd;
     c.dur = m.dur;
     c.name = 'test';
-    return c;
+    var clone = JSON.parse(JSON.stringify(c));
+    return clone;
 }
 
 // makes a sword and returns it; should be in JSON
@@ -587,8 +567,13 @@ function setUpSword(type, mat1, mat2) {
     sword.name = sword.blade.mat.name + ' ' + sword.name;
     sword.dmg = (blade.dmg + handle.dmg) / 2;
     sword.spd = (blade.spd + handle.spd) / 2;
+    sword.slot = 'weapon';
+    sword.icon = 'two-handed-sword.svg';
     sword.id = Math.random(); // for debugging purposes
-    return sword;
+    var clone = JSON.parse(JSON.stringify(sword)); // EXTREME workaround but hey it works... :D
+    sword = null;
+    clone.id = Math.random();
+    return clone;
 }
 
 },{"./json/base":10,"./json/mats":11,"./json/weapons":12,"rpg-tools/lib/ProtoTree":18}],10:[function(require,module,exports){
@@ -1068,7 +1053,7 @@ module.exports = function (globals, player) {
             player.serverdata = data;
             player.id = data.id;
 
-            Object.assign(player.inventory, player.serverdata.acc.inventory);
+            Object.assign(player.inventory, player.serverdata.acc.inventory); // GOD!
 
             require('./init/manager')(globals, player);
         }
@@ -1244,10 +1229,9 @@ var Player = function Player() {
         active: null
     };
 
-    require('./items')(function (pt, comp, sword) {
-        var s = sword(0, 'iron', 'wood');
-        s.slot = 'weapon';
-        _this.inventory.push(s);
+    require('./items')(function (pt, sword) {
+        _this.inventory.push(sword(0, 'iron', 'wood'));
+        _this.inventory.push(sword(0, 'ebony', 'iron'));
     });
 };
 
@@ -1276,6 +1260,7 @@ module.exports = function (globals, player) {
     });
 
     function addWeapon() {
+        if (player.hotbar.list[player.hotbar.selected - 1]) player.equipped.weapon = player.hotbar.list[player.hotbar.selected - 1];
         if (player.equipped.weapon && /sword/gi.test(player.equipped.weapon.name) && !weapon) {
             weapon = sword.clone();
             globals.camera.add(weapon);
@@ -1363,7 +1348,7 @@ module.exports = function (globals, player) {
     setInterval(addWeapon, 500);
 
     // $(document).on('mousedown', shoot);
-    $(document).on('keydown', function (event) {
+    $(window).on('keydown', function (event) {
         if (String.fromCharCode(event.keyCode) == 'E') {
             var raycaster = new THREE.Raycaster();
             raycaster.set(globals.camera.getWorldPosition(), globals.camera.getWorldDirection());

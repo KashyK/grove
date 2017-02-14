@@ -25,10 +25,9 @@ class Player {
             active: null
         };
 
-        require('./items')((pt, comp, sword) => {
-            let s = sword(0, 'iron', 'wood');
-            s.slot = 'weapon';
-            this.inventory.push(s);
+        require('./items')((pt, sword) => {
+            this.inventory.push(sword(0, 'iron', 'wood'));
+            this.inventory.push(sword(0, 'ebony', 'iron'));
         });
 
     }

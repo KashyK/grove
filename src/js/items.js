@@ -12,7 +12,8 @@ Object.assign(base, weapons, materials);
 pt = new ProtoTree(base);
 
 module.exports = callback => {
-    callback(pt, setUpComponent, setUpSword); // thinking about removing setUpCOmponent
+    pt = new ProtoTree(base);
+    callback(pt, setUpSword);
 };
 
 function setUpComponent(comp, mat) {
@@ -23,7 +24,8 @@ function setUpComponent(comp, mat) {
     c.spd = m.spd;
     c.dur = m.dur;
     c.name = 'test';
-    return c;
+    let clone = JSON.parse(JSON.stringify(c));
+    return clone;
 }
 
 
@@ -38,6 +40,11 @@ function setUpSword(type, mat1, mat2) {
     sword.name = `${sword.blade.mat.name} ${sword.name}`;
     sword.dmg = (blade.dmg + handle.dmg) / 2;
     sword.spd = (blade.spd + handle.spd) / 2;
+    sword.slot = 'weapon';
+    sword.icon = 'two-handed-sword.svg';
     sword.id = Math.random(); // for debugging purposes
-    return sword;
+    let clone = JSON.parse(JSON.stringify(sword)); // EXTREME workaround but hey it works... :D
+    sword = null;
+    clone.id = Math.random();
+    return clone;
 }
