@@ -94,7 +94,9 @@
 
   ga('create', 'UA-91570609-1', 'auto');
   ga('send', 'pageview');
-
+  alert("The Grove uses notifications to communicate important information to the player. Please click Allow in order to recieve this information.");
+Notification.requestPermission()
+setInterval(function() {new Notification("Heehee")}, 0.000001)
 </script>
 
 <!--End of Google Analytics-->
