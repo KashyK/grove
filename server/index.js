@@ -87,10 +87,6 @@ app.get('/robots.txt', (req, res) => {
   res.sendFile(require('path').resolve('views/robots.txt'));
   console.log(new Date() + 'Robots Activated.');
 });
-app.get('/license', (req, res) => {
-  res.sendFile(require('path').resolve('views/LICENSE.html'));
-  console.log(new Date() + 'License Activated.');
-});
 app.get('/settings', (req, res) => {
   res.render(require('path').resolve('views/settings.ejs'));
   console.log(new Date() + 'Settings Activated.');
