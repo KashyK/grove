@@ -25,7 +25,7 @@ module.exports = (globals, player) => {
                     let tween = new TWEEN.Tween(weapon.rotation)
                         .to({
                             x: [-Math.PI / 2, 0]
-                        }, 1 / player.equipped.weapon.spd * 2000)
+                        }, 1 / player.equipped.weapon.spd * 4000)
                         .onStart(() => {
                             let a = new Audio('/audio/sword.mp3');
                             a.play();
