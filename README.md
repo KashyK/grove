@@ -3,6 +3,8 @@
 (BETA - UNDER DEVELOPMENT)
 
 Welcome to The Grove, a browser-based MMORPG.
+- www.grove-mmo.com
+
 A list of server technologies are:
 
 - node.js
@@ -29,7 +31,8 @@ The Grove officialy uses MongoDB databases
 
 - www.mlab.com
 
-Liscense:
+
+License:
 
 
 - The Grove is copyright 2016 by Hybrid Alpaca Game Studios. All images, story, and game are copyright of Hybrid Alapca Game Studios.
