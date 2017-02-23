@@ -1,4 +1,6 @@
-module.exports = function (grunt) {
+// OOGENSNARGLE
+
+module.exports = function(grunt) {
 
     // Project configuration.
     grunt.initConfig({
@@ -19,9 +21,11 @@ module.exports = function (grunt) {
                 src: ['src/js/**/*.*'],
                 dest: 'public/js/latest.js',
                 options: {
-                    transform: [['babelify', {
-                        presets: ['es2015']
-                    }]]
+                    transform: [
+                        ['babelify', {
+                            presets: ['es2015']
+                        }]
+                    ]
                 }
             }
         },

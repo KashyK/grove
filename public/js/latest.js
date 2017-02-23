@@ -43,15 +43,6 @@ module.exports.ai = AI;
 var dave = new AI();
 
 },{}],2:[function(require,module,exports){
-// $('#dedicate').hide();
-//     if() {
-//     $('#dedicate').fadeIn(3000)
-//     setTimeout(2000);
-//     $('#anyKey').fadeOut(1000);
-//     }
-"use strict";
-
-},{}],3:[function(require,module,exports){
 'use strict';
 
 /* global THREE, CANNON, io */
@@ -114,7 +105,7 @@ module.exports.label = load.label;
 module.exports.ball = load.ball;
 module.exports.plane = load.plane;
 
-},{"./items":9,"./load":13}],4:[function(require,module,exports){
+},{"./items":8,"./load":12}],3:[function(require,module,exports){
 'use strict';
 
 /* global $ */
@@ -286,7 +277,7 @@ function draw(player) {
 //     }
 // };
 
-},{"./globals":3}],5:[function(require,module,exports){
+},{"./globals":2}],4:[function(require,module,exports){
 "use strict";
 
 /* global THREE, CANNON, $, SPE */
@@ -427,7 +418,7 @@ module.exports = function (globals, player) {
     });
 };
 
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 /* global THREE */
@@ -460,7 +451,7 @@ function init(globals, player) {
 
 module.exports = init;
 
-},{"./bodies":5,"./player":7,"./world":8}],7:[function(require,module,exports){
+},{"./bodies":4,"./player":6,"./world":7}],6:[function(require,module,exports){
 'use strict';
 
 /* global THREE, CANNON, PointerLockControls */
@@ -502,7 +493,7 @@ module.exports = function (globals, player) {
     window.controls = globals.controls;
 };
 
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
 /* global CANNON */
@@ -524,7 +515,7 @@ module.exports = function (globals) {
     globals.world.broadphase = new CANNON.NaiveBroadphase();
 };
 
-},{}],9:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 /* global $ */
@@ -576,7 +567,7 @@ function setUpSword(type, mat1, mat2) {
     return clone;
 }
 
-},{"./json/base":10,"./json/mats":11,"./json/weapons":12,"rpg-tools/lib/ProtoTree":18}],10:[function(require,module,exports){
+},{"./json/base":9,"./json/mats":10,"./json/weapons":11,"rpg-tools/lib/ProtoTree":17}],9:[function(require,module,exports){
 module.exports={
     "@item": {
         name: "-- Item --",
@@ -638,7 +629,7 @@ module.exports={
     }
 }
 
-},{}],11:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 module.exports={
     "wood": {
         proto: "@material",
@@ -694,7 +685,7 @@ module.exports={
     }
 }
 
-},{}],12:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 module.exports={
   "shortsword": {
     proto: "@sword",
@@ -709,7 +700,7 @@ module.exports={
     slot: 2
   }
 }
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 /* global CANNON, THREE */
@@ -924,7 +915,7 @@ module.exports.label = label;
 module.exports.ball = ball;
 module.exports.plane = plane;
 
-},{"./globals":3}],14:[function(require,module,exports){
+},{"./globals":2}],13:[function(require,module,exports){
 'use strict';
 
 /* global $, THREE */
@@ -1023,7 +1014,7 @@ function onWindowResize() {
     globals.renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-},{"./globals":3,"./gui":4,"./items":9,"./multiplayer":15,"./player":16,"./shooting":17}],15:[function(require,module,exports){
+},{"./globals":2,"./gui":3,"./items":8,"./multiplayer":14,"./player":15,"./shooting":16}],14:[function(require,module,exports){
 "use strict";
 
 /* global $, THREE, Materialize */
@@ -1194,7 +1185,7 @@ module.exports = function (globals, player) {
     globals.playerForId = playerForId;
 };
 
-},{"./init/manager":6}],16:[function(require,module,exports){
+},{"./init/manager":5}],15:[function(require,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1239,7 +1230,7 @@ var player = new Player();
 
 module.exports = player;
 
-},{"./items":9}],17:[function(require,module,exports){
+},{"./items":8}],16:[function(require,module,exports){
 'use strict';
 
 /* global THREE, CANNON, TWEEN, $ */
@@ -1268,7 +1259,7 @@ module.exports = function (globals, player) {
                 if (weapon) {
                     var tween = new TWEEN.Tween(weapon.rotation).to({
                         x: [-Math.PI / 2, 0]
-                    }, 1 / player.equipped.weapon.spd * 2000).onStart(function () {
+                    }, 1 / player.equipped.weapon.spd * 4000).onStart(function () {
                         var a = new Audio('/audio/sword.mp3');
                         a.play();
                     }).start();
@@ -1374,7 +1365,7 @@ module.exports = function (globals, player) {
     });
 };
 
-},{"./gui":4}],18:[function(require,module,exports){
+},{"./gui":3}],17:[function(require,module,exports){
 (function (root, factory) {
     'use strict';
     /* global define, module, require */
@@ -1464,7 +1455,7 @@ module.exports = function (globals, player) {
 
     return ProtoTree;
 }));
-},{"./utils":19}],19:[function(require,module,exports){
+},{"./utils":18}],18:[function(require,module,exports){
 (function (root, factory) {
     'use strict';
     /* global define, module, require */
@@ -1551,4 +1542,4 @@ module.exports = function (globals, player) {
     return exports;
 }));
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
