@@ -48,7 +48,7 @@ All people that have contributed to this game include:
 - Casimir Kash:             Developer, Graphics, Beta Testing
 - KJ Avakian:               Developer
 - Gavin Montheye:           PR
-- Hunter Sokolis:           Graphics, Humour Support
+- Hunter Sokolis:           Developer, Graphics, Humour Support
 - Michael Rimmele:          Graphics
 - Brendan O'Rourke:         Graphics
 - Jasper Burns:             Storyline
