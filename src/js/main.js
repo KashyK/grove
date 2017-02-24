@@ -2,6 +2,7 @@
 
 let globals = require('./globals');
 let player = require('./player');
+const _ = require('lodash');
 
 const dt = 1 / 60;
 
@@ -15,7 +16,7 @@ THREE.DefaultLoadingManager.onProgress = (item, loaded, total) => {
     if (loaded == total) {
         $('#spinner').hide();
         $('#load-play-btn, .play-btn').show();
-        animate();
+        _.once(animate)();
         require('./gui').quests();
     }
 };

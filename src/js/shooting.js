@@ -4,7 +4,7 @@ module.exports = (globals, player) => {
 
     let sword;
     let weapon;
-    
+
     let loader = new THREE.ObjectLoader();
     loader.load('/models/sword/sword.json', s => {
         sword = s;
@@ -22,10 +22,16 @@ module.exports = (globals, player) => {
             globals.camera.add(weapon);
             window.addEventListener('mousedown', () => {
                 if (weapon) {
+                    let raycaster = new THREE.Raycaster();
+                    raycaster.set(globals.camera.getWorldPosition(), globals.camera.getWorldDirection());
+                    let intersects = raycaster.intersectObjects(globals.scene.children, true);
+                    if (intersects.length > 0) {
+                        if (intersects[0].object.name) alert('You hit a player!');
+                    }
                     let tween = new TWEEN.Tween(weapon.rotation)
                         .to({
                             x: [-Math.PI / 2, 0]
-                        }, 1 / player.equipped.weapon.spd * 4000)
+                        }, 1 / player.equipped.weapon.spd * 3000)
                         .onStart(() => {
                             let a = new Audio('/audio/sword.mp3');
                             a.play();

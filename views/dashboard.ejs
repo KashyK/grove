@@ -31,15 +31,15 @@
             <div class="nav-wrapper ">
                 <a  class="brand-logo">&nbsp;<%= user.username %></a>
                 <div class='row'>
-                    <div class='col s6'>
+                    <div class='col s7'>
                         <ul id="tabs" class='right hide-on-med-and-down'>
-                        <li class="tab"><a class='active wave-effect waves-light' href="#home">Home</a></li>
+                            <li class="tab"><a href="#home">Home</a></li>
                             <li class="tab"><a href="#stats">Stats</a></li>
                             <li class="tab"><a href="#about">About</a></li>
                             <li class="tab"><a href="#options">Other Options</a></li>
                         </ul>
                     </div>
-                    <div class='col s6'></div>
+                    <div class='col s5'></div>
                 </div>
             </div>
         </nav>
@@ -49,8 +49,6 @@
                 <h3 class='header'>Actions</h3>
                 <br>
                 <a href='/play' class='waves-effect waves-light btn-large light-green z-depth-3'>Enter the Grove</a>
-                <!-- <br><br><a class='waves-effect waves-light btn-large green z-depth-3' href="https://www.gofundme.com/grove-mmo?utm_medium=wdgt">Donate Now!</a>
-                     <br><br><a href="http://grove-mmo.com" class='waves-effect waves-light btn-large purple z-depth-3'>Home</a> -->
                  <br><br><a href='/settings' class='waves-effect waves-light btn-large blue z-depth-3'>Settings</a>
                 <br><br><a href='/logout' class='waves-effect waves-light btn-large red z-depth-3'>Logout</a>
     
@@ -59,7 +57,7 @@
                 <br>
                 <h3 class='header'>Active Quests:</h3>
                 <div id='quests'>
-                    <p class='flow-text'>» You are playing on  <%=user.map%></p>
+                    <p class='flow-text'>» Your current quest is:  <%=user.quest%></p>
                 </div>
                 <h3 class='header'>Current Group:</h3>
                 <p class='flow-text'>You aren't in a group! Click in-game friends and click the 'join group' icon to join their group.</p>
@@ -72,13 +70,24 @@
                 height:100%;
                 width:100%;
             }
+            #options {
+                background: #81c784;
+                height:100%;
+                width:100%;
             }
              .random {
                 background: #81c784;
                 height:100%;
                 width:100%;
             }
-        </style>
+            .links {
+                font-size: 25px;
+                font-family: serif;
+            }
+            .other {
+                font-family: serif;
+            }
+        </style> 
         <div id='stats' class=''>
             <br>
             <table class='centered'>
@@ -115,13 +124,26 @@
             </table>
 
         </div>
-       <div id='about' style='overflow:auto'>
-        <h4 class='green-text text-darken-3'>&nbsp;About (mainly recent updates and stuff)</h4>
-        <pre class='green-text text-darken-4'> Congratulations! You found the About page! 
- Recent Updates:</pre>
- <pre class='green-text text-darken-4'> 2/22/17: Made Grove more user friendly!</pre>
- <pre class='green-text text-darken-4'> 2/22/17: Reset update log. Check back more often to not miss anything!</pre>
- <pre class='green-text text-darken-4'> 1/29/17: Created a password reset!</pre>
+        <div id='about' style='overflow:auto'>
+            <h4 class='green-text text-darken-3'>&nbsp;About (mainly recent updates and stuff)</h4>
+            <pre class='green-text text-darken-4'>   Congratulations! You found the About page!
+            
+   Recent Updates:
+ 
+  2/22/17: Added an "Other Options" page, so check out all the links!
+ 
+  2/22/17: Made The Grove more user friendly!
+
+  2/22/17: Reset update log. Check back more often to not miss anything! 
+ 
+  1/29/17: Created a password reset!</pre>
+         <!-- Other Options -->
+        </div>
+       <div id='options' style='overflow:auto'>
+           <h4 class='other'>&nbsp;Other Options (Other links related to The Grove)</h4>
+           <p class='links' >&nbsp; Head to the Grove Website <a href='http://www.grove-mmo.com/'>here</a>!</p>
+           <p class='links' >&nbsp; Donate to the cause <a href='https://www.gofundme.com/grove-mmo?utm_medium=wdgt'>here</a>!</p>
+           <p class='links' >&nbsp; Wanna play the very first Grove? Play it  <a href='http://codepen.io/tramans/full/bdOgEq'>here</a>!</p>
         <script>
             $(document).ready(function () {
                 $('ul#tabs').tabs();

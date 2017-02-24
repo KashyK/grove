@@ -1,6 +1,6 @@
 # The Grove
 
-(BETA - UNDER DEVELOPMENT)
+(PRE-ALPHA - UNDER DEVELOPMENT)
 
 Welcome to The Grove, a browser-based MMORPG.
 - www.grove-mmo.com
@@ -35,7 +35,7 @@ The Grove officialy uses MongoDB databases
 License:
 
 
-- The Grove is copyright 2016 by Hybrid Alpaca Game Studios. All images, story, and game are copyright of Hybrid Alapca Game Studios.
+- The Grove is copyright 2017 by Hybrid Alpaca Game Studios. All images, story, and game are copyright of Hybrid Alapca Game Studios.
 Copying or redistributing this game or content without the consent of Hybrid Alpaca Game Studios is illegal and unlawful.
 
  -  Most Images are not owned by Hybrid Alpaca Game Studios.
@@ -48,7 +48,7 @@ All people that have contributed to this game include:
 - Casimir Kash:             Developer, Graphics, Beta Testing
 - KJ Avakian:               Developer
 - Gavin Montheye:           PR
-- Hunter Sokolis:           Graphics
+- Hunter Sokolis:           Graphics, Humour Support
 - Michael Rimmele:          Graphics
 - Brendan O'Rourke:         Graphics
 - Jasper Burns:             Storyline

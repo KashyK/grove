@@ -76,6 +76,12 @@ module.exports = (app, events) => {
             }
         });
     });
+    // m
+    // a
+    // g
+    // g
+    // i
+    // e
     app.post('/register', (req, res) => {
         let u = new User({
             username: req.body.username,
