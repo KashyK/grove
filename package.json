@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "The Grove.",
   "main": "server/index.js",
+  "respository": "cellman1234/grove",
   "dependencies": {
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
@@ -30,6 +31,6 @@
     "grunt-browserify": "^5.0.0",
     "grunt-contrib-sass": "^1.0.0",
     "grunt-contrib-uglify": "^2.0.0",
-    "grunt-contrib-watch": "^1.0.0"
+    "grunt-este-watch": "^0.1.18"
   }
 }

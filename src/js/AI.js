@@ -17,7 +17,7 @@ module.exports = () => {
             TWEEN;
         }
     }
-    // EMOGICONS ARE PEOPLE DOS (to)
+    // EMOGICONS ARE PEOPLE DOS (too)
 
 
     class Villager extends AI {
@@ -25,7 +25,7 @@ module.exports = () => {
             super(name, hp, dmg);
         }
     }
-    //ASIANS ARE PEOPLE TO
+    //ASIANS ARE PEOPLE TOO
 
     class Wicket extends AI {
         constructor(name = 'Wicket', hp = Infinity, dmg = 2) {

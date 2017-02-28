@@ -1,4 +1,4 @@
-/* global $ */
+/* global $, skill, skilltree */
 
 module.exports = (title, content) => {
     $('#quest-alert').css('right', '0px');
@@ -91,7 +91,42 @@ module.exports.stats = player => {
     });
     $('#gui-p').click(() => {
         $('#gui-title').html('Player');
-        $('#gui-content').html('ur stats');
+        $('#gui-content').html('<div id=st></div>');
+        skill('strength')
+            .current(1)
+            .max(3)
+            .pos(100, 150)
+            .sprite(8, 10)
+            .sprites({
+                2: [8, 10],
+                3: [8, 3]
+            })
+            .name('Strength')
+            .hint('This determines how much you can hold, etc.')
+            .hint('You are a weakling.', 1)
+            .hint('You can beat up your stepmother now.', 2)
+            .hint('Hercules is a mouse compared to you.', 3)
+            .$('#st');
+        skill('fury')
+            .current(1)
+            .max(3)
+            .pos(200, 150)
+            .sprite(2, 6)
+            .sprites({
+                2: [2, 6],
+                3: [2, 6]
+            })
+            .name('Internal Fury')
+            .hint('How much you are able to mash up enemies :)')
+            .hint('Not a man to be trifled with.', 1)
+            .hint('Everyone stops talking when you are around.', 2)
+            .hint('They say you can start fires with your eyes...', 3)
+            .$('#st');
+            
+        skilltree.language.reqTitle = "For level {0} you would need:";
+        skilltree.language.req = '<h4>{1}</h4><ul class="reqs commamenu">{0}</ul>',
+            skilltree.language.levelTitle = "Level {1} {0}";
+        skilltree.init($('#st'));
     });
     if ($('#gui-content').is(':visible')) document.exitPointerLock();
 

@@ -26,7 +26,7 @@ module.exports = (globals, player) => {
                     raycaster.set(globals.camera.getWorldPosition(), globals.camera.getWorldDirection());
                     let intersects = raycaster.intersectObjects(globals.scene.children, true);
                     if (intersects.length > 0) {
-                        if (intersects[0].object.name) alert('You hit a player!');
+                        // if (intersects[0].object.name) alert('You hit a player!');
                     }
                     let tween = new TWEEN.Tween(weapon.rotation)
                         .to({

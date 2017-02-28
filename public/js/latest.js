@@ -1,3 +1,5 @@
+// Brought to you with <3 by the Grove team. Tue Feb 28 2017 00:58:57 GMT+0000 (UTC)
+
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
@@ -40,7 +42,7 @@ module.exports = function () {
 
         return AI;
     }();
-    // EMOGICONS ARE PEOPLE DOS (to)
+    // EMOGICONS ARE PEOPLE DOS (too)
 
 
     var Villager = function (_AI) {
@@ -59,7 +61,7 @@ module.exports = function () {
 
         return Villager;
     }(AI);
-    //ASIANS ARE PEOPLE TO
+    //ASIANS ARE PEOPLE TOO
 
     var Wicket = function (_AI2) {
         _inherits(Wicket, _AI2);
@@ -172,7 +174,7 @@ module.exports.plane = load.plane;
 },{"./items":8,"./load":12}],3:[function(require,module,exports){
 'use strict';
 
-/* global $ */
+/* global $, skill, skilltree */
 
 module.exports = function (title, content) {
     $('#quest-alert').css('right', '0px');
@@ -254,7 +256,19 @@ module.exports.stats = function (player) {
     });
     $('#gui-p').click(function () {
         $('#gui-title').html('Player');
-        $('#gui-content').html('ur stats');
+        $('#gui-content').html('<div id=st></div>');
+        skill('strength').current(1).max(3).pos(100, 150).sprite(8, 10).sprites({
+            2: [8, 10],
+            3: [8, 3]
+        }).name('Strength').hint('This determines how much you can hold, etc.').hint('You are a weakling.', 1).hint('You can beat up your stepmother now.', 2).hint('Hercules is a mouse compared to you.', 3).$('#st');
+        skill('fury').current(1).max(3).pos(200, 150).sprite(2, 6).sprites({
+            2: [2, 6],
+            3: [2, 6]
+        }).name('Internal Fury').hint('How much you are able to mash up enemies :)').hint('Not a man to be trifled with.', 1).hint('Everyone stops talking when you are around.', 2).hint('They say you can start fires with your eyes...', 3).$('#st');
+
+        skilltree.language.reqTitle = "For level {0} you would need:";
+        skilltree.language.req = '<h4>{1}</h4><ul class="reqs commamenu">{0}</ul>', skilltree.language.levelTitle = "Level {1} {0}";
+        skilltree.init($('#st'));
     });
     if ($('#gui-content').is(':visible')) document.exitPointerLock();
 };
@@ -1326,7 +1340,7 @@ module.exports = function (globals, player) {
                     raycaster.set(globals.camera.getWorldPosition(), globals.camera.getWorldDirection());
                     var intersects = raycaster.intersectObjects(globals.scene.children, true);
                     if (intersects.length > 0) {
-                        if (intersects[0].object.name) alert('You hit a player!');
+                        // if (intersects[0].object.name) alert('You hit a player!');
                     }
                     var tween = new TWEEN.Tween(weapon.rotation).to({
                         x: [-Math.PI / 2, 0]

@@ -1,4 +1,5 @@
 # we don't want anyone to see these files
+node_modules
 push.sh
 .gitignore
 npm-debug.log

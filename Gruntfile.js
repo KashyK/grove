@@ -6,14 +6,16 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
-        watch: {
-            scripts: {
-                files: ['src/js/**/*.*', 'src/css/**/*.*'],
-                tasks: ['browserify', 'uglify', 'sass'],
-                options: {
-                    spawn: false
-                },
+        esteWatch: {
+            options: {
+                dirs: ['src/js/**/'],
+                livereload: {
+                    enabled: false
+                }
             },
+            '*': () => {
+                return ['browserify', 'uglify'];
+            }
         },
 
         browserify: {
@@ -21,6 +23,7 @@ module.exports = function(grunt) {
                 src: ['src/js/**/*.*'],
                 dest: 'public/js/latest.js',
                 options: {
+                    banner: '// Brought to you with <3 by the Grove team. <%= new Date() %>\n',
                     transform: [
                         ['babelify', {
                             presets: ['es2015']
@@ -55,7 +58,7 @@ module.exports = function(grunt) {
 
     });
 
-    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-este-watch');
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-sass');
@@ -64,6 +67,6 @@ module.exports = function(grunt) {
     grunt.registerTask('build', ['browserify', 'uglify', 'sass']);
     grunt.registerTask('js', ['browserify', 'uglify', 'watch']);
     grunt.registerTask('css', ['sass', 'watch']);
-    grunt.registerTask('default', ['browserify', 'uglify', 'sass', 'watch']);
+    grunt.registerTask('default', ['esteWatch']);
 
 };

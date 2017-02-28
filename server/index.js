@@ -95,39 +95,9 @@ app.get('/pwreset', (req, res) => {
   res.render(require('path').resolve('views/pwreset.ejs'));
   console.log(new Date() + 'Password Reset Activated.');
 });
-app.get('/404', (req, res) => {
-  res.render(require('path').resolve('views/404.ejs'));
-  console.log(new Date() + 'ERROR!! 404 THIS PAGE DOES NOT EXIST!');
-});
-app.get('/google0c7efa3782c237cf.html', (req, res) => {
-  res.render(require('path').resolve('/google0c7efa3782c237cf.html'));
-  console.log(new Date() + 'Google Bot');
-});
-app.get('/site', (req, res) => {
-  res.render(require('path').resolve('../views/site.txt'));
-  console.log(new Date() + 'Google Bot');
-});
 http.listen(process.env.PORT || 8080, (listening) => {
   if (!process.env.NODE_ENV) {
     console.log('Listening For conections on 0.0.0.0');
     console.log('Server running! ( View license at https://grove-mmo.herokuapp.com/license )');
   }
 });
-console.log(new Date() + 'Login Initializing');
-console.log(new Date() + 'Register Initializing.');
-console.log(new Date() + 'Play Initializing.');
-console.log(new Date() + 'Dashboard Initializing.');
-console.log(new Date() + 'Robots Initializing.');
-console.log(new Date() + 'License Initializing.');
-console.log(new Date() + 'Siracha-Admin Initilizing.');
-console.log(new Date() + 'Multiplayer server Initilizing.');
-console.log(new Date() + 'App Initializing.');
-console.log(new Date() + 'Login Started');
-console.log(new Date() + 'Register Started.');
-console.log(new Date() + 'Play Started.');
-console.log(new Date() + 'Dashboard Started.');
-console.log(new Date() + 'Robots Started.');
-console.log(new Date() + 'License Started.');
-console.log(new Date() + 'Siracha-Admin Started.');
-console.log(new Date() + 'Multiplayer server Started.');
-console.log(new Date() + 'App Started.');
