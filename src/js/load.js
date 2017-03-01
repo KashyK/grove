@@ -126,7 +126,7 @@ function plane(opts) { // BROKEN!!!!!
         shape: groundShape,
         mesh: plane
     };
-}
+} // PLANE BROKEN!!!!
 
 function label(mesh, txt = '', icon = 'run') {
 

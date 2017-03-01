@@ -1,8 +1,8 @@
-/* global TWEEN */
+/* global THREE, TWEEN */
 
 let AIS = [];
 
-module.exports = () => {
+module.exports = (globals) => {
 
     // Current Required AIs Include: Wicket, Ferdinand, Nicholas Czerwinski
 
@@ -11,21 +11,29 @@ module.exports = () => {
             this.name = name;
             this.hp = hp;
             this.dmg = dmg;
+            this.target = new THREE.Vector3(0, 20, 0);
+            this.body = globals.ball({
+                radius: 1,
+                mass: 5,
+                pos: this.target
+            });
+            globals.scene.add(this.body.mesh);
+            let tween = new TWEEN.Tween(this.body.body.position)
+                .to(globals.BODIES['player'].body.position, 1000)
+                .start();
+            globals.TWEENS.push(tween);
             AIS.push(this);
         }
-        update() {
-            TWEEN;
-        }
+        update() {}
     }
-    // EMOGICONS ARE PEOPLE DOS (too)
-
 
     class Villager extends AI {
         constructor(name = 'Bob the Villager', hp = 10, dmg = 0) { // these are default vals
             super(name, hp, dmg);
         }
     }
-    //ASIANS ARE PEOPLE TOO
+
+    const test = new Villager('Jason');
 
     class Wicket extends AI {
         constructor(name = 'Wicket', hp = Infinity, dmg = 2) {
@@ -33,7 +41,6 @@ module.exports = () => {
         }
     }
 
-    //A Tribute to Mr. C
     class Nicholas extends AI {
         constructor(name = 'Nicholas Czerwinski', hp = 100000, dmg = Infinity, godLikePowers = "Controlling EVERYTHING (except his students)") {
             super(name, hp, dmg);
@@ -41,8 +48,4 @@ module.exports = () => {
         }
     }
 
-    module.exports.ai = AI;
-    module.exports.villager = Villager;
-    module.exports.wicket = Wicket;
-    module.exports.nicholas = Nicholas;
 };

@@ -10,13 +10,13 @@
     "ejs-locals": "^1.0.2",
     "express": "^4.14.1",
     "express-session": "^1.14.1",
-    "helmet": "^3.2.0",
+    "helmet": "^3.4.1",
     "jade": "^1.11.0",
     "md5": "^2.2.1",
-    "mongoose": "^4.8.4",
+    "mongoose": "^4.8.5",
     "postal": "^2.0.4",
     "request": "^2.79.0",
-    "socket.io": "^1.4.8",
+    "socket.io": "^1.7.3",
     "sriracha-admin": "0.0.3"
   },
   "scripts": {

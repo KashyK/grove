@@ -1,4 +1,4 @@
-// Brought to you with <3 by the Grove team. Tue Feb 28 2017 00:58:57 GMT+0000 (UTC)
+// Brought to you with <3 by the Grove team. Wed Mar 01 2017 01:17:38 GMT+0000 (UTC)
 
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
@@ -11,11 +11,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-/* global TWEEN */
+/* global THREE, TWEEN */
 
 var AIS = [];
 
-module.exports = function () {
+module.exports = function (globals) {
 
     // Current Required AIs Include: Wicket, Ferdinand, Nicholas Czerwinski
 
@@ -30,20 +30,25 @@ module.exports = function () {
             this.name = name;
             this.hp = hp;
             this.dmg = dmg;
+            this.target = new THREE.Vector3(0, 20, 0);
+            this.body = globals.ball({
+                radius: 1,
+                mass: 5,
+                pos: this.target
+            });
+            globals.scene.add(this.body.mesh);
+            var tween = new TWEEN.Tween(this.body.body.position).to(globals.BODIES['player'].body.position, 1000).start();
+            globals.TWEENS.push(tween);
             AIS.push(this);
         }
 
         _createClass(AI, [{
             key: 'update',
-            value: function update() {
-                TWEEN;
-            }
+            value: function update() {}
         }]);
 
         return AI;
     }();
-    // EMOGICONS ARE PEOPLE DOS (too)
-
 
     var Villager = function (_AI) {
         _inherits(Villager, _AI);
@@ -61,7 +66,8 @@ module.exports = function () {
 
         return Villager;
     }(AI);
-    //ASIANS ARE PEOPLE TOO
+
+    var test = new Villager('Jason');
 
     var Wicket = function (_AI2) {
         _inherits(Wicket, _AI2);
@@ -78,9 +84,6 @@ module.exports = function () {
 
         return Wicket;
     }(AI);
-
-    //A Tribute to Mr. C
-
 
     var Nicholas = function (_AI3) {
         _inherits(Nicholas, _AI3);
@@ -101,11 +104,6 @@ module.exports = function () {
 
         return Nicholas;
     }(AI);
-
-    module.exports.ai = AI;
-    module.exports.villager = Villager;
-    module.exports.wicket = Wicket;
-    module.exports.nicholas = Nicholas;
 };
 
 },{}],2:[function(require,module,exports){
@@ -580,6 +578,7 @@ module.exports = function (globals) {
 
     var solver = new CANNON.GSSolver();
 
+    globals.world.allowSleep = true;
     globals.world.defaultContactMaterial.contactEquationStiffness = 1e9;
     globals.world.defaultContactMaterial.contactEquationRelaxation = 4;
     globals.world.defaultContactMaterial.friction = 2;
@@ -909,7 +908,7 @@ function plane(opts) {
         shape: groundShape,
         mesh: plane
     };
-}
+} // PLANE BROKEN!!!!
 
 function label(mesh) {
     var txt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
@@ -1000,7 +999,10 @@ module.exports.plane = plane;
 
 var globals = require('./globals');
 var player = require('./player');
-var _ = require('lodash');
+
+var _require = require('lodash'),
+    _ = _require._,
+    lodash = _require.lodash;
 
 var dt = 1 / 60;
 
@@ -1126,6 +1128,8 @@ module.exports = function (globals, player) {
             Object.assign(player.inventory, player.serverdata.acc.inventory); // GOD!
 
             require('./init/manager')(globals, player);
+
+            require('./AI')(globals);
         }
     });
 
@@ -1264,7 +1268,7 @@ module.exports = function (globals, player) {
     globals.playerForId = playerForId;
 };
 
-},{"./init/manager":5}],15:[function(require,module,exports){
+},{"./AI":1,"./init/manager":5}],15:[function(require,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }

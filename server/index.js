@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(session({
-  secret: 'ziggity zaggity',
+  secret: '434dbc979dde137b5a2a5a4916464fecc8f7997f0caebd19e6e5d48b622a896b',
   name: 'TG_USR_SESSION',
   secure: true
 }));

@@ -24,6 +24,8 @@ module.exports = (globals, player) => {
             Object.assign(player.inventory, player.serverdata.acc.inventory); // GOD!
 
             require('./init/manager')(globals, player);
+            
+            require('./AI')(globals);
 
         }
     });

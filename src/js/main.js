@@ -2,7 +2,7 @@
 
 let globals = require('./globals');
 let player = require('./player');
-const _ = require('lodash');
+const {_, lodash} = require('lodash');
 
 const dt = 1 / 60;
 
