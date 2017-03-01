@@ -109,3 +109,17 @@ var pmx = require('pmx').init({
   network       : true, // Network monitoring at the application level
   ports         : true  // Shows which ports your app is listening on (default: false)
 });
+var probe = require('pmx').probe();
+
+var counter = 0;
+
+var metric = probe.metric({
+  name    : 'Realtime user',
+  value   : function() {
+    return counter;
+  }
+});
+
+setInterval(function() {
+  counter++;
+}, 100);
