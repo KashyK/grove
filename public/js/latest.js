@@ -1,4 +1,4 @@
-// Brought to you with <3 by the Grove team. Wed Mar 01 2017 01:17:38 GMT+0000 (UTC)
+// Brought to you with <3 by the Grove team. Wed Mar 01 2017 14:00:40 GMT+0000 (UTC)
 
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
@@ -11,13 +11,15 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-/* global THREE, TWEEN */
+/* global THREE, CANNON, TWEEN */
 
 var AIS = [];
 
 module.exports = function (globals) {
 
     // Current Required AIs Include: Wicket, Ferdinand, Nicholas Czerwinski
+
+    var body = void 0;
 
     var AI = function () {
         function AI() {
@@ -33,18 +35,23 @@ module.exports = function (globals) {
             this.target = new THREE.Vector3(0, 20, 0);
             this.body = globals.ball({
                 radius: 1,
-                mass: 5,
+                mass: 15,
                 pos: this.target
             });
             globals.scene.add(this.body.mesh);
-            var tween = new TWEEN.Tween(this.body.body.position).to(globals.BODIES['player'].body.position, 1000).start();
-            globals.TWEENS.push(tween);
+            body = this.body;
             AIS.push(this);
         }
 
         _createClass(AI, [{
             key: 'update',
-            value: function update() {}
+            value: function update() {
+                var ppos = globals.BODIES['player'].body.position;
+                var bpos = body.body.position;
+                var worldPoint = new CANNON.Vec3(0, 0, 0);
+                var force = new CANNON.Vec3(ppos.x < bpos.x ? 20 : -20, 0, ppos.z < bpos.z ? 20 : -20);
+                body.body.applyForce(force, worldPoint);
+            }
         }]);
 
         return AI;
@@ -68,6 +75,7 @@ module.exports = function (globals) {
     }(AI);
 
     var test = new Villager('Jason');
+    setInterval(test.update, 40);
 
     var Wicket = function (_AI2) {
         _inherits(Wicket, _AI2);

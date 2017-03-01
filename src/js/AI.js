@@ -1,10 +1,12 @@
-/* global THREE, TWEEN */
+/* global THREE, CANNON, TWEEN */
 
 let AIS = [];
 
 module.exports = (globals) => {
 
     // Current Required AIs Include: Wicket, Ferdinand, Nicholas Czerwinski
+
+    let body;
 
     class AI {
         constructor(name = '{{ AI CONSTRUCTOR }}', hp = 10, dmg = 10) {
@@ -14,17 +16,20 @@ module.exports = (globals) => {
             this.target = new THREE.Vector3(0, 20, 0);
             this.body = globals.ball({
                 radius: 1,
-                mass: 5,
+                mass: 15,
                 pos: this.target
             });
             globals.scene.add(this.body.mesh);
-            let tween = new TWEEN.Tween(this.body.body.position)
-                .to(globals.BODIES['player'].body.position, 1000)
-                .start();
-            globals.TWEENS.push(tween);
+            body = this.body;
             AIS.push(this);
         }
-        update() {}
+        update() {
+            const ppos = globals.BODIES['player'].body.position;
+            const bpos = body.body.position;
+            const worldPoint = new CANNON.Vec3(0, 0, 0);
+            const force = new CANNON.Vec3(ppos.x < bpos.x ? 20 : -20, 0, ppos.z < bpos.z ? 20 : -20);
+            body.body.applyForce(force, worldPoint);
+        }
     }
 
     class Villager extends AI {
@@ -34,6 +39,7 @@ module.exports = (globals) => {
     }
 
     const test = new Villager('Jason');
+    setInterval(test.update, 40);
 
     class Wicket extends AI {
         constructor(name = 'Wicket', hp = Infinity, dmg = 2) {
