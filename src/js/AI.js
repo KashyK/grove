@@ -23,12 +23,12 @@ module.exports = (globals) => {
             // Hostility: -1 is run away, 0 = neutral, 1 is hostile
             super(type, hp, dmg);
             let loader = new THREE.ObjectLoader();
-            loader.load(`/models/rabbit/rabbit.json`, object => {
-                this.target = new THREE.Vector3(0, 20, 0);
+            loader.load(`/models/${type}/${type}.json`, object => {
+                if (type == 'chicken') object.scale.set(5, 5, 5);
                 this.body = globals.ball({
                     radius: 1,
                     mass: 15,
-                    pos: this.target,
+                    pos: new THREE.Vector3(Math.random() * 50 - 25, 20, Math.random() * 50 - 25),
                     mesh: object
                 });
                 setInterval(() => this.update(this.body), 40);
@@ -45,8 +45,14 @@ module.exports = (globals) => {
         }
     }
 
-    const rabbit = new Animal('rabbit', 3, 0, -1);
-
-    const duck = new Animal('duck', 3, 0, -0.5); // Needs to be a bit docile, but also be a bit afraid
-
+    // This should be good
+    new Animal('rabbit', 3, 0, -1);
+    new Animal('rabbit', 3, 0, -1);
+    new Animal('rabbit', 3, 0, -1);
+    new Animal('rabbit', 3, 0, -1);
+    new Animal('rabbit', 3, 0, -1);
+    new Animal('chicken', 3, 0, -0.5); // Needs to be a bit docile, but also be a bit afraid
+    new Animal('chicken', 3, 0, -0.5);
+    new Animal('chicken', 3, 0, -0.5);
+    
 };
