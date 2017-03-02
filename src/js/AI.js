@@ -25,6 +25,7 @@ module.exports = (globals) => {
             let loader = new THREE.ObjectLoader();
             this.hostility = hostility;
             loader.load(`/models/${type}/${type}.json`, object => {
+                alert(JSON.stringify(object.animations));
                 if (type == 'chicken') object.scale.set(5, 5, 5);
                 this.body = globals.ball({
                     radius: 1,
@@ -32,15 +33,18 @@ module.exports = (globals) => {
                     pos: new THREE.Vector3(Math.random() * 50 - 25, 20, Math.random() * 50 - 25),
                     mesh: object
                 });
-                setInterval(() => this.update(this.body), 40);
+                setInterval(() => this.update(this.body, this.hostility), 40);
             });
         }
 
-        update(body) {
+        update(body, hostility) { // que? nothing. kk
             const ppos = globals.BODIES['player'].body.position;
             const bpos = body.body.position;
-            if (globals.BODIES['player'].mesh.position.distanceTo(body.mesh.position) < 20)
-                body.body.velocity.set(ppos.x < bpos.x ? -10 : 10, body.body.velocity.y, ppos.z < bpos.z ? -10 : 10);
+            if (globals.BODIES['player'].mesh.position.distanceTo(body.mesh.position) < 20) {
+                let speed = 10;
+                if (hostility < 0) speed *= -1;
+                body.body.velocity.set(ppos.x < bpos.x ? -speed : speed, body.body.velocity.y, ppos.z < bpos.z ? -speed : speed);
+            }
             else this.body.body.velocity.set(0, body.body.velocity.y, 0);
         }
     }
@@ -51,11 +55,9 @@ module.exports = (globals) => {
     new Animal('rabbit', 3, 0, -1);
     new Animal('rabbit', 3, 0, -1);
     new Animal('rabbit', 3, 0, -1);
-    new Animal('chicken', 1, 0, -0.5); // Needs to be a bit docile, but also be a bit afraid
-    new Animal('chicken', 1, 0, -0.5);
-    new Animal('chicken', 1, 0, -0.5);
-    new Animal('pig', 7, 0, 0);
-    new Animal('pig', 7, 0, 0);
-    new Animal('pig', 7, 0, 0);
-    
+    /* new Animal('chicken', 1, 0, -0.5); // Needs to be a bit docile, but also be a bit afraid nt
+     new Animal('chicken', 1, 0, -0.5);
+     new Animal('chicken', 1, 0, -0.5);*/
+
+
 };

@@ -1,4 +1,4 @@
-// Brought to you with <3 by the Grove team. Thu Mar 02 2017 13:57:09 GMT+0000 (UTC)
+// Brought to you with <3 by the Grove team. Thu Mar 02 2017 17:46:12 GMT+0000 (UTC)
 
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
@@ -60,6 +60,7 @@ module.exports = function (globals) {
             var loader = new THREE.ObjectLoader();
             _this.hostility = hostility;
             loader.load('/models/' + type + '/' + type + '.json', function (object) {
+                alert(JSON.stringify(object.animations));
                 if (type == 'chicken') object.scale.set(5, 5, 5);
                 _this.body = globals.ball({
                     radius: 1,
@@ -68,7 +69,7 @@ module.exports = function (globals) {
                     mesh: object
                 });
                 setInterval(function () {
-                    return _this.update(_this.body);
+                    return _this.update(_this.body, _this.hostility);
                 }, 40);
             });
             return _this;
@@ -76,10 +77,15 @@ module.exports = function (globals) {
 
         _createClass(Animal, [{
             key: 'update',
-            value: function update(body) {
+            value: function update(body, hostility) {
+                // que? nothing. kk
                 var ppos = globals.BODIES['player'].body.position;
                 var bpos = body.body.position;
-                if (globals.BODIES['player'].mesh.position.distanceTo(body.mesh.position) < 20) body.body.velocity.set(ppos.x < bpos.x ? -10 : 10, body.body.velocity.y, ppos.z < bpos.z ? -10 : 10);else this.body.body.velocity.set(0, body.body.velocity.y, 0);
+                if (globals.BODIES['player'].mesh.position.distanceTo(body.mesh.position) < 20) {
+                    var speed = 10;
+                    if (hostility < 0) speed *= -1;
+                    body.body.velocity.set(ppos.x < bpos.x ? -speed : speed, body.body.velocity.y, ppos.z < bpos.z ? -speed : speed);
+                } else this.body.body.velocity.set(0, body.body.velocity.y, 0);
             }
         }]);
 
@@ -94,12 +100,9 @@ module.exports = function (globals) {
     new Animal('rabbit', 3, 0, -1);
     new Animal('rabbit', 3, 0, -1);
     new Animal('rabbit', 3, 0, -1);
-    new Animal('chicken', 1, 0, -0.5); // Needs to be a bit docile, but also be a bit afraid
-    new Animal('chicken', 1, 0, -0.5);
-    new Animal('chicken', 1, 0, -0.5);
-    new Animal('pig', 7, 0, 0);
-    new Animal('pig', 7, 0, 0);
-    new Animal('pig', 7, 0, 0);
+    /* new Animal('chicken', 1, 0, -0.5); // Needs to be a bit docile, but also be a bit afraid nt
+     new Animal('chicken', 1, 0, -0.5);
+     new Animal('chicken', 1, 0, -0.5);*/
 };
 
 },{}],2:[function(require,module,exports){
