@@ -6,52 +6,47 @@ module.exports = (globals) => {
 
     // Current Required AIs Include: Wicket, Ferdinand, Nicholas Czerwinski
 
-    let body;
-
     class AI {
         constructor(name = '{{ AI CONSTRUCTOR }}', hp = 10, dmg = 10) {
             this.name = name;
             this.hp = hp;
             this.dmg = dmg;
-            this.target = new THREE.Vector3(0, 20, 0);
-            this.body = globals.ball({
-                radius: 1,
-                mass: 15,
-                pos: this.target
-            });
-            globals.scene.add(this.body.mesh);
-            body = this.body;
             AIS.push(this);
         }
-        update() {
+
+        update() {} // virtual
+    }
+
+    class Animal extends AI {
+
+        constructor(type = 'animal', hp = 3, dmg = 2, hostility = 0) {
+            // Hostility: -1 is run away, 0 = neutral, 1 is hostile
+            super(type, hp, dmg);
+            let loader = new THREE.ObjectLoader();
+            loader.load(`/models/rabbit/rabbit.json`, object => {
+                this.target = new THREE.Vector3(0, 20, 0);
+                this.body = globals.ball({
+                    radius: 1,
+                    mass: 15,
+                    pos: this.target,
+                    mesh: object
+                });
+                setInterval(() => this.update(this.body), 40);
+            });
+            this.hostility = hostility;
+        }
+
+        update(body) {
             const ppos = globals.BODIES['player'].body.position;
             const bpos = body.body.position;
-            const worldPoint = new CANNON.Vec3(0, 0, 0);
-            const force = new CANNON.Vec3(ppos.x < bpos.x ? 20 : -20, 0, ppos.z < bpos.z ? 20 : -20);
-            body.body.applyForce(force, worldPoint);
+            if (globals.BODIES['player'].mesh.position.distanceTo(body.mesh.position) < 20)
+                body.body.velocity.set(ppos.x < bpos.x ? -10 : 10, body.body.velocity.y, ppos.z < bpos.z ? -10 : 10);
+            else this.body.body.velocity.set(0, body.body.velocity.y, 0);
         }
     }
 
-    class Villager extends AI {
-        constructor(name = 'Bob the Villager', hp = 10, dmg = 0) { // these are default vals
-            super(name, hp, dmg);
-        }
-    }
+    const rabbit = new Animal('rabbit', 3, 0, -1);
 
-    const test = new Villager('Jason');
-    setInterval(test.update, 40);
-
-    class Wicket extends AI {
-        constructor(name = 'Wicket', hp = Infinity, dmg = 2) {
-            super(name, hp, dmg);
-        }
-    }
-
-    class Nicholas extends AI {
-        constructor(name = 'Nicholas Czerwinski', hp = 100000, dmg = Infinity, godLikePowers = "Controlling EVERYTHING (except his students)") {
-            super(name, hp, dmg);
-            this.godLikePowers = godLikePowers;
-        }
-    }
+    const duck = new Animal('duck', 3, 0, -0.5); // Needs to be a bit docile, but also be a bit afraid
 
 };

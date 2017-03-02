@@ -1,4 +1,4 @@
-// Brought to you with <3 by the Grove team. Wed Mar 01 2017 14:00:40 GMT+0000 (UTC)
+// Brought to you with <3 by the Grove team. Thu Mar 02 2017 01:09:56 GMT+0000 (UTC)
 
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
@@ -19,8 +19,6 @@ module.exports = function (globals) {
 
     // Current Required AIs Include: Wicket, Ferdinand, Nicholas Czerwinski
 
-    var body = void 0;
-
     var AI = function () {
         function AI() {
             var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '{{ AI CONSTRUCTOR }}';
@@ -32,86 +30,65 @@ module.exports = function (globals) {
             this.name = name;
             this.hp = hp;
             this.dmg = dmg;
-            this.target = new THREE.Vector3(0, 20, 0);
-            this.body = globals.ball({
-                radius: 1,
-                mass: 15,
-                pos: this.target
-            });
-            globals.scene.add(this.body.mesh);
-            body = this.body;
             AIS.push(this);
         }
 
         _createClass(AI, [{
             key: 'update',
-            value: function update() {
-                var ppos = globals.BODIES['player'].body.position;
-                var bpos = body.body.position;
-                var worldPoint = new CANNON.Vec3(0, 0, 0);
-                var force = new CANNON.Vec3(ppos.x < bpos.x ? 20 : -20, 0, ppos.z < bpos.z ? 20 : -20);
-                body.body.applyForce(force, worldPoint);
-            }
+            value: function update() {} // virtual
+
         }]);
 
         return AI;
     }();
 
-    var Villager = function (_AI) {
-        _inherits(Villager, _AI);
+    var Animal = function (_AI) {
+        _inherits(Animal, _AI);
 
-        function Villager() {
-            var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Bob the Villager';
-            var hp = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
-            var dmg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-
-            _classCallCheck(this, Villager);
-
-            // these are default vals
-            return _possibleConstructorReturn(this, (Villager.__proto__ || Object.getPrototypeOf(Villager)).call(this, name, hp, dmg));
-        }
-
-        return Villager;
-    }(AI);
-
-    var test = new Villager('Jason');
-    setInterval(test.update, 40);
-
-    var Wicket = function (_AI2) {
-        _inherits(Wicket, _AI2);
-
-        function Wicket() {
-            var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Wicket';
-            var hp = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : Infinity;
+        function Animal() {
+            var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'animal';
+            var hp = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 3;
             var dmg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
+            var hostility = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 
-            _classCallCheck(this, Wicket);
+            _classCallCheck(this, Animal);
 
-            return _possibleConstructorReturn(this, (Wicket.__proto__ || Object.getPrototypeOf(Wicket)).call(this, name, hp, dmg));
+            var _this = _possibleConstructorReturn(this, (Animal.__proto__ || Object.getPrototypeOf(Animal)).call(this, type, hp, dmg));
+            // Hostility: -1 is run away, 0 = neutral, 1 is hostile
+
+
+            var loader = new THREE.ObjectLoader();
+            loader.load('/models/rabbit/rabbit.json', function (object) {
+                _this.target = new THREE.Vector3(0, 20, 0);
+                _this.body = globals.ball({
+                    radius: 1,
+                    mass: 15,
+                    pos: _this.target,
+                    mesh: object
+                });
+                setInterval(function () {
+                    return _this.update(_this.body);
+                }, 40);
+            });
+            _this.hostility = hostility;
+            return _this;
         }
 
-        return Wicket;
+        _createClass(Animal, [{
+            key: 'update',
+            value: function update(body) {
+                var ppos = globals.BODIES['player'].body.position;
+                var bpos = body.body.position;
+                if (globals.BODIES['player'].mesh.position.distanceTo(body.mesh.position) < 20) body.body.velocity.set(ppos.x < bpos.x ? -10 : 10, body.body.velocity.y, ppos.z < bpos.z ? -10 : 10);else this.body.body.velocity.set(0, body.body.velocity.y, 0);
+            }
+        }]);
+
+        return Animal;
     }(AI);
 
-    var Nicholas = function (_AI3) {
-        _inherits(Nicholas, _AI3);
+    var rabbit = new Animal('rabbit', 3, 0, -1);
 
-        function Nicholas() {
-            var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Nicholas Czerwinski';
-            var hp = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 100000;
-            var dmg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : Infinity;
-            var godLikePowers = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "Controlling EVERYTHING (except his students)";
-
-            _classCallCheck(this, Nicholas);
-
-            var _this3 = _possibleConstructorReturn(this, (Nicholas.__proto__ || Object.getPrototypeOf(Nicholas)).call(this, name, hp, dmg));
-
-            _this3.godLikePowers = godLikePowers;
-            return _this3;
-        }
-
-        return Nicholas;
-    }(AI);
+    var duck = new Animal('duck', 3, 0, -0.5); // Needs to be a bit docile, but also be a bit afraid
 };
 
 },{}],2:[function(require,module,exports){
@@ -596,7 +573,7 @@ module.exports = function (globals) {
     var split = false;
     if (split) globals.world.solver = new CANNON.SplitSolver(solver);else globals.world.solver = solver;
 
-    globals.world.gravity.set(0, -40, 0);
+    globals.world.gravity.set(0, -25, 0);
     globals.world.broadphase = new CANNON.NaiveBroadphase();
 };
 
@@ -867,7 +844,7 @@ function ball(opts) {
     });
 
     ballBody.addShape(ballShape);
-    var ballMesh = new THREE.Mesh(ballGeometry, opts.mat || new THREE.MeshPhongMaterial({
+    var ballMesh = opts.mesh || new THREE.Mesh(ballGeometry, opts.mat || new THREE.MeshPhongMaterial({
         color: opts.c || 0x00CCFF
     }));
     globals.world.add(ballBody);

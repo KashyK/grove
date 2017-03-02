@@ -77,7 +77,7 @@ function ball(opts) {
     });
 
     ballBody.addShape(ballShape);
-    var ballMesh = new THREE.Mesh(ballGeometry, opts.mat || new THREE.MeshPhongMaterial({
+    var ballMesh = opts.mesh || new THREE.Mesh(ballGeometry, opts.mat || new THREE.MeshPhongMaterial({
         color: opts.c || 0x00CCFF
     }));
     globals.world.add(ballBody);
