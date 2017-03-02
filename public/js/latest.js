@@ -1,4 +1,4 @@
-// Brought to you with <3 by the Grove team. Thu Mar 02 2017 02:03:42 GMT+0000 (UTC)
+// Brought to you with <3 by the Grove team. Thu Mar 02 2017 13:57:09 GMT+0000 (UTC)
 
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
@@ -58,6 +58,7 @@ module.exports = function (globals) {
 
 
             var loader = new THREE.ObjectLoader();
+            _this.hostility = hostility;
             loader.load('/models/' + type + '/' + type + '.json', function (object) {
                 if (type == 'chicken') object.scale.set(5, 5, 5);
                 _this.body = globals.ball({
@@ -70,7 +71,6 @@ module.exports = function (globals) {
                     return _this.update(_this.body);
                 }, 40);
             });
-            _this.hostility = hostility;
             return _this;
         }
 
@@ -94,9 +94,12 @@ module.exports = function (globals) {
     new Animal('rabbit', 3, 0, -1);
     new Animal('rabbit', 3, 0, -1);
     new Animal('rabbit', 3, 0, -1);
-    new Animal('chicken', 3, 0, -0.5); // Needs to be a bit docile, but also be a bit afraid
-    new Animal('chicken', 3, 0, -0.5);
-    new Animal('chicken', 3, 0, -0.5);
+    new Animal('chicken', 1, 0, -0.5); // Needs to be a bit docile, but also be a bit afraid
+    new Animal('chicken', 1, 0, -0.5);
+    new Animal('chicken', 1, 0, -0.5);
+    new Animal('pig', 7, 0, 0);
+    new Animal('pig', 7, 0, 0);
+    new Animal('pig', 7, 0, 0);
 };
 
 },{}],2:[function(require,module,exports){
