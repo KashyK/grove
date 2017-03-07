@@ -1,9 +1,7 @@
-/* global _, THREE */
-
-
+/* global _, $, THREE */
 
 require('../css/play');
-require('../css/skill'); 
+require('../css/skill');
 
 let globals = require('./globals'),
     player = require('./player');
