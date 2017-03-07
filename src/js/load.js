@@ -1,5 +1,3 @@
-/* global CANNON, THREE */
-
 let globals = require('./globals');
 
 function load(mesh, opts) {
@@ -84,19 +82,18 @@ function ball(opts) {
     globals.scene.add(ballMesh);
     ballMesh.castShadow = true;
     ballMesh.receiveShadow = true;
-    globals.BODIES[opts.array || 'items'].push({
-        body: ballBody,
-        shape: ballShape,
-        mesh: ballMesh
-    });
-    opts.pos ? ballBody.position.set(opts.pos.x, opts.pos.y, opts.pos.z) : null;
-    
 
-    return {
+    let body = {
         body: ballBody,
         shape: ballShape,
-        mesh: ballMesh
+        mesh: ballMesh,
+        norotate: opts.norotate || false
     };
+
+    globals.BODIES[opts.array || 'items'].push(body);
+    opts.pos ? ballBody.position.set(opts.pos.x, opts.pos.y, opts.pos.z) : null;
+
+    return body;
 }
 
 function plane(opts) { // BROKEN!!!!!

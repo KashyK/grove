@@ -1,6 +1,4 @@
-/* global THREE, CANNON, TWEEN */
-
-let AIS = [];
+/* global TWEEN */
 
 module.exports = (globals) => {
 
@@ -11,7 +9,7 @@ module.exports = (globals) => {
             this.name = name;
             this.hp = hp;
             this.dmg = dmg;
-            AIS.push(this);
+            globals.AIS.push(this);
         }
 
         update() {} // virtual
@@ -24,38 +22,46 @@ module.exports = (globals) => {
             super(type, hp, dmg);
             let loader = new THREE.ObjectLoader();
             this.hostility = hostility;
+            this.id = Math.random();
             loader.load(`/models/${type}/${type}.json`, object => {
-                alert(JSON.stringify(object.animations));
                 if (type == 'chicken') object.scale.set(5, 5, 5);
                 this.body = globals.ball({
-                    radius: 1,
+                    radius: 0.4,
                     mass: 15,
                     pos: new THREE.Vector3(Math.random() * 50 - 25, 20, Math.random() * 50 - 25),
-                    mesh: object
+                    mesh: object,
+                    norotate: true,
+                    manual: true
                 });
                 setInterval(() => this.update(this.body, this.hostility), 40);
             });
         }
 
-        update(body, hostility) { // que? nothing. kk
+        update(body, hostility) {
             const ppos = globals.BODIES['player'].body.position;
             const bpos = body.body.position;
             if (globals.BODIES['player'].mesh.position.distanceTo(body.mesh.position) < 20) {
-                let speed = 10;
+                let speed = 12.5;
                 if (hostility < 0) speed *= -1;
                 body.body.velocity.set(ppos.x < bpos.x ? -speed : speed, body.body.velocity.y, ppos.z < bpos.z ? -speed : speed);
+                body.mesh.lookAt(globals.BODIES['player'].mesh.position);
             }
             else this.body.body.velocity.set(0, body.body.velocity.y, 0);
         }
     }
 
     // This should be good
+
+
     new Animal('rabbit', 3, 0, -1);
     new Animal('rabbit', 3, 0, -1);
     new Animal('rabbit', 3, 0, -1);
     new Animal('rabbit', 3, 0, -1);
     new Animal('rabbit', 3, 0, -1);
-    /* new Animal('chicken', 1, 0, -0.5); // Needs to be a bit docile, but also be a bit afraid nt
+    new Animal('rabbit', 3, 0, -1);
+    new Animal('rabbit', 3, 0, -1);
+
+    /* new Animal('chicken', 1, 0, -0.5); // Needs to be a bit docile, but also be a bit afraid
      new Animal('chicken', 1, 0, -0.5);
      new Animal('chicken', 1, 0, -0.5);*/
 

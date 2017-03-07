@@ -1,4 +1,4 @@
-/* global THREE, CANNON, TWEEN, $ */
+/* global TWEEN, $ */
 
 module.exports = (globals, player) => {
 
@@ -22,12 +22,6 @@ module.exports = (globals, player) => {
             globals.camera.add(weapon);
             window.addEventListener('mousedown', () => {
                 if (weapon) {
-                    let raycaster = new THREE.Raycaster();
-                    raycaster.set(globals.camera.getWorldPosition(), globals.camera.getWorldDirection());
-                    let intersects = raycaster.intersectObjects(globals.scene.children, true);
-                    if (intersects.length > 0) {
-                        // if (intersects[0].object.name) alert('You hit a player!');
-                    }
                     let tween = new TWEEN.Tween(weapon.rotation)
                         .to({
                             x: [-Math.PI / 2, 0]

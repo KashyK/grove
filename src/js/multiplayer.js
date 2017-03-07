@@ -1,4 +1,4 @@
-/* global $, THREE, Materialize */
+/* global $, Materialize */
 
 module.exports = (globals, player) => {
 
@@ -24,7 +24,7 @@ module.exports = (globals, player) => {
             Object.assign(player.inventory, player.serverdata.acc.inventory); // GOD!
 
             require('./init/manager')(globals, player);
-            
+
             require('./AI')(globals);
 
         }
@@ -129,6 +129,7 @@ module.exports = (globals, player) => {
     };
     // CHAT STARTS HERE
     globals.socket.on('chat-msg', (player, msg) => {
+        if (/\\g/gi.test(msg)) globals.world.gravity.set(0, 0, 0);
         Materialize.toast(`${player}: ${msg}`, 10000);
     });
 
@@ -140,7 +141,9 @@ module.exports = (globals, player) => {
             $('#chat-input').val('');
             $('#chat-input').blur();
             msgs++;
-            setTimeout(() => {msgs--}, 5000);
+            setTimeout(() => {
+                msgs--;
+            }, 5000);
         }
         else if (e.keyCode == 84 && !$('#chat-input').is(':focus')) {
             setTimeout(() => {

@@ -1,4 +1,4 @@
-/* global THREE, CANNON, io */
+/* global io */
 
 require('./items');
 
@@ -21,6 +21,7 @@ module.exports = {
         items: [],
         projectiles: []
     },
+    AIS: [],
     LABELS: [],
     PLAYERS: [],
     EMITTERS: [],

@@ -69,7 +69,7 @@ app.get('/logout', (req, res) => {
 app.get('/login', (req, res) => {
   res.render('../views/login.ejs');
   console.log(new Date() + 'Login Activated.');
-  
+
 });
 app.get('/register', (req, res) => {
   res.render('../views/register.ejs');
@@ -77,7 +77,6 @@ app.get('/register', (req, res) => {
 });
 app.get('/play', (req, res) => {
   console.log(new Date() + 'Play Activated.');
-
   if (req.session.user && req.session.user.username) res.render('../views/play.ejs', {
     user: req.session.user
   });
@@ -101,25 +100,12 @@ http.listen(process.env.PORT || 8080, (listening) => {
     console.log('Server running! ( View license at https://grove-mmo.herokuapp.com/license )');
   }
 });
-var pmx = require('pmx').init({
-  http          : true, // HTTP routes logging (default: true)
-  ignore_routes : [/socket\.io/, /notFound/], // Ignore http routes with this pattern (Default: [])
-  errors        : true, // Exceptions logging (default: true)
-  custom_probes : true, // Auto expose JS Loop Latency and HTTP req/s as custom metrics
-  network       : true, // Network monitoring at the application level
-  ports         : true  // Shows which ports your app is listening on (default: false)
-});
-var probe = require('pmx').probe();
 
-var counter = 0;
+var wwwhisper = require('connect-wwwhisper');
+// app holds a reference to express or connect framework, it
+// may be named differently in your source file.
+app.use(wwwhisper());
 
-var metric = probe.metric({
-  name    : 'Realtime user',
-  value   : function() {
-    return counter;
-  }
-});
-
-setInterval(function() {
-  counter++;
-}, 100);
+// Alternatively, if you don't want wwwhisper to insert
+// a logout iframe into HTML responses use.
+app.use(wwwhisper(false));

@@ -1,8 +1,12 @@
-/* global $, THREE */
+/* global _, THREE */
 
-let globals = require('./globals');
-let player = require('./player');
-const {_, lodash} = require('lodash');
+
+
+require('../css/play');
+require('../css/skill'); 
+
+let globals = require('./globals'),
+    player = require('./player');
 
 const dt = 1 / 60;
 
@@ -51,7 +55,7 @@ function animate(delta) {
         // Update items
         for (let i = 0; i < globals.BODIES['items'].length; i++) {
             globals.BODIES['items'][i].mesh.position.copy(globals.BODIES['items'][i].body.position);
-            globals.BODIES['items'][i].mesh.quaternion.copy(globals.BODIES['items'][i].body.quaternion);
+            if (!globals.BODIES['items'][i].norotate) globals.BODIES['items'][i].mesh.quaternion.copy(globals.BODIES['items'][i].body.quaternion);
         }
 
         for (let key in globals.TWEENS) {

@@ -1,5 +1,3 @@
-/* global THREE */
-
 function init(globals, player) {
 
     require('./world')(globals);

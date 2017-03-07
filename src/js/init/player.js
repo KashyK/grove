@@ -1,4 +1,4 @@
-/* global THREE, CANNON, PointerLockControls */
+const PointerLockControls = require('../threex/PointerLockControls');
 
 module.exports = (globals, player) => {
 
