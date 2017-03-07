@@ -37,6 +37,5 @@
     "style-loader": "^0.13.2",
     "uglify-js": "^2.8.5",
     "webpack": "^2.2.1"
-    "connect-wwwhisper": "*",
   }
 }
