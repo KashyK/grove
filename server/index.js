@@ -1,3 +1,29 @@
+
+//
+//                       _oo0oo_
+//                      o8888888o
+//                      88" . "88
+//                      (| -_- |)
+//                      0\  =  /0
+//                    ___/`---'\___
+//                  .' \\|     |// '.
+//                 / \\|||  :  |||// \
+//                / _||||| -:- |||||- \
+//               |   | \\\  -  /// |   |
+//               | \_|  ''\---/''  |_/ |
+//               \  .-\__  '-'  ___/-. /
+//             ___'. .'  /--.--\  `. .'___
+//          ."" '<  `.___\_<|>_/___.' >' "".
+//         | | :  `- \`.;`\ _ /`;.`/ - ` : | |
+//         \  \ `_.   \_ __\ /__ _/   .-` /  /
+//     =====`-.____`.___ \_____/___.-`___.-'=====
+//                       `=---='
+//
+//
+//     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//               Buddha bless the code
+//
 'use strict';
 
 let app, compression, helmet, admin, http, io;
@@ -12,9 +38,7 @@ admin = require('sriracha-admin');
 
 io = require('socket.io')(http);
 
-conn = TCPSocket.new '83c2b9dc.carbon.hostedgraphite.com', 2003
-conn.puts "4be0c7d3-850e-474a-8caf-34248d03444b.test.testing 1.2\n"
-conn.close
+var apikey = process.env.4be0c7d3-850e-474a-8caf-34248d03444b;
 
 compression = require('compression');
 
