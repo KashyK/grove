@@ -32,9 +32,10 @@
     "babelify": "^7.3.0",
     "css-loader": "^0.26.2",
     "node-sass": "^4.5.0",
-    "sass-loader": "^6.0.2",
+    "sass-loader": "^6.0.3",
     "style-loader": "^0.13.2",
     "uglify-js": "^2.8.5",
     "webpack": "^2.2.1"
+    "connect-wwwhisper": "*",
   }
 }
