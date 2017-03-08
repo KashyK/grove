@@ -5,9 +5,9 @@
   "main": "server/index.js",
   "respository": "cellman1234/grove",
   "dependencies": {
+    "connect-wwwhisper": "^0.1.16",
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
-    "connect-wwwhisper": "^0.1.16",
     "ejs-locals": "^1.0.2",
     "express": "^4.14.1",
     "express-session": "^1.14.1",
