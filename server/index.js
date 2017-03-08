@@ -24,6 +24,7 @@
 //
 //               Buddha bless the code
 //
+
 'use strict';
 
 let app, compression, helmet, admin, http, io;
@@ -38,7 +39,14 @@ admin = require('sriracha-admin');
 
 io = require('socket.io')(http);
 
-var apikey = process.env.4be0c7d3-850e-474a-8caf-34248d03444b;
+var dgram  = require('dgram');
+var apikey = process.env.HOSTEDGRAPHITE_APIKEY;
+
+var message = new Buffer(apikey + ".request.time 1444\n");
+var client = dgram.createSocket("udp4");
+client.send(message, 0, message.length, 2003, "carbon.hostedgraphite.com", function(err, bytes) {
+    client.close();
+});
 
 compression = require('compression');
 
