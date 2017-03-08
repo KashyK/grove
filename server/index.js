@@ -1,6 +1,6 @@
 'use strict';
 
-let app, compression, helmet, admin, http, io;
+let app, compression, helmet, admin, http, io, wwwhisper;
 
 app = require('express')();
 
@@ -11,6 +11,8 @@ helmet = require('helmet');
 admin = require('sriracha-admin');
 
 io = require('socket.io')(http);
+
+wwwhisper = require('connect-wwwhisper');
 
 compression = require('compression');
 
@@ -25,6 +27,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+app.use(wwwhisper());
 app.use(session({
   secret: '434dbc979dde137b5a2a5a4916464fecc8f7997f0caebd19e6e5d48b622a896b',
   name: 'TG_USR_SESSION',
@@ -100,12 +103,3 @@ http.listen(process.env.PORT || 8080, (listening) => {
     console.log('Server running! ( View license at https://grove-mmo.herokuapp.com/license )');
   }
 });
-
-var wwwhisper = require('connect-wwwhisper');
-// app holds a reference to express or connect framework, it
-// may be named differently in your source file.
-app.use(wwwhisper());
-
-// Alternatively, if you don't want wwwhisper to insert
-// a logout iframe into HTML responses use.
-app.use(wwwhisper(false));

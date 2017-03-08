@@ -7,6 +7,7 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
+    "connect-wwwhisper": "^0.1.16",
     "ejs-locals": "^1.0.2",
     "express": "^4.14.1",
     "express-session": "^1.14.1",
@@ -36,6 +37,5 @@
     "style-loader": "^0.13.2",
     "uglify-js": "^2.8.5",
     "webpack": "^2.2.1"
-    "connect-wwwhisper": "*",
   }
 }
