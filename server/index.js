@@ -12,6 +12,10 @@ admin = require('sriracha-admin');
 
 io = require('socket.io')(http);
 
+conn = TCPSocket.new '83c2b9dc.carbon.hostedgraphite.com', 2003
+conn.puts "4be0c7d3-850e-474a-8caf-34248d03444b.test.testing 1.2\n"
+conn.close
+
 compression = require('compression');
 
 let postal = require('postal');
