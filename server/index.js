@@ -103,3 +103,11 @@ http.listen(process.env.PORT || 8080, (listening) => {
     console.log('Server running! ( View license at https://grove-mmo.herokuapp.com/license )');
   }
 });
+ wwwhisper = require('connect-wwwhisper');
+// app holds a reference to express or connect framework, it
+// may be named differently in your source file.
+app.use(wwwhisper());
+
+// Alternatively, if you don't want wwwhisper to insert
+// a logout iframe into HTML responses use.
+app.use(wwwhisper(false));
