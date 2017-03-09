@@ -1,3 +1,5 @@
+/* global CANNON, THREE */
+
 let globals = require('./globals');
 
 function load(mesh, opts) {
@@ -96,7 +98,7 @@ function ball(opts) {
     return body;
 }
 
-function plane(opts) { // BROKEN!!!!!
+function plane(opts) { // PLANE BROKEN!!!!!
     var geometry = new THREE.PlaneGeometry(5, 20, 32);
     var material = new THREE.MeshBasicMaterial({
         color: 0xffff00,

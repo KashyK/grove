@@ -5,7 +5,7 @@ require('../css/skill');
 
 let globals = require('./globals'),
     player = require('./player');
-
+    
 const dt = 1 / 60;
 
 require('./items');
@@ -94,9 +94,7 @@ function animate(delta) {
 window.addEventListener('resize', onWindowResize, false);
 
 function onWindowResize() {
-
     globals.camera.aspect = window.innerWidth / window.innerHeight;
     globals.camera.updateProjectionMatrix();
     globals.renderer.setSize(window.innerWidth, window.innerHeight);
-
 }

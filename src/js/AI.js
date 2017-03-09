@@ -1,4 +1,4 @@
-/* global TWEEN */
+/* global THREE */
 
 module.exports = (globals) => {
 
@@ -30,8 +30,7 @@ module.exports = (globals) => {
                     mass: 15,
                     pos: new THREE.Vector3(Math.random() * 50 - 25, 20, Math.random() * 50 - 25),
                     mesh: object,
-                    norotate: true,
-                    manual: true
+                    norotate: true
                 });
                 setInterval(() => this.update(this.body, this.hostility), 40);
             });

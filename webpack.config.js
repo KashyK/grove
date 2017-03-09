@@ -22,7 +22,7 @@ module.exports = [{
                 'sass-loader'
             ]
         }, {
-            test: /\.js$/,
+            test: /\.js$/,  
             exclude: /(node_modules|bower_components)/,
             loader: 'babel-loader',
             query: {
@@ -60,6 +60,7 @@ module.exports = [{
         extensions: ['.js', '.json', '.sass']
     }
 }];
+
 //
 //                       _oo0oo_
 //                      o8888888o
