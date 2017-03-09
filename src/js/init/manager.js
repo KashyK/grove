@@ -6,7 +6,7 @@ function init(globals, player) {
 
     globals.renderer.shadowMapEnabled = true;
     globals.renderer.shadowMapSoft = true;
-    globals.renderer.shadowMapType = THREE.PCFShadowMap;
+    globals.renderer.shadowMapType = THREE.BasicShadowMap;
 
     globals.renderer.shadowCameraNear = 3;
     globals.renderer.shadowCameraFar = globals.camera.far;

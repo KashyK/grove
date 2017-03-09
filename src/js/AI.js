@@ -25,13 +25,14 @@ module.exports = (globals) => {
             this.id = Math.random();
             loader.load(`/models/${type}/${type}.json`, object => {
                 if (type == 'chicken') object.scale.set(5, 5, 5);
-                this.body = globals.ball({
+                let body = globals.ball({
                     radius: 0.4,
                     mass: 15,
                     pos: new THREE.Vector3(Math.random() * 50 - 25, 20, Math.random() * 50 - 25),
                     mesh: object,
                     norotate: true
                 });
+                this.body =  body;
                 setInterval(() => this.update(this.body, this.hostility), 40);
             });
         }

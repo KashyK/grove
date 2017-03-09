@@ -11,7 +11,17 @@ module.exports = (app, events) => {
         map: String,
         level: Number,
         status: String
-    });
+    }); 
+    // Seth like 
+    //n
+    //a
+    //n
+    //c
+    //y
+    //
+    //v
+    //l
+    //k
     db.on('error', console.error);
     db.once('open', () => {
         console.log(new Date() + `Successfully connected to MongoDB`);

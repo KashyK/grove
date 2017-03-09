@@ -1,3 +1,5 @@
+/* global CANNON */
+
 module.exports = (globals) => {
 
     var solver = new CANNON.GSSolver();

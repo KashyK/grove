@@ -1,4 +1,4 @@
-/* global TWEEN, $ */
+/* global THREE, TWEEN, $ */
 
 module.exports = (globals, player) => {
 

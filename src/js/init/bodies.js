@@ -1,4 +1,4 @@
-/* global $, SPE */
+/* global THREE, SPE */
 
 module.exports = (globals, player) => {
 

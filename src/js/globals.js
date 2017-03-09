@@ -1,4 +1,4 @@
-/* global io */
+/* global THREE, CANNON, io */
 
 require('./items');
 
