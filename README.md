@@ -50,7 +50,6 @@ Copying or redistributing this game or content without the consent of Hybrid Alp
 All people that have contributed to this game include:
 
 - Seth Traman:              Lead Developer, CEO Hybrid Alapca Game Studios
-- Nancy Vlk:                Seth Traman's Support
 - Nate Goldsborough:        Developer, Marketing, General Maintenance, CEO Artifex Inc.
 - Casimir Kash:             Developer, Graphics, Beta Testing
 - Hunter Sokolis:           Developer, Graphics, Humor Support
