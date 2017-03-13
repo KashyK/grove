@@ -30,9 +30,12 @@ module.exports = (globals) => {
                     mass: 15,
                     pos: new THREE.Vector3(Math.random() * 50 - 25, 20, Math.random() * 50 - 25),
                     mesh: object,
-                    norotate: true
+                    norotate: true,
+                    cb(body) {
+                        body.mesh.name = 'rabbit';
+                    }
                 });
-                this.body =  body;
+                this.body = body;
                 setInterval(() => this.update(this.body, this.hostility), 40);
             });
         }

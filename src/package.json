@@ -1,7 +1,7 @@
 {
   "name": "src",
   "version": "1.0.0",
-  "description": "node_modules used for building The Grove",
+  "description": "node_modules used for The Grove gameplay",
   "author": "",
   "license": "ISC",
   "dependencies": {

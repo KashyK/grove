@@ -1,10 +1,10 @@
 # The Grove
 
-(PRE-PRE-ALPHA - UNDER DEVELOPMENT MEANING ITS NOT EVEN CLOSE TO BEING FINISHED)
+(PRE-ALPHA  - Under Development)
 
 Welcome to The Grove, a browser-based MMORPG.
 
-- The Grove Website (Info):
+- The Grove Website:
   www.grove-mmo.com
 - The Grove (Offical Game Servers):
   grove-mmo.herokuapp.com
@@ -47,10 +47,10 @@ Copying or redistributing this game or content without the consent of Hybrid Alp
  -  Most images are not owned by Hybrid Alpaca Game Studios.
  
 
-All people that have contributed to this game (in order of most involved) include:
+All people that have contributed to this game include:
 
 - Seth Traman:              Lead Developer, CEO Hybrid Alapca Game Studios
-- Nancy Vlk:                Seth Traman's Support/Incentive ( not rlly ;] )
+- Nancy Vlk:                Seth Traman's Support
 - Nate Goldsborough:        Developer, Marketing, General Maintenance, CEO Artifex Inc.
 - Casimir Kash:             Developer, Graphics, Beta Testing
 - Hunter Sokolis:           Developer, Graphics, Humor Support

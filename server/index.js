@@ -27,7 +27,7 @@
 
 'use strict';
 
-let app, compression, helmet, admin, http, io;
+let app, compression, helmet, http, io;
 
 app = require('express')();
 
@@ -35,18 +35,7 @@ http = require('http').Server(app);
 
 helmet = require('helmet');
 
-admin = require('sriracha-admin');
-
 io = require('socket.io')(http);
-
-var dgram  = require('dgram');
-var apikey = process.env.HOSTEDGRAPHITE_APIKEY;
-
-var message = new Buffer(apikey + ".request.time 1444\n");
-var client = dgram.createSocket("udp4");
-client.send(message, 0, message.length, 2003, "carbon.hostedgraphite.com", function(err, bytes) {
-    client.close();
-});
 
 compression = require('compression');
 
@@ -81,12 +70,6 @@ app.all('*', ensureSecure); // at top of routing calls
 
 const User = require(__dirname + '/mongo')(app, events);
 require(__dirname + '/client-interact')(io, User);
-
-app.use('/admin', admin({
-  User: {
-    searchField: 'username'
-  }
-}));
 
 app.get('/', (req, res) => {
   if (req.session.user && req.session.user.username) res.render('../views/dashboard.ejs', {

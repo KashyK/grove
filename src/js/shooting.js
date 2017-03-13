@@ -33,6 +33,11 @@ module.exports = (globals, player) => {
                         .start();
 
                     globals.TWEENS.push(tween);
+
+                    let raycaster = new THREE.Raycaster();
+                    raycaster.set(globals.camera.getWorldPosition(), globals.camera.getWorldDirection());
+                    let intersects = raycaster.intersectObjects(globals.scene.children, true);
+                    if (intersects.length && intersects[0].object.name == 'Rabbit') alert('Got one!');
                 }
             });
         }

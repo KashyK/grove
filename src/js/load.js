@@ -91,6 +91,8 @@ function ball(opts) {
         mesh: ballMesh,
         norotate: opts.norotate || false
     };
+    
+    !opts.cb || opts.cb(body);
 
     globals.BODIES[opts.array || 'items'].push(body);
     opts.pos ? ballBody.position.set(opts.pos.x, opts.pos.y, opts.pos.z) : null;
