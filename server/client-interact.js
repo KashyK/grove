@@ -17,7 +17,7 @@ module.exports = (io, User, conf_url) => {
         // check for potential errors
         if (err) console.err(err);
         // user not found (in case this ever happened)
-        if (!o) console.error(new Date() + 'USER NOT FOUND FOR MULTIPLAYER');
+        if (!o) console.error(new Date() + ' Username incorrect for multiplayer!');
 
         // add the new player to list of players
         players.addPlayer(socket.id, o);
@@ -56,7 +56,7 @@ module.exports = (io, User, conf_url) => {
             username: dat.user.username,
             password: dat.user.password
           }, (err, obj) => {
-            if (err) console.log(new Date() + 'ERROR!    ');
+            if (err) console.log(new Date() + 'ERROR!');
             if (obj) {
               obj.inventory = dat.inv;
               obj.save();

@@ -1,4 +1,3 @@
-
 //
 //                       _oo0oo_
 //                      o8888888o
@@ -117,6 +116,7 @@ app.get('/stuff', (req, res) => {
   res.render(require('path').resolve('views/stuff.ejs'));
   console.log(new Date() + 'Stuff Activated.');
 });
+
 http.listen(process.env.PORT || 8080, (listening) => {
   if (!process.env.NODE_ENV) {
     console.log('Listening For conections on 0.0.0.0');
