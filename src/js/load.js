@@ -47,7 +47,7 @@ function box(opts) {
         mass: opts.mass || 0
     });
     boxBody.addShape(boxShape);
-    var boxMesh = new THREE.Mesh(boxGeometry, opts.mat !== undefined ? opts.mat : new THREE.MeshPhongMaterial({
+    var boxMesh = opts.mesh || new THREE.Mesh(boxGeometry, opts.mat !== undefined ? opts.mat : new THREE.MeshPhongMaterial({
         color: 0xFF0000
     }));
     globals.world.add(boxBody);
@@ -64,7 +64,8 @@ function box(opts) {
     return {
         body: boxBody,
         shape: boxShape,
-        mesh: boxMesh
+        mesh: boxMesh,
+        norotate: opts.norotate || false
     };
 }
 

@@ -1,4 +1,4 @@
-/* global $, Materialize */
+/* global $, THREE,  Materialize */
 
 module.exports = (globals, player) => {
 
@@ -32,38 +32,35 @@ module.exports = (globals, player) => {
 
     globals.socket.on('addOtherPlayer', data => {
         if (data.id !== player.id) {
-            let cube = globals.box({
-                l: 1,
-                w: 1,
-                h: 2,
-                mass: 0
+            new THREE.ObjectLoader().load('/models/character-model/character-model.json', character => {
+                let cube = globals.box({
+                    l: 1,
+                    w: 1,
+                    h: 1,
+                    mass: 0,
+                    mesh: character,
+                    norotate: true
+                });
+                globals.PLAYERS.push({
+                    body: cube.body,
+                    mesh: cube.mesh,
+                    id: data.id,
+                    data
+                });
+                globals.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
+                Materialize.toast(`<span style='color:lightblue'>${data.acc.username} joined</span>`, 4000);
             });
-            let loader = new THREE.ObjectLoader();
-            loader.load('/models/sword/sword.json', sword => {
-                sword.scale.set(0.2, 0.2, 0.2);
-                sword.castShadow = true;
-                cube.mesh.add(sword);
-                sword.position.x += 0.7;
-                sword.position.y -= 0.375;
-                sword.position.z -= 1.25;
-            });
-            globals.PLAYERS.push({
-                body: cube.body,
-                mesh: cube.mesh,
-                id: data.id,
-                data
-            });
-            globals.label(cube.mesh, data.acc.level + ' - ' + data.acc.username);
-            Materialize.toast(`<span style='color:lightblue'>${data.acc.username} joined</span>`, 4000);
         }
     });
 
     globals.socket.on('removeOtherPlayer', data => {
 
-        globals.scene.remove(playerForId(data.id).mesh);
-        globals.world.remove(playerForId(data.id).body);
-        Materialize.toast(`${data.acc.username} left`, 4000);
-        console.log(data.id + ' disconnected');
+        if (playerForId(data.id).mesh) {
+            globals.scene.remove(playerForId(data.id).mesh);
+            globals.world.remove(playerForId(data.id).body);
+            Materialize.toast(`${data.acc.username} left`, 4000);
+            console.log(data.id + ' disconnected');
+        }
 
     });
 
