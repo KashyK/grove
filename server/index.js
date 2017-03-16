@@ -38,8 +38,6 @@ io = require('socket.io')(http);
 
 compression = require('compression');
 
-var request = require('request');
-
 let postal = require('postal');
 let events = postal.channel();
 
