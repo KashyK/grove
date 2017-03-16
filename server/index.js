@@ -38,6 +38,14 @@ io = require('socket.io')(http);
 
 compression = require('compression');
 
+var request = require('request');
+
+request('https://iptoearth.expeditedaddons.com/?api_key=' + process.env.IPTOEARTH_API_KEY + '&ip=68.10.149.45', function (error, response, body) {
+  console.log('Status:', response.statusCode);
+  console.log('Headers:', JSON.stringify(response.headers));
+  console.log('Response:', body);
+});
+
 let postal = require('postal');
 let events = postal.channel();
 
