@@ -10,9 +10,10 @@ module.exports = (app, events) => {
         inventory: Array,
         map: String,
         level: Number,
-        status: String
+        status: String,
+        quest: String,
     }); 
-
+// Seth like Nancy
     db.on('error', console.error);
     db.once('open', () => {
         console.log(new Date() + `Successfully connected to MongoDB`);
